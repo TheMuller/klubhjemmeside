@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin_manifest>
+    <field key="author" value="vazco, Elggdev" />
+    <field key="version" value="1.0" />
+    <field key="description" value="Sends newsletter to subscribed users" />
+    <field key="website" value="http://elggdev.com" />
+    <field key="copyright" value="(C) Elggdev 2010" />
+    <field key="licence" value="Commercial per-site licence - http://elggdev.com/pg/license" />
+    <field key="elgg_version" value="2009030702" />    
+</plugin_manifest>

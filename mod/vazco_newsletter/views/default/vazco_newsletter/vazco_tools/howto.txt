@@ -1,0 +1,23 @@
+1. add static method getForm() to class in models/model.php with form elements:
+
+2. to display form in edit view add code below to view file:
+
+	$fieldArray = vazco_plugin::pluginEditFormArray($entity);
+	$actionUrl = $CONFIG->wwwroot.'action/vazco_plugin/edit';
+
+	...
+	
+	<?php 
+		echo elgg_view('vazco_plugin/tools/forms/edit',
+			array(
+				'fieldArray' => $fieldArray,
+				'actionUrl' => $actionUrl,
+				'formName' => 'plugin_edit',
+			)
+		);
+	?>
+
+	
+
+
+3. modify action (actions/edit.php)
