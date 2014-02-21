@@ -1,0 +1,12 @@
+.weatherContainer
+{
+	margin:0 auto;
+}
+
+.weatherIcon 
+{ 
+	float: left;
+	margin: 5px auto;
+	padding: 5px;
+	text-align: center;
+}

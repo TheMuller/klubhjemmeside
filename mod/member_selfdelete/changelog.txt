@@ -1,0 +1,7 @@
+Changelog
+
+04/07/2012
+Fix issue with white screen during activation on some systems
+
+02/20/2012
+Initial Release

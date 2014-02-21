@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin_manifest>
+        <field key="author" value="Tom Ondiba" />
+        <field key="version" value="1.8.x" />
+        <field key="description" value="Provides Twizanex logout landing page for Elgg 1.8 Just like Facebook Logout page" />
+        <field key="website" value="http://www.twizanex.com/" />
+        <field key="copyright" value="(c) twizanex Group 2012" />
+        <field key="licence" value="GNU Public License version 2" />
+        <field key="elgg_version" value="2008072701" />
+</plugin_manifest>

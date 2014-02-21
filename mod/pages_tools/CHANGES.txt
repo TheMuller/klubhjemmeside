@@ -1,0 +1,16 @@
+= Version history =
+1.1 (2013-04-05):
+
+- added: publication and expiration date for pages (optional and admin setting)
+- added: option to move a subpage to a different page tree (as of Elgg 1.8.12)
+- added: tooltip to the naviagtion tree to help with drag-and-drop
+- changed: no navigation tree with only one page
+- changed: no more wrapping of the first 5 levels of the navigation tree
+- fixed: #1 Undefined function on pdf export
+- fixed: small JS bug
+- fixed: duplicate page title in full view
+
+1.0:
+
+- first combined version of pages_export and pages_tree
+- changed: layout of start.php to be more inline with Elgg
