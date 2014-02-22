@@ -50,11 +50,11 @@ window.onload = function() {
 <div id='GROUPPAID' style='background:#DDF;'>
 <br>
 <div>
-<label>
 <b><?php echo elgg_echo("paidgroup:field:group_paid_flag"); ?><br /></b>
 <?php echo elgg_view("input/radio", array(
                                           "name" => 'group_paid_flag',
                                           "value" => $group_paid_flag,
+                                          "onchange"=>" onpaidgrp_change(this.value);return true;",
                                           'options' => array(
                                                              elgg_echo('groups:yes') => 'yes',
                                                              elgg_echo('groups:no') => 'no',
@@ -67,8 +67,10 @@ window.onload = function() {
 <!--	////////////////////////////////////////////////////////////////////////////////////////////////////	-->
 
 
+<div id='paymentdetail' style='
+<?php	if($group_paid_flag =='no') echo "display:none;"?>'>
 <div>
-<label>
+
 <b><?php echo elgg_echo("paidgroup:field:group_period_type"); ?><br /></b>
 
 <?php
@@ -181,11 +183,23 @@ window.onload = function() {
 <!--	////////////////////////////////////////////////////////////////////////////////////////////////////	-->
 <br><br>
 </div>
+</div>
 <br>
 
 <!--	END::PAID$ Groups	////////////////////////////////////////////////////////////////////////////////////////////////////	-->
 <script type='text/javascript'>
 var last_price_type =' for one day.';
+function onpaidgrp_change(value)
+{
+    var paymenttypediv = document.getElementById('paymentdetail');
+    if(value == 'yes'){
+        paymenttypediv.style.display = 'block';
+    }else{
+        paymenttypediv.style.display = 'none';
+    }
+    return;
+    
+}
 
 function onpaidgrptype_change(value)
 {
