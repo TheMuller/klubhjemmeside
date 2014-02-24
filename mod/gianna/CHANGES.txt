@@ -1,0 +1,29 @@
+= Version history =
+
+2013.10.12:
+
+- Fixed: front page CSS bug
+
+2013.10.11:
+
+- Fixed: front page in walled garden mode
+
+2013.09.25:
+
+- Added: profile_manager CSS fix
+- Fixed: walled garden CSS
+
+2013.07.29:
+
+- Fixed: logged out pages layout
+
+2013.05.11:
+
+- Updated to Elgg 1.8.15
+- Added: errors/
+- Added: category Elggzone in manifest
+- Added: css/ie7
+
+2013.03.23:
+
+- Initial release for Elgg 1.8.14
