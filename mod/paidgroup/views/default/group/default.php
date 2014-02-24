@@ -36,7 +36,7 @@ if($vars['paid_view']   == true){
     
     echo "<div class='group-gallery-item-img'>";
     echo    elgg_view('output/img', array(
-                                          'src' => $group->getIconURL('medium'),
+                                          'src' => $group->getIconURL('large'),
                                           'width' => "150px",
                                           'height' => "150px",
                                           ));
