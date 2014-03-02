@@ -9,42 +9,24 @@ if($vars['paid_view']   == true){
     echo "<div class='group-gallery-item-header'>";
     echo "&nbsp&nbsp";
     echo $group->name;
-    echo "</div>";    
-
-    echo "<div style='float:right;width:70px;'>";
     $url = elgg_get_site_url() . "action/groups/join?group_guid={$group->getGUID()}";
     $url = elgg_add_action_tokens_to_url($url);
     echo elgg_view("output/url", array(
                                        "href" => $url,
                                        "text" => elgg_echo('Join'),
                                        "is_trusted" => true,
-                                       "class" => "elgg-button elgg-button-submit",
-                                       "style" =>"float:right;",
+                                       "class" => "joinButton",
+                                       "style" =>"float:right;height:13px;",
                                        ));
-    echo "<div >Members</div>";
-    echo "<div >".$group->getMembers(0, 0, TRUE)."</div>";
-    echo "<div >";
-    $membership = $group->membership;
-	if ($membership == ACCESS_PUBLIC) {
-		echo elgg_echo("open");
-	} else {
-		echo elgg_echo("closed");
-	}
     echo "</div>";
-    
-    echo "</div>";
-    
     echo "<div class='group-gallery-item-img'>";
     echo    elgg_view('output/img', array(
                                           'src' => $group->getIconURL('large'),
-                                          'width' => "150px",
+                                          'width' => "225px",
                                           'height' => "150px",
                                           ));
     echo "<p>".$group->briefdescription."</p>";
     echo "</div>";
-    
-    
-  
     echo "<div class='group-gallery-item-footer'>";
     if($group->group_paid_flag =='yes'   ){
         echo "&nbsp&nbsp";
@@ -65,7 +47,25 @@ if($vars['paid_view']   == true){
             echo $GRPS." DKK till ".$group->group_paid_MembershipEnd;
         }
     }
-    echo "</div >";
+    
+    echo "<ul class='elgg-menu elgg-menu-hz elgg-menu-title'>";
+    $membercount =  $group->getMembers(0, 0, TRUE);
+    echo "<li style='width:10px;' title='".$membercount." members'>";
+    echo $membercount;
+    $membership = $group->membership;
+    echo "</li >";
+    if ($membership == ACCESS_PUBLIC) {
+		$accessstring =  elgg_echo("open");
+        $accesslongstring = "Aproval is not needed";
+	} else {
+		 $accessstring =  elgg_echo("closed");
+        $accesslongstring = "Need Aproval";
+	}
+    echo "<li  style='float:left;width:40px;'title='".$accesslongstring."'>";
+    echo $accessstring;
+    echo "</li>";
+
+    echo "</ul >";
 
 }else{
     include elgg_get_plugins_path() ."groups/views/default/group/default.php";

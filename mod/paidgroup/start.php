@@ -151,8 +151,7 @@ function paidgroup_init() {
         }
 
         elgg_set_ignore_access($ia);
-        $resulttext = "success<br>";
-        return $returnvalue . $resulttext.$debugtext;
+        return $returnvalue . $resulttext;
     }
 
 

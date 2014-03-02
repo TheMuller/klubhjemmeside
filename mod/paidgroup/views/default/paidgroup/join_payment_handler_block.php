@@ -95,7 +95,7 @@ height:200px;
 
 
 .group-gallery-item-img {
-width:150px;
+width:225px;
 height:150px;
 position:relative;
 }
@@ -105,8 +105,8 @@ top: 5px;
 left:5px;
 opacity:0;
     word-wrap:break-word;
-width:150px;
-    height:145px;
+width:225px;
+    height:155px;
 overflow:hidden;
 }
 .group-gallery-item-img:hover img{
@@ -133,5 +133,30 @@ background:#3287c4;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
 }
-
+.joinButton {
+    text-decoration: none;
+	background-color:#44c767;
+	-moz-border-radius-topright:28px;
+	-webkit-border-radius-topright:28px;
+	border-top-right-radius: 10px;
+border:1px solid #18ab29;
+display:inline-block;
+cursor:pointer;
+color:#ffffff;
+	font-family:arial;
+	font-size:17px;
+padding:6px 10px;
+    width :auto;
+height:15px;
+	
+	text-shadow:0px 1px 0px #2f6627;
+}
+.joinButton:hover {
+    text-decoration:none;
+	background-color:#5cbf2a;
+}
+.joinButton:active {
+position:relative;
+top:1px;
+}
 </style>
