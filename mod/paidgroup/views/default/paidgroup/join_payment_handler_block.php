@@ -87,8 +87,9 @@ background:white   ;
     margin-bottom :15px;
 width:225px;
 height:200px;
-    box-shadow: 0px 5px 2px #808080;
-    border-radius: 10px;
+    box-shadow: 0px 8px 0px 0px #808080;
+    border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 0px;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
 }
@@ -120,15 +121,15 @@ opacity:1;
 height:27px;
 background:#3287c4;
     
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 0px;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
 }
 .group-gallery-item-header {
     height:27px;
     background:#3287c4;
-    border-top-left-radius: 10px;
+    border-top-left-radius: 0px;
     border-top-right-radius: 10px;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
