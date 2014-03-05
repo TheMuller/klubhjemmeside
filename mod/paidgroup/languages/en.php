@@ -8,6 +8,7 @@
 $english = array(
 'groups:paid' => "Paid Group",
                  'groups:groups:access:style' => "Site Access Level",
+                 'groups:groups:payment:mode' => "Payment Mode",
                  'groups_currency' => "Currency",
                  'groups_merchant_number' => " DIBS merchant number",
                  'groups_md5secret' => "DIBS md5 secret",

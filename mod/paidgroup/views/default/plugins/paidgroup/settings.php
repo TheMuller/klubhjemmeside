@@ -4,16 +4,37 @@
 **/
 ?>
 <style>
-.Group0{width:99%;float:left;margin-bottom:-10px;}
-.Group1{width:40%;float:left;margin-bottom:-10px;}
-.Group2{width:59%;float:left;margin-bottom:-10px;}
-.Group3{width:26%;float:left;margin-bottom:2px;}
-.Group2SCR{overflow:auto;height:150px;width:90%;}
+.Group0{width:99%;height:30px;float:left;margin-bottom:-10px;}
+.Group1{width:40%;height:30px;float:left;margin-bottom:-10px;}
+.Group2{width:59%;height:40px;float:left;margin-bottom:-10px;}
+.Group3{width:26%;height:40px;float:left;margin-bottom:2px;}
+.Group2SCR{overflow:auto;height:150px;width:90%;;height:40px;}
 .Clear1{height:0px;clear:both;}
 </style>
 <?php
-echo '<br>';
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+    if (!isset($vars['entity']->groups_payment_mode)){	//:DC:
+        $vars['entity']->groups_payment_mode = 3;
+    }
+    echo '<div class="Group1">';
+    echo elgg_echo('groups:groups:payment:mode');
+    $GroupsStyles=array(
+                        '1'=>'Local Test',
+                        '2'=>'DIBS Test',
+                        '3'=>'DIBS Live',
+                        );
+    echo '</div>';
+    echo '<div class="Group2">';
+    echo elgg_view('input/dropdown',
+                   array(
+                         'name' => 'params[groups_payment_mode]',
+                         'options_values' => $GroupsStyles,
+                         'value' => $vars['entity']->groups_payment_mode,
+                         )
+                   );
+    echo '</div>';
+    echo '<div class="Clear1"></div>';
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 if (!isset($vars['entity']->groups_access_style)){	//:DC:
@@ -137,6 +158,7 @@ echo '<div class="Clear1"></div>';
 if (!isset($vars['entity']->groups_merchant_number)){	//:DC:
 	$vars['entity']->groups_merchant_number = '';
 }
+    
 echo '<div class="Group1">';
 echo elgg_echo('groups_merchant_number');
 echo '</div>';
@@ -173,7 +195,7 @@ echo '<div class="Clear1"></div>';
     $showclosegrps= $vars['entity']->showclosegrps;
     $showpaidgrps= $vars['entity']->showpaidgrps;
     
-    echo "<div style='border:1px dashed;'> <label>Types of groups to be shown in Group gallery</label><br>";
+    echo "<br><div style='border:1px dashed;'> <label>Types of groups to be shown in Group gallery</label><br>";
     
     echo "Open :";
     echo "<input type='hidden' name='params[showopengrps]' value='0'/>";

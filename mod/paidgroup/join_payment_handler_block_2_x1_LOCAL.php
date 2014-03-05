@@ -25,8 +25,7 @@ gatekeeper();
 	$amount = $GRPS*100;
 	$groups_currency = elgg_get_plugin_setting('groups_currency', 'paidgroup');
 	$secret = elgg_get_plugin_setting('groups_md5secret', 'paidgroup');
-	//$url = 'https://sat1.dibspayment.com/dibspaymentwindow/entrypoint';
-     $url = elgg_get_site_url().'mod/paidgroup/epayaccept.php';
+    $groups_payment_mode = elgg_get_plugin_setting('groups_payment_mode', 'paidgroup');
 	$xAccept='join_payment_handler_block_3_x1_EPAY.php';
 	$params = array
 	(
@@ -38,6 +37,12 @@ gatekeeper();
 
 		'groupid' => $GRPN
 	);
+    if($groups_payment_mode == '1'){ //local test
+        $url = elgg_get_site_url().'mod/paidgroup/epayaccept.php';
+    }else{
+        $url = 'https://sat1.dibspayment.com/dibspaymentwindow/entrypoint';
+        if($groups_payment_mode == '2') $params['test'] ="1";   //DIBS Test
+    }
 	$params['hash'] = md5(implode("",array_values($params)).$secret);
 
 	$query = http_build_query($params)."\n";
