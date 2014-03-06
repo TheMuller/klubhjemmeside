@@ -202,11 +202,11 @@ function paidgroup_manage_unpaid_members($hook, $type, $value, $params) {
                 $Counter = elgg_get_entities_from_relationship($options);
             
                 if(!$Counter){
-                    echo "not a member of any group ";
+                   // echo "not a member of any group ";
                     $value['body'] = elgg_view ( 'paidgroup/join_payment_handler_block');
                 }
                 else {
-                    echo "member  in some group / ";
+                   // echo "member  in some group / ";
                     $options['count'] = false;
                     $mgroups = elgg_get_entities_from_relationship($options);
                     $last_dates = unserialize($user->last_dates);
@@ -221,11 +221,11 @@ function paidgroup_manage_unpaid_members($hook, $type, $value, $params) {
                                     $last_date = $last_dates[$mgroup->guid];
                                     if(!$last_date or $last_date ==''){
                                         $user_inactive = false;//inactive member, so skip
-                                        echo "inactive  in  ".$mgroup->name;
+                                     //   echo "inactive  in  ".$mgroup->name;
                                         continue;
                                     }
                                 }
-                            echo $mgroup->membership." ".$mgroup->name." ,";
+                           // echo $mgroup->membership." ".$mgroup->name." ,";
                                 if($mgroup->membership == ACCESS_PRIVATE){
                                     if($mgroup->group_paid_flag =='yes') $is_member_of_close_paid = true;
                                     else $is_member_of_close_unpaid = true;
@@ -243,17 +243,17 @@ function paidgroup_manage_unpaid_members($hook, $type, $value, $params) {
                             $groupforce_open_unpaid = elgg_get_plugin_setting('groupforce_open_unpaid','paidgroup');
                             $groupforce_close_paid = elgg_get_plugin_setting('groupforce_close_paid','paidgroup');
                             $groupforce_close_unpaid = elgg_get_plugin_setting('groupforce_close_unpaid','paidgroup');
-                            echo "/setting is ".$groupforce_open_paid." ".$groupforce_open_unpaid." ". $groupforce_close_paid ." ".$groupforce_close_unpaid. " / ";
+                           // echo "/setting is ".$groupforce_open_paid." ".$groupforce_open_unpaid." ". $groupforce_close_paid ." ".$groupforce_close_unpaid. " / ";
                             
-                            echo "/situation is ";
-                            if($is_member_of_open_paid) echo "1"; else echo "0";
-                            if($is_member_of_open_unpaid) echo "1"; else echo "0";
-                            if($is_member_of_close_paid) echo "1"; else echo "0";
-                            if($is_member_of_close_unpaid) echo "1"; else echo "0";
-                            echo  " / ";
+                           // echo "/situation is ";
+                           // if($is_member_of_open_paid) echo "1"; else echo "0";
+                           // if($is_member_of_open_unpaid) echo "1"; else echo "0";
+                           // if($is_member_of_close_paid) echo "1"; else echo "0";
+                           // if($is_member_of_close_unpaid) echo "1"; else echo "0";
+                           // echo  " / ";
                             if($groupforce_open_paid !='1' and $groupforce_open_unpaid !='1' and $groupforce_close_paid !='1' and $groupforce_close_unpaid !='1'){
                                 //let him go,its admins mistake. so give benifit of doubt since poor fellow is atlist a member of soe group
-                                echo "letting go since admin not checked anything";
+                             //   echo "letting go since admin not checked anything";
                             }
                             elseif(($groupforce_open_paid =='1' and $is_member_of_open_paid) or
                                    ($groupforce_open_unpaid =='1' and $is_member_of_open_unpaid) or
@@ -261,9 +261,9 @@ function paidgroup_manage_unpaid_members($hook, $type, $value, $params) {
                                    ($groupforce_close_unpaid =='1' and $is_member_of_close_unpaid)
                                 ){
                                     // let him go, as per admins wish
-                                   echo "letting go since meeting criteria";
+                                 //  echo "letting go since meeting criteria";
                             }else{
-                                echo "forcing gallery since  not meeting criteria";
+                               // echo "forcing gallery since  not meeting criteria";
                                 $value['body'] = elgg_view ( 'paidgroup/join_payment_handler_block');
                                 }
                         
