@@ -87,11 +87,11 @@ background:white   ;
     margin-bottom :15px;
 width:225px;
 height:200px;
-    box-shadow: 0px 8px 0px 0px #808080;
-    border-bottom-left-radius: 10px;
-	border-bottom-right-radius: 0px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
+    box-shadow: 6px 8px 3px #808080;
+    border: 5px;
+
+    -webkit-border: 5px;
+    -moz-border: 5px;
 }
 
 
@@ -119,28 +119,34 @@ opacity:1;
 }
 .group-gallery-item-footer {
 height:27px;
-background:#3287c4;
-    
-    border-bottom-left-radius: 16px;
-    border-bottom-right-radius: 0px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
+background:#000;
+    color:gray;
+    border: 5px;
+    border: 5px;
+    -webkit-border: 5px;
+    -moz-border: 5px;
 }
 .group-gallery-item-header {
+	//font-weight:bold;
+	font-size-adjust: 0.58;
+	color:gray;
     height:27px;
-    background:#3287c4;
-    border-top-left-radius: 0px;
-    border-top-right-radius: 10px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
+    background:#000000;
+    border: 5px;
+    border: 5px;
+    -webkit-border: 5px;
+    -moz-border: 5px;
 }
 .joinButton {
     text-decoration: none;
-	background-color:#44c767;
+	//background-color:#44c767;
+	background-color:#fffff;
 	-moz-border-radius-topright:28px;
 	-webkit-border-radius-topright:28px;
-	border-top-right-radius: 10px;
-border:1px solid #18ab29;
+	border: 10px;
+//border:1px solid #18ab29;
+border-left:1px solid #ffffff;
+border-bottom:2px solid #000000;
 display:inline-block;
 cursor:pointer;
 color:#ffffff;
