@@ -6,9 +6,10 @@ include('../../engine/start.php');
 $Group_paid_price=$_GET['p'];
 $CurrUser= get_entity($_GET['u']);
     $group_guid = $_GET['g'];
+$order_id = $_GET['o'];
 $ia = elgg_set_ignore_access(true);
 $group=get_entity($group_guid);
-elgg_set_ignore_access($ia);
+
 /*
     if($group->group_period_type =='duration'){
         $GRPS = $group->group_paid_price * $group->group_paid_LockedPeriod;
@@ -24,6 +25,32 @@ elgg_set_ignore_access($ia);
     }
 */
     $last_dates = unserialize($CurrUser->last_dates);
+    $last_orders = unserialize($CurrUser->last_orders);
+    
+if($_POST['status']){
+        ini_set('log_errors', true);
+        ini_set('error_log', dirname(__FILE__).'/ipn_errors.log');
+        error_log("group_guid=".$group_guid);
+        error_log($last_orders[$group_guid]."-order_id-".$order_id);
+        error_log("status=".$_POST['status']);
+        if($_POST['status'] !='ACCEPTED'){
+            exit(0);
+        }
+}
+if($last_orders[$group_guid] ==$order_id){
+        if($_POST['status']){
+            error_log("orderid already processed");
+            exit(0);
+        }else{
+            system_message("orderid processed");
+            forward($group->getURL());
+        }
+        
+}else{
+        //exit(0);
+    $last_orders[$group_guid] =$order_id;
+    
+        
     if (!$last_dates[$group_guid] || $last_dates[$group_guid] ==''){
         $last_dates[$group_guid] = date('Y-m-d H:i');
     }
@@ -37,7 +64,6 @@ elgg_set_ignore_access($ia);
     }
     
 
-    $CurrUser->last_dates = serialize($last_dates);
                   
     //$last_dates = unserialize($CurrUser->last_dates);
    // system_message($last_dates[$group_guid] );
@@ -66,9 +92,19 @@ elgg_set_ignore_access($ia);
             add_entity_relationship($CurrUser->guid, 'membership_request', $group->guid);
             system_message(elgg_echo("groups:joinrequestmade"));
         }
+if(!$_POST['status']){
         forward($group->getURL());
+}
     }
+$CurrUser->last_orders = serialize($last_orders);
+    $CurrUser->last_dates = serialize($last_dates);
+if($_POST['status']){
+ 
+        error_log("filial");
 
+}
+}
+elgg_set_ignore_access($ia);
 
     
 //``````````````````````````````````````````````````````````````````````````````````````````````````

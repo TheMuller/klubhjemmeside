@@ -27,13 +27,15 @@ gatekeeper();
 	$secret = elgg_get_plugin_setting('groups_md5secret', 'paidgroup');
     $groups_payment_mode = elgg_get_plugin_setting('groups_payment_mode', 'paidgroup');
 	$xAccept='join_payment_handler_block_3_x1_EPAY.php';
+    $orderid = time();
 	$params = array
 	(
         "merchant" => $groups_merchant_number,
 		'amount' => $amount,
 		'currency' => $groups_currency,
-		'orderid' => time(),
-		'acceptReturnUrl'   => elgg_get_site_url().'mod/paidgroup/'.$xAccept		.'?p='.$GRPS.'&g='.$GRPN.'&u='.$USRI,
+		'orderid' => $orderid,
+		'acceptReturnUrl'   => elgg_get_site_url().'mod/paidgroup/'.$xAccept		.'?p='.$GRPS.'&g='.$GRPN.'&u='.$USRI.'&o='.$orderid,
+        'callbackUrl'   => elgg_get_site_url().'mod/paidgroup/'.$xAccept	.'?p='.$GRPS.'&g='.$GRPN.'&u='.$USRI.'&o='.$orderid,
 
 		'groupid' => $GRPN
 	);
