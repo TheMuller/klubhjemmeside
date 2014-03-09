@@ -10,24 +10,10 @@ $order_id = $_GET['o'];
 $ia = elgg_set_ignore_access(true);
 $group=get_entity($group_guid);
 
-/*
-    if($group->group_period_type =='duration'){
-        $GRPS = $group->group_paid_price * $group->group_paid_LockedPeriod;
-    }elseif($group->group_price_type == 'fixed'){
-        $GRPS = $group->group_paid_price;
-    }else{
-        $end_date = strtotime($group->group_paid_MembershipEnd);
-        $daystopay = ceil(($end_date-time())/(24*60*60));
-        $GRPS = $group->group_paid_price * $daystopay;
-    }
-    if($Group_paid_price - $GRPS ) > 100){
-        //there is some fraud happening now.
-    }
-*/
     $last_dates = unserialize($CurrUser->last_dates);
     $last_orders = unserialize($CurrUser->last_orders);
     
-if($_POST['status']){
+if(!elgg_is_logged_in ()){
         ini_set('log_errors', true);
         ini_set('error_log', dirname(__FILE__).'/ipn_errors.log');
         error_log("group_guid=".$group_guid);
@@ -38,7 +24,7 @@ if($_POST['status']){
         }
 }
 if($last_orders[$group_guid] ==$order_id){
-        if($_POST['status']){
+        if(!elgg_is_logged_in ()){
             error_log("orderid already processed");
             exit(0);
         }else{
@@ -47,7 +33,7 @@ if($last_orders[$group_guid] ==$order_id){
         }
         
 }else{
-        //exit(0);
+
     $last_orders[$group_guid] =$order_id;
     
         
@@ -64,9 +50,6 @@ if($last_orders[$group_guid] ==$order_id){
     }
     
 
-                  
-    //$last_dates = unserialize($CurrUser->last_dates);
-   // system_message($last_dates[$group_guid] );
     notify_user($CurrUser->getGUID(), $group->getOwnerGUID(),elgg_echo('paidgroup:invoice:email:subject'), elgg_echo('paidgroup:invoice:email:body',array($CurrUser->name,$group->name)));                  
     if($group->isMember($user)){
          forward(elgg_get_site_url().'groups/profile/'.$group->guid);
@@ -92,17 +75,11 @@ if($last_orders[$group_guid] ==$order_id){
             add_entity_relationship($CurrUser->guid, 'membership_request', $group->guid);
             system_message(elgg_echo("groups:joinrequestmade"));
         }
-if(!$_POST['status']){
-        forward($group->getURL());
-}
+        if(elgg_is_logged_in ())forward($group->getURL());
     }
-$CurrUser->last_orders = serialize($last_orders);
+    $CurrUser->last_orders = serialize($last_orders);
     $CurrUser->last_dates = serialize($last_dates);
-if($_POST['status']){
- 
-        error_log("filial");
-
-}
+    if(!elgg_is_logged_in ())error_log("final");
 }
 elgg_set_ignore_access($ia);
 
