@@ -9,6 +9,7 @@ $num_members = get_number_users();
 $title = elgg_echo('members');
 
 $options = array('type' => 'user', 'full_view' => false);
+if(elgg_is_admin_logged_in())$options['admin_view'] = true;
 switch ($vars['page']) {
 	case 'popular':
 		$options['relationship'] = 'friend';
@@ -36,12 +37,14 @@ if($user){
 }
 
 $params = array(
-	'content' => $content,
+	'content' => elgg_view('members/nav', array('selected' => $vars['page'])).$content,
 	'sidebar' => elgg_view('members/sidebar'),
 	'title' => $title . " ($num_members)",
-	'filter_override' => elgg_view('members/nav', array('selected' => $vars['page'])),
+	'filter_override' => false,
 );
-
+if(elgg_is_admin_logged_in())
+$body = elgg_view_layout('one_column', $params);
+else
 $body = elgg_view_layout('content', $params);
 
 echo elgg_view_page($title, $body);
