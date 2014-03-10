@@ -29,9 +29,28 @@ if($vars['paid_view']   == true){
                                           ));
     echo "<p>".$group->briefdescription."</p>";
     echo "</div>";
+	
     echo "<div class='group-gallery-item-footer'>";
+	echo "<ul class='elgg-menu elgg-menu-hz' style='line-height: fixed'>";
+    $membercount =  $group->getMembers(0, 0, TRUE);
+    echo "&nbsp;&nbsp;&nbsp;<li class='tooltip1' data-tooltip1='".$membercount." members' style='width:10px;'>";
+    echo "<span>".$membercount."</span>";
+    $membership = $group->membership;
+    echo "</li >";
+    if ($membership == ACCESS_PUBLIC) {
+		$accessstring =  elgg_echo("open");
+        $accesslongstring = "Aproval is not needed";
+	} else {
+		 $accessstring =  elgg_echo("closed");
+        $accesslongstring = "Need Aproval";
+	}
+    echo "<li class='tooltip' data-tooltip='$accesslongstring' style='float:left;width:40px;'>";
+    echo "<span>".$accessstring."</span>";
+    echo "</li>";
+
+    echo "</ul >";
     if($group->group_paid_flag =='yes'   ){
-        echo "&nbsp&nbsp";
+        
         if($group->group_period_type =='duration'){
             $GRPS = $group->group_paid_price * $group->group_paid_LockedPeriod;
             if($GRPS <=0)$GRPS=0;
@@ -50,24 +69,7 @@ if($vars['paid_view']   == true){
         }
     }
     
-    echo "<ul class='elgg-menu elgg-menu-hz elgg-menu-title'>";
-    $membercount =  $group->getMembers(0, 0, TRUE);
-    echo "<li class='tooltip' data-tooltip='".$membercount." members' style='width:10px;'>";
-    echo "<span>".$membercount."</span>";
-    $membership = $group->membership;
-    echo "</li >";
-    if ($membership == ACCESS_PUBLIC) {
-		$accessstring =  elgg_echo("open");
-        $accesslongstring = "Aproval is not needed";
-	} else {
-		 $accessstring =  elgg_echo("closed");
-        $accesslongstring = "Need Aproval";
-	}
-    echo "<li class='tooltip' data-tooltip='$accesslongstring' style='float:left;width:40px;'>";
-    echo "<span>".$accessstring."</span>";
-    echo "</li>";
-
-    echo "</ul >";
+    
 
 }else{
     include elgg_get_plugins_path() ."groups/views/default/group/default.php";
