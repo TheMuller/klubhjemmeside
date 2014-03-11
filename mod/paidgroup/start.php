@@ -23,6 +23,7 @@ function paidgroup_init() {
     elgg_register_event_handler('login','user','paidgroup_login_redirect');
     elgg_register_plugin_hook_handler('forward', 'system', 'paidgroup_hook_forward_system');
     elgg_register_page_handler('paidgroup', 'paidgroup_page_handler');
+    elgg_register_page_handler('groups', 'paidgroup_groups_page_handler');
     elgg_extend_view('user/default', 'paidgroup/userdefault', 101);
  }
 
@@ -310,6 +311,34 @@ function paidgroup_hook_forward_system($hook, $type, $returnvalue, $params) {
             return elgg_get_site_url() .$url ;
         }
     }
+    function paidgroup_groups_page_handler($segments, $handle) {
+        $pages_dir = dirname(__FILE__) . '/pages';
+        
+        switch ($segments[0]) {
+            case 'all':
+
+                $view_type = get_input("view","list");
+                if($view_type =="list"){
+                    elgg_register_menu_item('title', array('name' => 'project:invite','href' => 'groups/all/?view=gallery','text' => elgg_echo('project:Invite') ,'link_class' => 'elgg-button elgg-button-action',));
+                    elgg_load_library('elgg:groups');
+                 groups_handle_all_page();
+                }
+                else {
+                    elgg_register_menu_item('title', array('name' => 'project:invite','href' => 'groups/all','text' => elgg_echo('project:Invite') ,'link_class' => 'elgg-button elgg-button-action',));
+                    paidgroup_groups_handle_all_page();
+                }
+                
+                break;
+            default:
+                return call_user_func("groups_page_handler", $segments, $handle);//sachin
+        }
+        return true;
+    }
+
+
+function paidgroup_groups_handle_all_page(){
+    echo "under construction";
+}
 
 function paidgroup_page_handler($segments) {
     switch($segments[0]) {
