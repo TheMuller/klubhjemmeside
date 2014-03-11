@@ -322,3 +322,34 @@ function paidgroup_page_handler($segments) {
     }
     return false;
 }
+    
+
+function group_get_getActiveMembers($group){
+        $options =    array(
+                            'relationship' => 'member',
+                            'relationship_guid' => $group->guid,
+                            'inverse_relationship' => true,
+                            'type' => 'user',
+                            );
+        $ia = elgg_set_ignore_access(true);
+        $users = elgg_get_entities_from_relationship($options);
+        $count =0;
+        foreach($users as $user){
+            if($group->owner_guid == $user->guid){
+                $count++;
+                continue;
+            }
+            
+            $last_dates = unserialize($user->last_dates);
+            
+            $last_date = $last_dates[$group->guid];
+            if(!$last_date or $last_date ==''){
+                continue;
+            }
+            $count++;
+            echo "w".$count;
+        }
+        elgg_set_ignore_access($ia);
+        return $count;
+
+}

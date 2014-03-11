@@ -32,7 +32,8 @@ if($vars['paid_view']   == true){
 	
     echo "<div class='group-gallery-item-footer'>";
 	echo "<ul class='elgg-menu elgg-menu-hz' style='line-height: fixed'>";
-    $membercount =  $group->getMembers(0, 0, TRUE);
+    //$membercount =  $group->getMembers(0, 0, TRUE);
+    $membercount =  group_get_getActiveMembers($group);
     echo "&nbsp;&nbsp;&nbsp;<li class='tooltip1' data-tooltip1='".$membercount." members' style='width:10px;'>";
     echo "<span>".$membercount."</span>";
     $membership = $group->membership;
