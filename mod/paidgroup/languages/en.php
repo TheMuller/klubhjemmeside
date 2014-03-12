@@ -6,6 +6,7 @@
  */
 
 $english = array(
+'inactive' => "inActive",
 'groups:paid' => "Paid Group",
                  'groups:groups:access:style' => "Site Access Level",
                  'groups:groups:payment:mode' => "Payment Mode",

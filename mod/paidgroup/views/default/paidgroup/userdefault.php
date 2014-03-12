@@ -15,7 +15,7 @@ if(elgg_get_context() =='groups'){
     
     $last_date = $last_dates[$group_guid];
     if(!$last_date or $last_date ==''){
-        echo "<div style='float:right;'>inactive</div>";
+        echo "<div style='float:right;'>".elgg_echo('inactive')."</div>";
     }
     //echo $group->guid;
 }

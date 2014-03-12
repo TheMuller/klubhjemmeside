@@ -25,6 +25,8 @@ function paidgroup_init() {
     elgg_register_page_handler('paidgroup', 'paidgroup_page_handler');
     elgg_register_page_handler('groups', 'paidgroup_groups_page_handler');
     elgg_extend_view('user/default', 'paidgroup/userdefault', 101);
+    elgg_register_simplecache_view("css/paidgroup/paidgroup");
+    elgg_register_css("paidgroup.paidgroup", elgg_get_simplecache_url("css", "paidgroup/paidgroup"));
  }
 
 
@@ -316,15 +318,14 @@ function paidgroup_hook_forward_system($hook, $type, $returnvalue, $params) {
         
         switch ($segments[0]) {
             case 'all':
-
-                $view_type = get_input("view","list");
-                if($view_type =="list"){
-                    elgg_register_menu_item('title', array('name' => 'project:invite','href' => 'groups/all/?view=gallery','text' => elgg_echo('project:Invite') ,'link_class' => 'elgg-button elgg-button-action',));
+                if(get_input("list_type","list") =="list"){
+                    elgg_register_menu_item('title', array('name' => 'project:invite','href' => 'groups/all/?list_type=gallery','text' => elgg_echo('gallery') ,'link_class' => 'elgg-button elgg-button-action',));
                     elgg_load_library('elgg:groups');
                  groups_handle_all_page();
                 }
                 else {
-                    elgg_register_menu_item('title', array('name' => 'project:invite','href' => 'groups/all','text' => elgg_echo('project:Invite') ,'link_class' => 'elgg-button elgg-button-action',));
+                    elgg_register_menu_item('title', array('name' => 'project:invite','href' => 'groups/all','text' => elgg_echo('list') ,'link_class' => 'elgg-button elgg-button-action',));
+                    elgg_load_css("paidgroup.paidgroup");
                     paidgroup_groups_handle_all_page();
                 }
                 
@@ -337,7 +338,73 @@ function paidgroup_hook_forward_system($hook, $type, $returnvalue, $params) {
 
 
 function paidgroup_groups_handle_all_page(){
-    echo "under construction";
+    
+	// all groups doesn't get link to self
+	elgg_pop_breadcrumb();
+	elgg_push_breadcrumb(elgg_echo('groups'));
+    
+	if (elgg_get_plugin_setting('limited_groups', 'groups') != 'yes' || elgg_is_admin_logged_in()) {
+		elgg_register_title_button();
+	}
+    
+	$selected_tab = get_input('filter', 'newest');
+	switch ($selected_tab) {
+		case 'popular':
+			$content = elgg_list_entities_from_relationship_count(array(
+                                                                        'type' => 'group',
+                                                                        'relationship' => 'member',
+                                                                        'inverse_relationship' => false,
+                                                                        'full_view' => false,
+                                                                        'paid_view' => true,
+                                                                        'list_type' =>"gallery",
+                                                                        'item_class'=>'group-gallery-item ',
+                                                                        'gallery_class'=> 'clearfix',
+                                                                        ));
+			if (!$content) {
+				$content = elgg_echo('groups:none');
+			}
+			break;
+		case 'discussion':
+			$content = elgg_list_entities(array(
+                                                'type' => 'object',
+                                                'subtype' => 'groupforumtopic',
+                                                'order_by' => 'e.last_action desc',
+                                                'limit' => 40,
+                                                'full_view' => false,
+                                                ));
+			if (!$content) {
+				$content = elgg_echo('discussion:none');
+			}
+			break;
+		case 'newest':
+		default:
+			$content = elgg_list_entities(array(
+                                                'type' => 'group',
+                                                'full_view' => false,
+                                                'paid_view' => true,
+                                                'list_type' =>"gallery",
+                                                'item_class'=>'group-gallery-item ',
+                                                'gallery_class'=> 'clearfix',
+                                                ));
+			if (!$content) {
+				$content = elgg_echo('groups:none');
+			}
+			break;
+	}
+    
+	$filter = elgg_view('groups/groupgallery_sort_menu', array('selected' => $selected_tab));
+    
+	$sidebar = elgg_view('groups/sidebar/find');
+	$sidebar .= elgg_view('groups/sidebar/featured');
+    
+	$params = array(
+                    'content' => $content,
+                    'sidebar' => $sidebar,
+                    'filter' => $filter,
+                    );
+	$body = elgg_view_layout('content', $params);
+    
+	echo elgg_view_page(elgg_echo('groups:all'), $body);
 }
 
 function paidgroup_page_handler($segments) {
