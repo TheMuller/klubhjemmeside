@@ -3,7 +3,7 @@
     $step = get_input('step','1');
     
     if($step =='1'){
-        echo "<form action='".elgg_get_site_url()."paidgroup/upload?step=2' method='post' enctype='multipart/form-data'>";
+        echo "<form action='".elgg_get_site_url()."admin/PHPExcel/settings?step=2' method='post' enctype='multipart/form-data'>";
         echo "<input type='file' name='upload'><br>";
         $groups = elgg_get_entities(array('type'=>'group',));
         
@@ -28,7 +28,7 @@
     }
     else{
         $group_guid =  get_input('group_guid','');
-        echo $group_guid;
+        //echo $group_guid;
         $group = get_entity($group_guid);
         //$user_guid= elgg_get_logged_in_user_entity();
         echo $user_guid;
@@ -117,7 +117,7 @@
         }
         
         echo elgg_view("output/url",
-                       array('href' => elgg_get_site_url().'paidgroup/upload?step=3','text' => elgg_echo('submit'),
+                       array('href' => elgg_get_site_url().'admin/PHPExcel/settings?step=3','text' => elgg_echo('submit'),
                              'class' => 'elgg-button elgg-button-delete',));
         echo "<hr>";
         foreach ($not_users as $not_user)
