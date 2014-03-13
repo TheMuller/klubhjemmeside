@@ -409,7 +409,12 @@ function paidgroup_groups_handle_all_page(){
 
 function paidgroup_page_handler($segments) {
     switch($segments[0]) {
-        case 'joinpayment': {
+        case 'upload': {
+            $body = elgg_view ( 'paidgroup/upload');
+            echo elgg_view_page($title,$body);
+            return true;
+        }
+		case 'joinpayment': {
             $body = elgg_view ( 'paidgroup/join_payment_handler_block');
             echo elgg_view_page($title,$body);
             return true;
