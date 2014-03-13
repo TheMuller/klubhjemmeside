@@ -216,6 +216,6 @@ height:10px;
 	background-color:#5cbf2a;
 }
 .joinButton:active {
-position:absolute;
+position:relative;
 top:1px;
 }
