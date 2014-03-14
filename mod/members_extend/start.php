@@ -62,14 +62,7 @@ $mypost= elgg_get_site_url()."members/upload";
 	
 		require_once "$base/upload.php";
 	} else {
-	$myurl= elgg_get_site_url()."action/member/download";
-	$myurl = elgg_add_action_tokens_to_url($myurl);
-	echo elgg_view('output/url', array(
-      'href' => $myurl,
-      'text' => "Download",
-      'is_trusted' => true
-   ));
-   
+	 
    
 		require_once "$base/index.php";
 	}
