@@ -2,6 +2,7 @@
 /**
  * Members navigation
  */
+ 
 
 $tabs = array(
 	'newest' => array(
@@ -24,6 +25,11 @@ $tabs = array(
             'href' => "members/upload",
             'priority' =>1000
             ),
+'xldownload' => array(
+            'text' => elgg_echo('XL Download'),
+            'href' => "members/download",
+            'priority' =>1000
+            ),
 	
 );
 $user= get_entity($_SESSION['user']->guid);
@@ -41,5 +47,7 @@ if($user){
 foreach($tabs as $name => $tab){
     $tab["name"] = $name;
     elgg_register_menu_item("projecttabs", $tab);
+	
 }
 echo elgg_view_menu('projecttabs', array("sort_by" => "priority", "style" => "padding:0;",'class' => 'elgg-menu-filter',));
+echo $user;
