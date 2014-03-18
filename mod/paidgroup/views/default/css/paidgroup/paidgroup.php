@@ -137,10 +137,10 @@ right:-12px; /* above 'right' value + 2 */
 background:white   ;
     margin-right :8px;
     margin-left :8px;
-    margin-bottom :15px;
+    margin-bottom :25px;
 width:225px;
 height:200px;
-    box-shadow: 6px 8px 3px #808080;
+    box-shadow: 5px 14px 6px #808080;
 border: 5px;
     
     -webkit-border: 5px;
