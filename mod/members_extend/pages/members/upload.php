@@ -43,19 +43,54 @@ $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
 echo "afetr..";
 print_r($sheetData);
 
-
+//$group_guid = $group->getGUID();
 foreach ($sheetData as $data)
 {
-	
+	echo $data[A];
 	$user = get_user_by_username($data[A]);
 	if ($user instanceof ElggUser)
 	{
 		echo "User Exist...";
+		 $options = array(
+                          'type' => 'group',
+                          'relationship' => 'member',
+                          'relationship_guid' => $user->guid,
+                          'inverse_relationship' => false,
+                          );
+		$groups = elgg_get_entities_from_relationship($options); 
+		unset($sugested_groupids);
+		unset($redgroupids);
+		for($i='B';$i<='Z';$i++)
+		{
+			//echo $data[$i];
+		
+			if($data[$i]!='')
+			{
+				$sugested_groupids[] = $data[$i];
+			}
+		
+		}
+		var_dump($sugested_groupids);
+		foreach($groups as $group)
+		{
+		echo $group->guid;	
+			if(!in_array($group->guid,$sugested_groupids))
+			{
+				$redgroupids[]=$group->guid;
+			ECHO "not IN";
+				
+			}
+			else 
+			echo "in";
+		}
+		var_dump($redgroupids);
+		$user->redgroupids=serialize($redgroupids);
 	}
 	else
 	{
 		echo "User Not Exist...";
 	}
+	
 	
 }
 

@@ -70,3 +70,19 @@ foreach($tabs as $name => $tab){
 }
 echo elgg_view_menu('projecttabs', array("sort_by" => "priority", "style" => "padding:0;",'class' => 'elgg-menu-filter',));
 echo $user;
+echo "<font color='white'><table width='auto' bgcolor='gray'>
+<td width='40px'>Msg's</td>
+<td width='200px'>Group's</td>
+<td width='40px'>User Image</td>
+<td width='120px'>Name</td>
+<td width='50px' cellpadding='10'>No. Of Event's</td>
+<td width='50px'>Mem- bership</td>
+<td width='150px'>Address</td>
+<td width='65px'>Zipcode</td>
+<td width='65px'>City</td>
+<td width='95px'>Phone</td>
+<td width='100px'>Email</td>
+
+</table>
+</font>";
+echo "<br><br>";
