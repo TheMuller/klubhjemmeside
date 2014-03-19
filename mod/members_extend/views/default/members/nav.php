@@ -69,10 +69,12 @@ foreach($tabs as $name => $tab){
 	
 }
 echo elgg_view_menu('projecttabs', array("sort_by" => "priority", "style" => "padding:0;",'class' => 'elgg-menu-filter',));
-echo $user;
-echo "<font color='white'><table width='auto' bgcolor='gray'>
+//echo $user;
+echo "<font color='white'><table width='1000px' bgcolor='gray'>
 <td width='40px'>Msg's</td>
-<td width='200px'>Group's</td>
+<td width='150px'>Not Sugsted Group</td>
+<td width='150px'>Sgested Group</td>
+<td width='150px'>Member</td>
 <td width='40px'>User Image</td>
 <td width='120px'>Name</td>
 <td width='50px' cellpadding='10'>No. Of Event's</td>

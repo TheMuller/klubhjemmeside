@@ -83,11 +83,22 @@ $bulk_actions = <<<___END
 
 	$bulk_actions_checkbox
 ___END;
+$site = elgg_get_site_entity();
+$suggestedgroupids = unserialize($site->suggestedgroupids);
 
 if (is_array($users) && count($users) > 0) {
+$suggestedgroupids = unserialize($site->suggestedgroupids);
+
 	$html = '<ul class="elgg-list elgg-list-distinct">';
 	foreach ($users as $user) {
-		$html .= "<li id=\"unvalidated-user-{$user->guid}\" class=\"elgg-item uservalidationbyadmin-unvalidated-user-item\">";
+	$color = "red";
+		foreach($suggestedgroupids as $key=>$groupid){
+			if($user->username==$key){
+				$colour = "green";
+			}
+		}
+	
+		$html .= "<li style='color: ".$color."' id=\"unvalidated-user-{$user->guid}\" class=\"elgg-item uservalidationbyadmin-unvalidated-user-item\">";
 		$html .= elgg_view('uservalidationbyadmin/unvalidated_user', array('user' => $user));
 		$html .= '</li>';
 	}

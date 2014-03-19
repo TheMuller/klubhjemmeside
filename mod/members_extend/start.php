@@ -13,7 +13,9 @@ function members_extend_init() {
 	elgg_register_page_handler('members', 'members_extend_page_handler');
 	$action_path = elgg_get_plugins_path().'members_extend/actions/member_extend';
 //elgg_register_action("member/upload", "$action_path/upload.php");
-	elgg_register_action("member/download"						, "$action_path/download.php");
+	elgg_register_action("member/download", "$action_path/download.php");
+	elgg_register_action("member/approve", "$action_path/approve.php");
+	elgg_register_action("member/delete", "$action_path/delete.php");
 }
 
 /**
@@ -39,21 +41,22 @@ include elgg_get_plugins_path().members_extend/actions/member_extend/download.ph
 	} elseif( $page[0] == 'newuser') {
 		require_once "$base/new.php";
 	}elseif( $page[0] == 'upload') {
-	echo "hdsj".$base;
+	
 	///////
 	echo "$user";
 $mypost= elgg_get_site_url()."members/upload";
 	$mypost = elgg_add_action_tokens_to_url($mypost);
 	$file = elgg_view('input/file', array(
-	
-      'name' => "upload",
-      'is_trusted' => true
+		
+		'name' => "upload",
+		'is_trusted' => true
    ));
    $file .= elgg_view('input/submit', array(
   
 	'value' => 'Upload Now'
 	));
 	echo elgg_view('input/form', array(
+	'bgcolor' => "red",
 	'body' => $file,
 	'enctype' => 'multipart/form-data',
 	'action' => 'members/upload'

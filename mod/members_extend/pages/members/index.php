@@ -3,7 +3,10 @@
  * Members index
  *
  */
-
+$site = elgg_get_site_entity();
+//$suggestedgroupids = unserialize($site->suggestedgroupids);
+//var_dump($suggestedgroupids);
+$base = elgg_get_plugins_path() . 'members_extend/pages/members';
 $num_members = get_number_users();
 
 $title = elgg_echo('members');
@@ -21,16 +24,18 @@ switch ($vars['page']) {
 		break;
 		
 	case 'unvalidated':
-	$user= get_entity($_SESSION['user']->guid);
-if($user){
-	if($user->isAdmin()){
-		$content = elgg_view_form('uservalidationbyadmin/bulk_action', array(
-	'id' => 'uservalidationbyadmin-form',
-	'action' => 'action/uservalidationbyadmin/bulk_action'
-));
-	}}
-		break;
+		$user= get_entity($_SESSION['user']->guid);
+		if($user){
+			if($user->isAdmin()){
+				$content = elgg_view_form('uservalidationbyadmin/bulk_action', array(
+				'id' => 'uservalidationbyadmin-form',
+				'action' => 'action/uservalidationbyadmin/bulk_action'
+				));
+			}}
+			break;
 	case 'newest':
+	/*case 'xl upload':
+		require_once "$base/upload.php";*/
 	default:
 		$content = elgg_list_entities($options);
 		break;
