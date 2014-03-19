@@ -51,15 +51,7 @@ foreach ($sheetData as $data)
 	if ($user instanceof ElggUser)
 	{
 		echo "User Exist...";
-		 $options = array(
-                          'type' => 'group',
-                          'relationship' => 'member',
-                          'relationship_guid' => $user->guid,
-                          'inverse_relationship' => false,
-                          );
-		$groups = elgg_get_entities_from_relationship($options); 
 		unset($sugested_groupids);
-		unset($redgroupids);
 		for($i='B';$i<='Z';$i++)
 		{
 			//echo $data[$i];
@@ -71,20 +63,8 @@ foreach ($sheetData as $data)
 		
 		}
 		var_dump($sugested_groupids);
-		foreach($groups as $group)
-		{
-		echo $group->guid;	
-			if(!in_array($group->guid,$sugested_groupids))
-			{
-				$redgroupids[]=$group->guid;
-			ECHO "not IN";
-				
-			}
-			else 
-			echo "in";
-		}
-		var_dump($redgroupids);
-		$user->redgroupids=serialize($redgroupids);
+        $user->suggestedgroupids = serialize($sugested_groupids);
+		
 	}
 	else
 	{

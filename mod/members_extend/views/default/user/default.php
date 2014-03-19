@@ -69,16 +69,42 @@ echo "<table width='auto'>";
 echo "<tr>
 <td width='40px'><img src=".$msg." height='30px' width='35px'>&nbsp;</td>&nbsp;";
 echo "<td><table width='200px'><tr>";
-	
-/*         $options = array(
-                          'type' => 'group',
-                          'relationship' => 'member',
-                          'relationship_guid' => $user->guid,
-                          'inverse_relationship' => false,
-                          );
-		$groups = elgg_get_entities_from_relationship($options); */
+	$sugested_groupids = unserialize($user->suggestedgroupids);
+    $options = array(
+                    'type' => 'group',
+                    'relationship' => 'member',
+                    'relationship_guid' => $user->guid,
+                    'inverse_relationship' => false,
+                    );
+    $groups = elgg_get_entities_from_relationship($options);
+    $last_dates = unserialize($user->last_dates);
+    foreach($groups as $group)
+    {
+        if($last_dates and ($group->group_paid_flag =='yes')){
+            $last_date = $last_dates[$group->guid];
+            if(!$last_date or $last_date ==''){
+                $user_inactive = false;//inactive member, so skip
+                continue;
+            }
+        }
+		echo $group->guid;
+        if(in_array($group->guid,$sugested_groupids))
+        {
+            $greengroupids[]=$group->guid;
+        }
+        else {
+            $redgroupids[]=$group->guid;
+        }
+    }
+    var_dump($greengroupids);
+    var_dump($redgroupids);
+   
+    $yellowgroupids = array_diff($sugested_groupids, $greengroupids);
+    var_dump($yellowgroupids);
+  
+    
 			//echo "<table align='center'><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>";
-			$redgroupids = unserialize($user->redgroupids);
+			//$redgroupids = unserialize($user->redgroupids);
 			foreach($redgroupids as $redgroupid)
 			{
 			$group= get_entity($redgroupid);
