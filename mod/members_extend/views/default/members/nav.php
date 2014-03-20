@@ -27,6 +27,13 @@ $tabs = array(
 $user= get_entity($_SESSION['user']->guid);
 if($user){
 	if($user->isAdmin()){
+	     ?>
+ <script type="text/javascript">
+$(document).ready(function() {
+    $(".me_ul_as_table").prepend( "<li class ='me_div_as_th'> <div class ='me_div_as_td' >Msg's</div><div class ='me_div_as_td' >Not Suggested Group</div><div class ='me_div_as_td' >Suggested Group</div><div class ='me_div_as_td' >Member</div><div class ='me_div_as_td' >User Image</div><div class ='me_div_as_td' >Name</div><div class ='me_div_as_td' >No Of Event's</div><div class ='me_div_as_td' >Membership</div><div class ='me_div_as_td' >Address</div><div class ='me_div_as_td' >Zipcode</div><div class ='me_div_as_td' >City</div><div class ='me_div_as_td' >Phone</div><div class ='me_div_as_td' >Email</div></li>");
+                  });
+ </script>
+ <?php
 		$tabs = array(
 		'newest' => array(
 		'text' => elgg_echo('members:label:newest'),
@@ -69,22 +76,5 @@ foreach($tabs as $name => $tab){
 	
 }
 echo elgg_view_menu('projecttabs', array("sort_by" => "priority", "style" => "padding:0;",'class' => 'elgg-menu-filter',));
-//echo $user;
-echo "<font color='white'><table width='1000px' bgcolor='gray'>
-<td width='40px'>Msg's</td>
-<td width='150px'>Not Sugsted Group</td>
-<td width='150px'>Sgested Group</td>
-<td width='150px'>Member</td>
-<td width='40px'>User Image</td>
-<td width='120px'>Name</td>
-<td width='50px' cellpadding='10'>No. Of Event's</td>
-<td width='50px'>Mem- bership</td>
-<td width='150px'>Address</td>
-<td width='65px'>Zipcode</td>
-<td width='65px'>City</td>
-<td width='95px'>Phone</td>
-<td width='100px'>Email</td>
 
-</table>
-</font>";
 echo "<br><br>";

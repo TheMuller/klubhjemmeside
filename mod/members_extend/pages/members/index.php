@@ -3,6 +3,7 @@
  * Members index
  *
  */
+
 $base = elgg_get_plugins_path() . 'members_extend/pages/members';
 $num_members = get_number_users();
 
@@ -11,7 +12,7 @@ $title = elgg_echo('members');
 $options = array('type' => 'user',
                  'full_view' => false,
                  'pagination'=>true,
-                 'limit'=>2,//sachin tbc
+                 'limit'=>10,//sachin tbc
                  'list_class'=> 'me_ul_as_table',
                  'item_class' =>'me_li_as_tr');
 if(elgg_is_admin_logged_in())$options['admin_view'] = true;
@@ -22,7 +23,15 @@ switch ($vars['page']) {
 		$content = elgg_list_entities_from_relationship_count($options);
 		break;
 	case 'online':
-		$content = get_online_users();
+			global $CONFIG;
+
+		$time = time() - 600;
+	$options['joins'] = array("join {$CONFIG->dbprefix}users_entity u on e.guid = u.guid");
+					$options['wheres'] = array("u.last_action >= {$time}");
+			$options['order_by'] = "u.last_action desc";
+			
+		//$content = get_online_users();
+		$content = elgg_list_entities($options);
 		break;
 		
 	case 'unvalidated':
@@ -55,8 +64,9 @@ else
 $body = elgg_view_layout('content', $params);
 
 echo elgg_view_page($title, $body);
-    
+
 ?>
+
 <style type="text/css">
 
 .me_ul_as_table {
@@ -68,7 +78,7 @@ margin:0px;padding:0px;
 }
 
 .me_li_as_tr {
-display: table-row;
+	display: table-row;
 }
 
 .me_ul_as_table .dm_li_as_tr:nth-child(even){
@@ -78,12 +88,44 @@ display: table-row;
     background-color:#e5e5e5;
 }
 
+.me_div_as_th
+{
+	background-color:gray;
+	font-size:16px;
+	font-weight:bold;
+	display:table-row;
+    //text-align:center;
+	border: 1px solid #000000;
+   // vertical-align: middle;
+}
+
 .me_div_as_td
 {
-display:table-cell;
+	display:table-cell;
     text-align:center;
-border: 1px solid #000000;
+	border: 1px solid #000000;
     vertical-align: middle;
+}
+.tcell_red
+{
+	display:table-cell;
+	float:left;
+	border:2px solid;
+	border-color:red;	
+}
+.tcell_green
+{
+	display:table-cell;
+	float:left;
+	border:2px solid;
+	border-color:green;
+}
+.tcell_yellow
+{
+	display:table-cell;
+	float:left;
+	border:2px solid;
+	border-color:yellow;
 }
 
 </style>

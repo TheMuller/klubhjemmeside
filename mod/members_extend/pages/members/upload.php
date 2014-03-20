@@ -37,7 +37,7 @@ else
 			die('Error loading file "'.pathinfo($target,PATHINFO_BASENAME).'": '.$e->getMessage());
 		}
 
-	echo "<pre>";
+	
 	$sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
 
 	//print_r($sheetData);
