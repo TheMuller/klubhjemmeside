@@ -3,15 +3,17 @@
  * Members index
  *
  */
-$site = elgg_get_site_entity();
-//$suggestedgroupids = unserialize($site->suggestedgroupids);
-//var_dump($suggestedgroupids);
 $base = elgg_get_plugins_path() . 'members_extend/pages/members';
 $num_members = get_number_users();
 
 $title = elgg_echo('members');
 
-$options = array('type' => 'user', 'full_view' => false);
+$options = array('type' => 'user',
+                 'full_view' => false,
+                 'pagination'=>true,
+                 'limit'=>2,//sachin tbc
+                 'list_class'=> 'me_ul_as_table',
+                 'item_class' =>'me_li_as_tr');
 if(elgg_is_admin_logged_in())$options['admin_view'] = true;
 switch ($vars['page']) {
 	case 'popular':
@@ -27,7 +29,7 @@ switch ($vars['page']) {
 		$user= get_entity($_SESSION['user']->guid);
 		if($user){
 			if($user->isAdmin()){
-				$content = elgg_view_form('uservalidationbyadmin/bulk_action', array(
+				$content = elgg_view_form('members/bulk_action', array(
 				'id' => 'uservalidationbyadmin-form',
 				'action' => 'action/uservalidationbyadmin/bulk_action'
 				));
@@ -53,3 +55,35 @@ else
 $body = elgg_view_layout('content', $params);
 
 echo elgg_view_page($title, $body);
+    
+?>
+<style type="text/css">
+
+.me_ul_as_table {
+display:table;
+    border-collapse: collapse;
+    border-spacing: 0;
+width:100%;
+margin:0px;padding:0px;
+}
+
+.me_li_as_tr {
+display: table-row;
+}
+
+.me_ul_as_table .dm_li_as_tr:nth-child(even){
+    background-color:#ffffff  ;
+}
+.me_ul_as_table .dm_li_as_tr:nth-child(odd){
+    background-color:#e5e5e5;
+}
+
+.me_div_as_td
+{
+display:table-cell;
+    text-align:center;
+border: 1px solid #000000;
+    vertical-align: middle;
+}
+
+</style>

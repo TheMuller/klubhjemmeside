@@ -4,9 +4,22 @@ $site = elgg_get_site_entity();
 set_include_path(elgg_get_plugins_path() . 'PHPExcel/vendors/PHPExcleReader/Classes/');
 include elgg_get_plugins_path() . 'PHPExcel/vendors/PHPExcleReader/Classes/PHPExcel/IOFactory.php';
 
-if($_FILES['upload']['error']>0)
+if(empty($_FILES['upload']))
+{
+    $file = elgg_view('input/file', array('name' => "upload", 'is_trusted' => true    ));
+        
+    $file .= elgg_view('input/submit', array('value' => 'Upload Now' ));
+    $content = elgg_view('input/form', array(
+                                           'bgcolor' => "red",
+                                           'body' => $file,
+                                           'enctype' => 'multipart/form-data',
+                                           'action' => 'members/upload'
+                                           ));
+}
+else if($_FILES['upload']['error']>0)
 {
 	register_error('Error');
+    
 }
 else
 {
@@ -57,7 +70,18 @@ else
 		}
 	
 	}
-
+$content .="success";
 }
 
+$params = array(
+                    'content' => elgg_view('members/nav', array('selected' => $vars['page'])).$content,
+                    'sidebar' => elgg_view('members/sidebar'),
+                    'title' => $title . " ($num_members)",
+                    'filter_override' => false,
+                    );
+
+$body = elgg_view_layout('one_column', $params);
+
+    
+echo elgg_view_page($title, $body);
 ?>
