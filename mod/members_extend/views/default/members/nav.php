@@ -33,7 +33,7 @@ if($user){
 	     ?>
  <script type="text/javascript">
 $(document).ready(function() {
-    $(".me_ul_as_table").prepend( "<li class ='me_div_as_th'> <div class ='me_div_as_td' >Msg's</div><div class ='me_div_as_td' >Not Suggested Group</div><div class ='me_div_as_td' >Suggested Group</div><div class ='me_div_as_td' >Member</div><div class ='me_div_as_td' >User Image</div><div class ='me_div_as_td' >Name</div><div class ='me_div_as_td' >No Of Event's</div><div class ='me_div_as_td' >Membership</div><?php 
+    $(".me_ul_as_table").prepend( "<li class ='me_div_as_th'> <div class ='me_div_as_td' >Msg's</div><div class ='me_div_as_td' >Suggested Group</div><div class ='me_div_as_td' >Not Suggested Group</div><div class ='me_div_as_td' >Member Group</div><div class ='me_div_as_td' >Image</div><div class ='me_div_as_td' >Name</div><div class ='me_div_as_td' >Event's</div><?php 
         foreach($MemberFieldLabels as $MemberFieldLabel){
         echo "<div class ='me_div_as_td' >$MemberFieldLabel</div>";
         }

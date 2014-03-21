@@ -60,42 +60,34 @@ echo "<div class='me_div_as_td' style='vertical-align:top;'>";
     //echo "red";var_dump($redgroupids);
    
     $yellowgroupids = array_diff($sugested_groupids, $greengroupids);
-    //echo "yellow";var_dump($yellowgroupids);
-  
-    
-			//echo "<table align='center'><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>";
-			//$redgroupids = unserialize($user->redgroupids);
+
 			foreach($yellowgroupids as $yellowgroupid)
 			{
-			$group= get_entity($yellowgroupid);
+				$group= get_entity($yellowgroupid);
 				echo "<div class='me_div_as_td tcell_yellow'>";
-				//echo  "<b>".$group->name."_</b>";
 				$icon_yellow = elgg_view_entity_icon($group, 'tiny', array(
 				'img_class' => 'elgg-index-photo',
-				//'width' => '700px',
-				//'height'=>'230px',
 				));
 				echo $icon_yellow;echo "</div>";
+			}
+			if(count($yellowgroupids))
+				echo "<br><br>".$approve;
+				echo "</div>";
 			
-			}echo "<br><br>".$approve;
-			
-			echo "</div>";
 			echo "<div class='me_div_as_td' style='vertical-align:top;'>";
 			foreach($redgroupids as $redgroupid)
 			{
-			$group= get_entity($redgroupid);
+				$group= get_entity($redgroupid);
 				echo "<div class='me_div_as_td tcell_red'>";
-				//echo  "<b>".$group->name."_</b>";
 				$icon_red = elgg_view_entity_icon($group, 'tiny', array(
 				'img_class' => 'elgg-index-photo',
-				//'width' => '700px',
-				//'height'=>'230px',
 				));
 				echo $icon_red;echo "</div>";
-			}echo "<br><br>".$delete;
-			echo "</div>";
-			
-			
+			}
+			if(count($redgroupids))
+				echo "<br><br>".$delete;
+				echo "</div>";
+
 			echo "<div class='me_div_as_td' style='vertical-align:top;'>";
 			foreach($greengroupids as $greengroupid)
 			{
@@ -115,8 +107,7 @@ echo "<div class='me_div_as_td'>";
 echo elgg_view_entity_icon($user,'tiny')."&nbsp;</div><div class='me_div_as_td'>";
     echo $user->name;echo "</div>";
 	echo "<div class='me_div_as_td'>5</div>";
-	echo "<div class='me_div_as_td'>10</div>";
-    
+	    
     $MemberFields       = explode(",",elgg_get_plugin_setting('MemberField', 'members_extend'));
     foreach($MemberFields as $MemberField){
         echo "<div class ='me_div_as_td' >".$user->$MemberField."</div>";

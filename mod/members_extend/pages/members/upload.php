@@ -6,7 +6,7 @@ include elgg_get_plugins_path() . 'PHPExcel/vendors/PHPExcleReader/Classes/PHPEx
 
 if(empty($_FILES['upload']))
 {
-    $file .= "Select XL file with format ->  (username,groupid1,groupid2,groupid3....)";
+    $file .= "Select XL File with format ->  (username,groupid1,groupid2,groupid3.... [First Row For Header])";
     $file .= elgg_view('input/file', array('name' => "upload", 'is_trusted' => true    ));
         
     $file .= elgg_view('input/submit', array('value' => 'Upload Now' ));
