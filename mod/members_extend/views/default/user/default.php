@@ -110,22 +110,17 @@ echo "<div class='me_div_as_td' style='vertical-align:top;'>";
 				echo $icon_green;echo "</div>";
 			}
 			echo "</div>";
+
 echo "<div class='me_div_as_td'>";
 echo elgg_view_entity_icon($user,'tiny')."&nbsp;</div><div class='me_div_as_td'>";
     echo $user->name;echo "</div>";
 	echo "<div class='me_div_as_td'>5</div>";
 	echo "<div class='me_div_as_td'>10</div>";
-	echo "<div class='me_div_as_td'>Address</div>";
-	echo "<div class='me_div_as_td'>Zipcode</div>";
-	echo "<div class='me_div_as_td'>City</div>";
-	echo "<div class='me_div_as_td'>Phone</div>";
-	echo "<div class='me_div_as_td'>Email</div>";
-	//echo "</table>";
-	
-	
-	
-	
-			
+    
+    $MemberFields       = explode(",",elgg_get_plugin_setting('MemberField', 'members_extend'));
+    foreach($MemberFields as $MemberField){
+        echo "<div class ='me_div_as_td' >".$user->$MemberField."</div>";
+    }			
 			
 }else{
     include elgg_get_root_path() ."views/default/user/default.php";

@@ -6,7 +6,8 @@ include elgg_get_plugins_path() . 'PHPExcel/vendors/PHPExcleReader/Classes/PHPEx
 
 if(empty($_FILES['upload']))
 {
-    $file = elgg_view('input/file', array('name' => "upload", 'is_trusted' => true    ));
+    $file .= "Select XL file with format ->  (username,groupid1,groupid2,groupid3....)";
+    $file .= elgg_view('input/file', array('name' => "upload", 'is_trusted' => true    ));
         
     $file .= elgg_view('input/submit', array('value' => 'Upload Now' ));
     $content = elgg_view('input/form', array(
@@ -15,6 +16,7 @@ if(empty($_FILES['upload']))
                                            'enctype' => 'multipart/form-data',
                                            'action' => 'members/upload'
                                            ));
+    $title = "Upload XL";
 }
 else if($_FILES['upload']['error']>0)
 {
@@ -76,7 +78,7 @@ $content .="success";
 $params = array(
                     'content' => elgg_view('members/nav', array('selected' => $vars['page'])).$content,
                     'sidebar' => elgg_view('members/sidebar'),
-                    'title' => $title . " ($num_members)",
+                    'title' => $title ,
                     'filter_override' => false,
                     );
 

@@ -27,10 +27,17 @@ $tabs = array(
 $user= get_entity($_SESSION['user']->guid);
 if($user){
 	if($user->isAdmin()){
+        
+        $MemberFieldLabels  = explode(",",elgg_get_plugin_setting('MemberFieldLabel', 'members_extend'));
+        
 	     ?>
  <script type="text/javascript">
 $(document).ready(function() {
-    $(".me_ul_as_table").prepend( "<li class ='me_div_as_th'> <div class ='me_div_as_td' >Msg's</div><div class ='me_div_as_td' >Not Suggested Group</div><div class ='me_div_as_td' >Suggested Group</div><div class ='me_div_as_td' >Member</div><div class ='me_div_as_td' >User Image</div><div class ='me_div_as_td' >Name</div><div class ='me_div_as_td' >No Of Event's</div><div class ='me_div_as_td' >Membership</div><div class ='me_div_as_td' >Address</div><div class ='me_div_as_td' >Zipcode</div><div class ='me_div_as_td' >City</div><div class ='me_div_as_td' >Phone</div><div class ='me_div_as_td' >Email</div></li>");
+    $(".me_ul_as_table").prepend( "<li class ='me_div_as_th'> <div class ='me_div_as_td' >Msg's</div><div class ='me_div_as_td' >Not Suggested Group</div><div class ='me_div_as_td' >Suggested Group</div><div class ='me_div_as_td' >Member</div><div class ='me_div_as_td' >User Image</div><div class ='me_div_as_td' >Name</div><div class ='me_div_as_td' >No Of Event's</div><div class ='me_div_as_td' >Membership</div><?php 
+        foreach($MemberFieldLabels as $MemberFieldLabel){
+        echo "<div class ='me_div_as_td' >$MemberFieldLabel</div>";
+        }
+        ?></li>");
                   });
  </script>
  <?php
