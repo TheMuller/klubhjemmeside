@@ -6,8 +6,7 @@
  */
 
 $danish = array(
-                'admin:PHPExcel' => "Excel",
-                'admin:PHPExcel:settings' => "Upload",
+'admin:users:addtogroup' => "Upload users to Group",
 );
 
 add_translation("da", $danish);

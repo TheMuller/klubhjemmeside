@@ -11,6 +11,7 @@ function phpexcel_init() {
     {
         elgg_register_menu_item('page', array('name' => 'excel_admin', 'href' => 'admin/PHPExcel/settings', 'text' => elgg_echo('excel'), 'context' => 'admin', 'section' => 'administer'));
     }
+    elgg_register_admin_menu_item('administer', 'addtogroup', 'users');
  }
 
 

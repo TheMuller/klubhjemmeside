@@ -7,6 +7,7 @@
     if($step =='1'){
         echo "<form action='".elgg_get_site_url()."admin/PHPExcel/settings?step=2' method='post' enctype='multipart/form-data'>";
         echo "<input type='file' name='upload'><br>";
+        echo "Choose group: ";
         $groups = elgg_get_entities(array('type'=>'group',));
         
         foreach($groups as $group){

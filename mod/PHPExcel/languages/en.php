@@ -6,8 +6,7 @@
  */
 
 $english = array(
-'admin:PHPExcel' => "Excel",
-'admin:PHPExcel:settings' => "Upload",
+'admin:users:addtogroup' => "Upload users to Group",
 
 );
 
