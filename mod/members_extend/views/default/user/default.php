@@ -42,11 +42,10 @@ echo "<div class='me_div_as_td' style='vertical-align:top;'>";
         if($last_dates and ($group->group_paid_flag =='yes')){
             $last_date = $last_dates[$group->guid];
             if(!$last_date or $last_date ==''){
-                
-                //continue;
+                continue;
             }
         }
-		//echo $group->guid;
+
         if(in_array($group->guid,$sugested_groupids))
         {
             $greengroupids[]=$group->guid;
@@ -93,11 +92,8 @@ echo "<div class='me_div_as_td' style='vertical-align:top;'>";
 			{
 			$group= get_entity($greengroupid);
 				echo "<div class='me_div_as_td tcell_green'>";
-				//echo  "<b>".$group->name."_</b>";
 				$icon_green = elgg_view_entity_icon($group, 'tiny', array(
 				'img_class' => 'elgg-index-photo',
-				//'width' => '700px',
-				//'height'=>'230px',
 				));
 				echo $icon_green;echo "</div>";
 			}

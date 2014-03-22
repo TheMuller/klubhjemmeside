@@ -9,12 +9,28 @@ $num_members = get_number_users();
 
 $title = elgg_echo('members');
 
+$dbprefix = elgg_get_config("dbprefix");
 $options = array('type' => 'user',
                  'full_view' => false,
                  'pagination'=>true,
                  'limit'=>10,//sachin tbc
                  'list_class'=> 'me_ul_as_table',
                  'item_class' =>'me_li_as_tr');
+$orderby = get_input('orderby','');				 
+if($orderby =='name'){
+$options['joins'] = array("JOIN " . $dbprefix . "users_entity u ON e.guid=u.guid");
+$options["order_by"] = "u.name ";
+}elseif($orderby !=''){
+
+$options['joins'][]  = "JOIN {$dbprefix}metadata $orderby ON e.guid = {$orderby}.entity_guid";
+ $options['joins'][]  = "JOIN {$dbprefix}metastrings {$orderby}_name on {$orderby}.name_id={$orderby}_name.id";
+ $options['joins'][]  = "JOIN {$dbprefix}metastrings {$orderby}_value on {$orderby}.value_id={$orderby}_value.id";
+ $options["order_by"] = "{$orderby}_name.string ";
+}
+
+$sorting = get_input('sorting','');
+$options["order_by"] .= $sorting;
+
 if(elgg_is_admin_logged_in())$options['admin_view'] = true;
 switch ($vars['page']) {
 	case 'popular':
