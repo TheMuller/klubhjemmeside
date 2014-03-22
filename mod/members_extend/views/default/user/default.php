@@ -42,7 +42,8 @@ echo "<div class='me_div_as_td' style='vertical-align:top;'>";
         if($last_dates and ($group->group_paid_flag =='yes')){
             $last_date = $last_dates[$group->guid];
             if(!$last_date or $last_date ==''){
-                continue;
+                $inactivegroupids[]=$group->guid;
+				continue;
             }
         }
 
@@ -54,16 +55,17 @@ echo "<div class='me_div_as_td' style='vertical-align:top;'>";
             $redgroupids[]=$group->guid;
         }
     }
-	//echo "suggested";var_dump($sugested_groupids);
-    //echo "green";var_dump($greengroupids);
-    //echo "red";var_dump($redgroupids);
    
     $yellowgroupids = array_diff($sugested_groupids, $greengroupids);
 
 			foreach($yellowgroupids as $yellowgroupid)
 			{
+				if(in_array($yellowgroupid,$inactivegroupids))
+				{
+					$addcolor = "tcell_blue";
+				}
 				$group= get_entity($yellowgroupid);
-				echo "<div class='me_div_as_td tcell_yellow'>";
+				echo "<div class='me_div_as_td tcell_icon $addcolor'>";
 				$icon_yellow = elgg_view_entity_icon($group, 'tiny', array(
 				'img_class' => 'elgg-index-photo',
 				));
@@ -77,7 +79,7 @@ echo "<div class='me_div_as_td' style='vertical-align:top;'>";
 			foreach($redgroupids as $redgroupid)
 			{
 				$group= get_entity($redgroupid);
-				echo "<div class='me_div_as_td tcell_red'>";
+				echo "<div class='me_div_as_td tcell_icon'>";
 				$icon_red = elgg_view_entity_icon($group, 'tiny', array(
 				'img_class' => 'elgg-index-photo',
 				));
@@ -91,7 +93,7 @@ echo "<div class='me_div_as_td' style='vertical-align:top;'>";
 			foreach($greengroupids as $greengroupid)
 			{
 			$group= get_entity($greengroupid);
-				echo "<div class='me_div_as_td tcell_green'>";
+				echo "<div class='me_div_as_td tcell_icon'>";
 				$icon_green = elgg_view_entity_icon($group, 'tiny', array(
 				'img_class' => 'elgg-index-photo',
 				));

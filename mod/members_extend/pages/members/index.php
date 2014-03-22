@@ -122,6 +122,17 @@ margin:0px;padding:0px;
 	border: 1px solid #000000;
     vertical-align: middle;
 }
+.tcell_icon
+{
+	border: 0px solid #000000;
+	float:left;
+}
+.tcell_blue
+{
+	float:left;
+	border:2px solid;
+	border-color:blue;	
+}
 .tcell_red
 {
 	display:table-cell;
