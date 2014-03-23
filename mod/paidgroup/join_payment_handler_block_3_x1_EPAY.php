@@ -50,7 +50,8 @@ if($last_orders[$group_guid] ==$order_id){
     }
    $CurrUser->last_orders = serialize($last_orders);
     $CurrUser->last_dates = serialize($last_dates);    
-
+    $CurrUser->save();
+    
     notify_user($CurrUser->getGUID(), $group->getOwnerGUID(),elgg_echo('paidgroup:invoice:email:subject'), elgg_echo('paidgroup:invoice:email:body',array($CurrUser->name,$group->name)));                  
     if($group->isMember($user)){
          if(elgg_is_logged_in ())forward(elgg_get_site_url().'groups/profile/'.$group->guid);
