@@ -12,19 +12,19 @@
                 }
             }
             return $string;
-
+            
         } else {
             return "An array must be used as input!";
         }
     }
-
+    
     // This function converts from a hexadecimal representation to a string representation.
     function hextostr($hex) {
         $string = "";
         foreach (explode("\n", trim(chunk_split($hex, 2))) as $h) {
             $string .= chr(hexdec($h));
         }
-
+        
         return $string;
     }
 
@@ -36,7 +36,7 @@
             $messageToBeSigned = createMessage($formKeyValues);
             // Calculate the MAC.
             $MAC = hash_hmac("sha256", $messageToBeSigned, hextostr($HmacKey));
-
+            
             // Following is only relevant if you wan't to log the calculated MAC to a log file.
             if ($logfile) {
                 $fp = fopen($logfile, 'a') or exit("Can't open $logfile!");
@@ -45,9 +45,9 @@
                 if (isset($formKeyValues["MAC"]) && $formKeyValues["MAC"] != "")
                     fwrite($fp, " posted MAC:    " . $formKeyValues["MAC"] . PHP_EOL);
             }
-
+            
             return $MAC;
-
+            
         } else {
             die("Form key values must be given as an array");
         }
@@ -162,7 +162,7 @@ function event_calendar_extend_set_event_from_form($event_guid, $group_guid) {
 		$ticket_amount    = get_input('ticket_option_amount_'    . $i);
 		$ticket_spots     = get_input('ticket_option_spots_'     . $i);
 		$ticket_max_spots = get_input('ticket_option_spots_max_' . $i);
-		//					//
+		//					//		
 		if ($ticket_type)
 		$event->$type_var   = $ticket_type;
 		if ($ticket_amount){
@@ -247,7 +247,7 @@ function event_calendar_extend_get_page_content_display_users($event_guid)
 		$limit = 12;
 		$offset = get_input('offset', 0);
 		//echo"<h2>BEFORE event_calendar_get_users_for_event()::</h2><hr>";//:DC:
-		$users = event_calendar_get_users_for_event($event_guid,$limit,$offset,false);
+		//$users = event_calendar_get_users_for_event($event_guid,$limit,$offset,false);
 		//echo"<h2>AFTER event_calendar_get_users_for_events()::",count($users),"</h2><hr>";//:DC:
 		$options = array('types' => 'object',
 		'subtype' => 'ticket_order',
@@ -259,11 +259,21 @@ function event_calendar_extend_get_page_content_display_users($event_guid)
 		'limit' => $limit,
 		'offset' => $offset
 		);
+        $tkts = elgg_get_entities_from_metadata($options);
+        
+        foreach($tkts as $tkt){
+            $user = elgg_get_entities_from_relationship(array('relationship' => $tkt->guid, 'relationship_guid' => $event->event_guid,'inverse_relationship' => TRUE,));
+            if(!in_array($user[0]->guid,$user_guids))$user_guids[]=$user[0]->guid;
+               
+        }
+        foreach($user_guids as$uguid){
+            $users[]= get_entity($uguid);
+        }
 		//echo"<h2>BEFORE elgg_view_entity_list()::</h2><hr>";//:DC:
 		//echo"<h2>BYPASS.......	elgg_extend_view('user/default','event_calendar/calendar_toggle')::</h2><hr>";//:DC:
 		//elgg_extend_view('user/default','event_calendar/calendar_toggle');//:DC:
 		//echo"<h2>BEFORE elgg_view_entity_list()::</h2><hr>";//:DC:
-		$content = elgg_view_entity_list($users,$options);
+
 		$content = elgg_view_entity_list($users,$options);//:DC:EVT-CAL-FULL
 		//echo"<h2>AFTER elgg_view_entity_list()::",count($content),"</h2><hr>";//:DC:
 		//??$content=elgg_view_entity_list($users,$options,0,$limit,true,false,true);//:DC:EVT-CAL-FULL//:DC:
@@ -325,48 +335,105 @@ function event_calendar_view_orders($event_guid)
 }
 function event_calendar_view_all_orders($event_guid)
 {
+?>
+<style type="text/css">
+.elgg-list > li {
+    border-bottom: none;
+}
+.table_order_list {
+    display:table;
+    border-collapse: collapse;
+}
+.table_order_item {
+display: table-row;
+    border-collapse: collapse;
+}
+
+</style>
+<script>
+function updateQueryStringParameter(uri, key, value) {
+    var re = new RegExp("([?|&])" + key + "=.*?(&|$)", "i");
+    separator = uri.indexOf('?') !== -1 ? "&" : "?";
+    if (uri.match(re)) {
+        return uri.replace(re, '$1' + key + "=" + value + '$2');
+    }
+    else {
+        return uri + separator + key + "=" + value;
+    }
+}
+
+function on_select_limit(limit){
+    window.location =  updateQueryStringParameter(window.location.href,'limit',limit);
+}
+function on_select_order(order){
+    window.location =  updateQueryStringParameter(window.location.href,'orderby',order);
+}
+</script>
+<?php
+    global $CONFIG;
     elgg_load_js('elgg.event_calendar');
     elgg_push_breadcrumb(elgg_echo('event_calendar:show_events_title'), 'event_calendar/list');
-    $entities = elgg_get_entities(array('type'=>'object','subtype'=>'event_calendar'));
     $title = elgg_echo('event_calendar:view_all_orders' );
-    foreach($entities as $event){
- 		//event_calendar_handle_menu($event_guid);
-		//$title = elgg_echo('event_calendar:view_orders', array(htmlspecialchars($event->title)));
-		$event_container = get_entity($event->container_guid);
-		if (elgg_instanceof($event_container, 'group')) {
-			elgg_push_context('groups');
-			elgg_set_page_owner_guid($event->container_guid);
-			//elgg_push_breadcrumb(elgg_echo('event_calendar:group_breadcrumb'), 'event_calendar/group/' . $event->container_guid);
-		} else {
-			//elgg_push_breadcrumb(elgg_echo('event_calendar:show_events_title'), 'event_calendar/list');
-		}
-		//elgg_push_breadcrumb($event->title, $event->getURL());
-		//elgg_push_breadcrumb(elgg_echo('event_calendar:view_orders', array(htmlspecialchars($event->title))));
-		$limit = 0;
+
+ 		$limit = get_input('limit', 10);
 		$offset = get_input('offset', 0);
+    
+    
+    
 		$options = array('types' => 'object',
-                         'subtype' => 'ticket_order',						//views/default/object/ticket_order.php
-                         'metadata_name_value_pairs' => array(
-                                                              array('name' => 'event_guid', 'value' => $event->guid, 'operand' => '='),
-                                                              array('name' => 'status', 'value' => 'declined', 'operand' => '!='),
-                                                              ),
+                         'subtype' => 'ticket_order',	
+                         'metadata_name_value_pairs' => array( array('name' => 'status', 'value' => 'declined', 'operand' => '!='),),
                          'full_view' => false,
+                         'table_view' => true,
                          'limit' => $limit,
-                         'offset' => $offset
+                         'offset' => $offset,
+                         'list_class'=> 'table_order_list',
+                         'item_class' =>'table_order_item'
                          );
-		elgg_extend_view('user/default','event_calendar/calendar_toggle');
-		$o_content = elgg_list_entities_from_metadata($options);	//views/default/object/ticket_order.php
-        if($o_content )$content .=$event->title.$o_content;
+    $orderby = get_input('orderby', '');
+    if($orderby=='orderid'){
+        $options['order_by']="e.guid ASC";
+    }else if($orderby=='event'){
+    
+    $options['joins'][]  = "JOIN {$CONFIG->dbprefix}metadata lat on e.guid=lat.entity_guid";
+	$options['joins'][]  = "JOIN {$CONFIG->dbprefix}metastrings lat_name on lat.name_id=lat_name.id";
+	$options['joins'][]  = "JOIN {$CONFIG->dbprefix}metastrings lat_value on lat.value_id=lat_value.id";
+    $options['wheres'][] = "lat_name.string='event_guid'";
+	$options["order_by"] = "lat_value.string ASC";
+    
+    }else if($orderby=='attendee'){
+        $options["order_by"] = "e.owner_guid ASC";
     }
+		elgg_extend_view('user/default','event_calendar/calendar_toggle');
+    $limits = array('10','15','20','30','50','70','100');
+	$content .= elgg_echo('event_calendar:pagelimit').
+                elgg_view('input/dropdown',array( 'name' => 'limit','value'=>$limit,'options'=>array_combine($limits, $limits)  ,'onchange'=>'on_select_limit(this.value)'));
+    
+    $content .=  "<div style='display: table-row;clear:both;'>";
+    
+    $text1 = "border:1px solid;display: table-cell;vertical-align:middle;text-align:center;'>";
+    $text2 = $text1."<a href='#' onclick='on_select_order(\"";
+
+    $content .=  "<div class='table_order_list' style='background:#CCC;margin-bottom:-4px;'><div style='width:150px;".$text2."orderid\")'>".elgg_echo('event_calendar:orderid')."</a></div>";
+    $content .=  "<div style='width:200px;".$text2."event\")'>".elgg_echo('event_calendar:eventtitle')."</a></div>";
+    $content .=  "<div style='width:140px;".$text2."attendee\")'>".elgg_echo('event_calendar:attendee')."</a></div>";
+    $content .=  "<div style='width:100px;".$text1.elgg_echo('event_calendar:amount')."</div>";
+    $content .=  "<div style='width:130px;".$text1."</div>";
+    $content .=  "</div>";
+
+    
+		$content .= elgg_list_entities_from_metadata($options);
+    
+    
     $params = array('title' => $title, 'content' => $content, 'filter' => '', 'sidebar' => $sidebar);
 	$body = elgg_view_layout("content", $params);
 	return elgg_view_page($title, $body);
 }
-
+    
 function event_calendar_extend_handle_menu($event_guid) {
 	$event = get_entity($event_guid);
 	$event_calendar_personal_manage = elgg_get_plugin_setting('personal_manage', 'event_calendar');
-	//if ((($event_calendar_personal_manage == 'by_event') && ($event->personal_manage == 'closed' || $event->personal_manage == 'closedfuture_keep_list'))
+	//if ((($event_calendar_personal_manage == 'by_event') && ($event->personal_manage == 'closed' || $event->personal_manage == 'closedfuture_keep_list')) 
 		//|| (($event_calendar_personal_manage == 'closed') || ($event_calendar_personal_manage == 'no'))) {
 //:DC::
 		$url =  "event_calendar/view_orders/$event_guid";
@@ -460,23 +527,23 @@ function epay_check_hash() {
 	} else {
 		return true;
 	}*/
-
+    /*
 	foreach($_REQUEST as $key => $value) {
 		if ($key != "MAC") {
 			$a_REQUEST[$key]= $value;
 		}
 	}
 	$HmacKey = '254c504c4e376c7379792a4265397c4929353562494b5e6c427c71215630556836366d7776583862523330676a74785e522a304f52613b7450403f6b577a7950';
-	$MAC = calculateMac($_POST, $HmacKey, $logfile);
-	echo 'localy calculated MAC is '.$MAC."\n";
+	//schin $MAC = calculateMac($_POST, $HmacKey, $logfile);
+	//echo 'localy calculated MAC is '.$MAC."\n";
 	if ($MAC != $_POST["MAC"]) {
-		echo "MAC IS not MATCHING";
+		//echo "MAC IS not MATCHING";
 		return false;
 	} else {
-		echo "MAC IS MATCHING";
+		//echo "MAC IS MATCHING";
 		return true;
-	}
-
+	}*/
+	
 }
 function event_calendar_payment_success($event, $user_guid, $orderid) {
 	//add request to event because payment has been verified
@@ -489,7 +556,7 @@ function event_calendar_payment_success($event, $user_guid, $orderid) {
 	remove_entity_relationship($event->guid, $orderid, $user_guid);
 	$order = get_entity($orderid);
 	//remove those tickets from sale
-	//deduct the spots
+	//deduct the spots	
 	for ($i = 1; $i <= 5; $i++) {
 		$spots_var = 'ticket_spots_' . $i;
 		$ticket_spots = $order->$spots_var;
@@ -527,7 +594,7 @@ function event_calendar_payment_success($event, $user_guid, $orderid) {
 		}
 	}
 	$user = get_entity($order->getOwnerGUID());//sachin
-
+	
 	if($order->status=='processing')
 	{
 		notify_user(
@@ -556,11 +623,11 @@ function event_calendar_payment_success($event, $user_guid, $orderid) {
 			array('site', 'email')
 		);
 	}else{/**	> You have now recieved the tickets for		//:DC:
-				> NEW A
-				> Order id: 77
+				> NEW A 
+				> Order id: 77 
 				> Transfer id:
-				> 12877839 Username: kenneth
-				> Date: 23-10-2012
+				> 12877839 Username: kenneth 
+				> Date: 23-10-2012 
 				> Venue: NEW A
 				> The ticket(s) contain  A:
 				> (DKK  1234.75)  x  2  =  DKK kr.

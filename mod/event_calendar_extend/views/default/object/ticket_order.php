@@ -147,6 +147,27 @@ else
 	||	$event->status == 'awaitingapproval'
 	)
 	{
+        $menu_button1 = elgg_view('output/confirmlink',
+                                  array(
+                                        'class' => "elgg-button elgg-button-delete",
+                                        'href' => 'action/event_calendar/order/decline?order_guid='
+                                        .$event->guid.'&event_guid=' . $event->event_guid,
+                                        'confirm' => elgg_echo('event_calendar:request:remove:check'),
+                                        'text' => elgg_echo('event_calendar:review_requests:reject'),
+                                        'title' => elgg_echo('event_calendar:review_requests:reject:title'),
+                                        ));
+        $menu_button2 = elgg_view('output/url', array(
+                                                      'text' => elgg_echo('event_calendar:review_requests:accept'),
+                                                      'title' => elgg_echo('event_calendar:review_requests:accept:title'),
+                                                      'href' => "action/event_calendar/order/accept"
+                                                      ."?order_guid="
+                                                      .$event->guid
+                                                      ."&event_guid="
+                                                      .$event->event_guid
+                                                      ,
+                                                      'class' => "elgg-button elgg-button-submit",
+                                                      'is_action' => TRUE,
+                                                      ));
 		$menu.='';
 		$menu.='<div style="border:dotted red 0px;width:40%;float:right;text-align:right;">&nbsp;&nbsp;';
 		$user=elgg_get_logged_in_user_entity();
@@ -154,42 +175,39 @@ else
 		//if(	$event->status == 'awaitingpayment')
 		{
 		//:DC: REJECT
-		$menu.=elgg_view('output/confirmlink',
-				array(
-				'class' => "elgg-button elgg-button-delete",
-				'href' => 'action/event_calendar/order/decline?order_guid='
-					.$event->guid.'&event_guid=' . $event->event_guid,
-				'confirm' => elgg_echo('event_calendar:request:remove:check'),
-				'text' => elgg_echo('event_calendar:review_requests:reject'),
-				'title' => elgg_echo('event_calendar:review_requests:reject:title'),
-			));
+        $menu.=$menu_button1;
 		$menu.='&nbsp;&nbsp;';
 		}//	if(	$event->status == 'awaitingpayment')
 		//:DC: ACCEPT
-		$menu.=elgg_view('output/url', array(
-				'text' => elgg_echo('event_calendar:review_requests:accept'),
-				'title' => elgg_echo('event_calendar:review_requests:accept:title'),
-				'href' => "action/event_calendar/order/accept"
-					."?order_guid="
-					.$event->guid
-					."&event_guid="
-					.$event->event_guid
-				,
-				'class' => "elgg-button elgg-button-submit",
-				'is_action' => TRUE,
-			));
+		$menu.=$menu_button2;
 		$menu.='</div>';
 	}
 	
 	$tags = elgg_view('output/tags', array('tags' => $event->tags));
-	
+	$title =             elgg_view('output/url', array(
+                                                       'href' => '#info'.$event->guid,
+                                                       'rel' => 'popup',
+                                                       'text' => str_replace('%s', $event->getGUID(),  $event->title)
+                                                       ));
+
+    if(elgg_extract('table_view', $vars, FALSE)){
+        $owner = get_entity($event->owner_guid);
+        $tiny_icon = elgg_view_entity_icon($owner, 'tiny');
+        $the_event = get_entity($event->event_guid);  //sachin it seems $event it actually a order ;)
+        
+       // echo "<div style='display: table-row;clear:both;'>";
+        $text1 = "border:1px solid;display: table-cell;vertical-align:middle;text-align:center'>";
+        echo "<div style='width:150px;".$text1.$title."</div>";
+        echo "<div style='width:200px;".$text1."<a href='".$the_event->getURL()."'>".$the_event->title."</a></div>";
+        echo "<div style='width:140px;".$text1.$tiny_icon.$owner->name."</div>";
+        echo "<div style='width:100px;".$text1.number_format($event->total,2,',','.')."</div>";
+        echo "<div style='width:130px;".$text1.elgg_echo($event->status).$menu_button1.$menu_button2."</div>";
+       // echo "</div>";
+    }else{
+    $user = elgg_get_entities_from_relationship(array('relationship' => $event->guid, 'relationship_guid' => $event->event_guid,'inverse_relationship' => TRUE,));
 	$params = array(
 			'entity' => $event,
-			'title' => elgg_view('output/url', array(
-								'href' => '#info'.$event->guid,
-								'rel' => 'popup',
-								'text' => str_replace('%s', $event->getGUID(),  $event->title)
-							)),
+			'title' => $title."<br>".$user[0]->name ,
 			'subtitle' => '<b>DKK:</b> ' 
 		//		Ticket Order: 67 (TITLE-LINK)
 		//		DKK: 123,40 | 11 hours ago | Awaiting Payment 
@@ -201,6 +219,8 @@ else
 	$list_body = elgg_view('object/elements/summary', $params);
 	
 	echo elgg_view_image_block($icon, $list_body);
+    }
+    
 }//ELSE::if ($full)
 
 

@@ -9,17 +9,19 @@ $event = get_entity($event_guid);
 $order = get_entity($order_guid);
 ////////////////////////////////////////////////////////////////////////////////
 //Change the users order status to decline
+    if($order->status == 'processing'){
+      for($i = 1; $i <=5; $i++)
+        {
+              $spots_var = 'ticket_spots_' . $i;
+              $ticket_spots = $order->$spots_var;
+              if($ticket_spots)
+                    {
+                          event_calendar_increase_spots($event_guid, $i, $ticket_spots);
+                        }
+            }
+    }
 $order->status = 'declined';
-	//increase spots
-	for($i = 1; $i <=5; $i++)
-		{
-			$spots_var = 'ticket_spots_' . $i;
-			$ticket_spots = $order->$spots_var;
-			if($ticket_spots)
-				{
-					event_calendar_increase_spots($event_guid, $i, $ticket_spots);
-				}
-		}
+
 ////////////////////////////////////////////////////////////////////////////////
 if($event->save())
 	{

@@ -9,14 +9,15 @@ $event = get_entity($event_guid);
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 if (elgg_instanceof($event,'object','event_calendar'))
 {
-	//@todo... listen out for tickets selected and the quantity. Work out the overrall ammount and put something in the description. Perhaps we should also log the ammount of tickets? If so, we should create an order object which stores this information.
+	//@todo... listen out for tickets selected and the quantity. Work out the overrall ammount and put something in the description. Perhaps we should also log the ammount of tickets? If so, we should create an order object which stores this information. 
 	//thefore orderid would now be simply the guid of the new order object. the subtype should be ticket_order.
 	$ticket_order = new ElggObject();
 	$ticket_order->subtype = 'ticket_order';
+	$ticket_order->access_id = 2;
 	$ticket_order->title = 'Ticket Order: %s'; //grab in the guid later
 	$order_total = 0;
 	$free_tickets =0 ;
-	for($i = 1; $i <=5; $i++)		//:DC:	EURO AMNT FMT
+	for($i = 1; $i <=5; $i++)		//:DC:	EURO AMNT FMT		
 	{								//1.234,75 | Total: 2.469,50
 		$ticket_type = get_input('ticket_option_type_' . $i);
 		$ticket_amount = get_input('ticket_option_amount_' . $i);
@@ -75,7 +76,8 @@ if (elgg_instanceof($event,'object','event_calendar'))
 				$orderid = $event_guid . $user_guid;
 				$secret = elgg_get_plugin_setting('md5secret', 'event_calendar');
 				////////////////////////////////////////////////////////////////////////////////////////////////////
-				$url = 'https://ssl.ditonlinebetalingssystem.dk/integration/ewindow/Default.aspx';
+				//$url = 'https://ssl.ditonlinebetalingssystem.dk/integration/ewindow/Default.aspx';
+                
 				$params = array
 				(
 	/*************************************************************************************
@@ -89,22 +91,22 @@ if (elgg_instanceof($event,'object','event_calendar'))
 				'currency' => $currency,												//
 				'orderid' => $ticket_order->getGUID(),									//
 				//http://test.klubhjemmeside.dk/event_calendar/payment/accept?			//
-				'accepturl'   => elgg_get_site_url() .'event_calendar/payment/accept',	//
-				'callbackurl' => elgg_get_site_url() .'event_calendar/payment/callback',//
-				'cancelurl'   => elgg_get_site_url() .'event_calendar/payment/decline',	//
+				'accepturl'   => elgg_get_site_url() .'event_calendar/payment/accept',	//		
+				'callbackurl' => elgg_get_site_url() .'event_calendar/payment/callback',//		
+				'cancelurl'   => elgg_get_site_url() .'event_calendar/payment/decline',	//		
 				'description' => 'Order'												//
 				);
 				////////////////////////////////////////////////////////////////////////////////////////////////////
 				$params['hash'] = md5(implode("", array_values($params)) . $secret);
 				$query = http_build_query($params) . "\n";
-				add_entity_relationship($user_guid, $ticket_order->getGUID(), $event_guid);
+				add_entity_relationship($user_guid, $ticket_order->getGUID(), $event_guid); 	
 				//forward($url . '?' . $query); sachin
 				////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
+                
+                
                 // Put the DIBS payment window URL here or your own test URL.
                 $dibsPostUrl = 'https://sat1.dibspayment.com/dibspaymentwindow/entrypoint'; // Change this if you wan't to post to DIBS.
-
+                $dibsPostUrl = elgg_get_site_url().'mod/event_calendar_extend/epayaccept.php';
                 // Build an array holding the values which should be posted.
                 $formKeyValues = array(
                                        // Put your merchant ID here.
@@ -118,7 +120,7 @@ if (elgg_instanceof($event,'object','event_calendar'))
                                        // Put an accept or return URL here. You should try to use a secure site (https).
                                        "acceptReturnUrl" => elgg_get_site_url() .'event_calendar/payment/accept',
                                        );
-
+                
                 $query = http_build_query($formKeyValues) . "\n";
                 forward($dibsPostUrl . '?' . $query);
 

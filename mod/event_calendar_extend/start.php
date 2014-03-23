@@ -31,6 +31,8 @@ function event_calendar_extend_init() {
 	elgg_register_action("event_calendar/select_tickets/no_payment"	, "$action_path/order_no_payment.php");
 	elgg_register_action("event_calendar/attending/export"			, "$action_path/attending_export.php");
 	elgg_register_action("event_calendar/attending"					, "$action_path/attending.php");
+    
+    elgg_register_action("event_calendar/payment_retry"			, "$action_path/payment_gateway_retry.php");
 	//
 	register_plugin_hook('permissions_check', 'all', 'event_calendar_permissions');
 	//register this to 
@@ -80,7 +82,13 @@ function event_calendar_extend_page_handler($page)
 	}
 //====================================================================================================
 	elgg_load_library('elgg:event_calendar');
-	//````````````````````````````````````````````````````````````````````````````````````````````````````	
+	//````````````````````````````````````````````````````````````````````````````````````````````````````
+    if(elgg_is_admin_logged_in()) {
+        $url = "event_calendar/view_all_orders";
+        $item = new ElggMenuItem('events_calendar:allorders', elgg_echo('event_calendar:view_all_orders'), $url);
+        //$item->setPriority(2);
+        elgg_register_menu_item('page', $item);
+    }
 	$page_type = $page[0];
 	if(!$page_type||$page_type=='')
 		$page_type='list';
@@ -88,6 +96,14 @@ function event_calendar_extend_page_handler($page)
 	//````````````````````````````````````````````````````````````````````````````````````````````````````	
 	switch ($page_type)
 	{
+		case 'touchorders' :
+
+			$TicketOrders = elgg_get_entities(array('types' => 'object','subtype' => 'ticket_order','limit' => 0,));
+			foreach($TicketOrders as $ticket_order)
+				$ticket_order->access_id = 2;
+			echo "DONE THANX";
+			
+		break;
 	//````````````````````````````````````````````````````````````````````````````````````````````````````	
 	case 'pastevents':		//:DC: ++PAST EVENTS
 		//echo"<h2>K @ :PAST-EVENTS:</h2><hr>";
@@ -106,8 +122,26 @@ function event_calendar_extend_page_handler($page)
 			);
 		//echo"<br>:PASTEVENTS:END:";
 		break;
+        case 'upcoming':		//:DC: ++PAST EVENTS
+            //echo"<h2>K @ :PAST-EVENTS:</h2><hr>";
+          
+            $filter_mode="upcoming";
+            if (isset($page[1]))
+                $GroupGuid=$page[1];
+            echo event_calendar_get_page_content_list(
+                                                      $page_type,
+                                                      0,
+                                                      $start_date,
+                                                      $display_mode,
+                                                      $filter_mode,
+                                                      $region,
+                                                      $pastevents
+                                                      );
+            //echo"<br>:PASTEVENTS:END:";
+            break;
 	//````````````````````````````````````````````````````````````````````````````````````````````````````	
 	case 'list':
+        $filter_mode = 'upcoming';
 		if (isset($page[1])) {
 			$start_date = $page[1];
 			if (isset($page[2])) {
@@ -120,14 +154,16 @@ function event_calendar_extend_page_handler($page)
 						$region = '';
 					}
 				} else {
-					$filter_mode = '';
+					$filter_mode = 'upcoming';
 				}
 			} else {
 				$display_mode = '';
+                
 			}
 		} else {
 			$start_date = 0;
 		}
+           
 		echo event_calendar_get_page_content_list(
 			$page_type,0,
 			$start_date,
@@ -162,6 +198,9 @@ echo"<hr>#1 (",$page[1],")<hr>";
 		if (isset($page[1]))
 		{
 			$group_guid = $page[1];
+            $display_mode = '';
+            $filter_mode = '';
+            $region = '';
 			if (isset($page[2])) {
 				$start_date = $page[2];
 				if (isset($page[3])) {
@@ -186,7 +225,7 @@ echo"<hr>#1 (",$page[1],")<hr>";
 			$group_guid = 0;
 		}
 		echo event_calendar_get_page_content_list(		//:DC: ++PAST EVENTS
-			$page_type,0,
+			$page_type,$group_guid,
 			$start_date,
 			$display_mode,
 			$filter_mode,
@@ -208,7 +247,10 @@ echo"<hr>#1 (",$page[1],")<hr>";
 		case 'view_orders':
 			echo event_calendar_view_orders($page[1]);
 			break;
-//````````````````````````````````````````````````````````````````````````````````````````````````````	
+        case 'view_all_orders':
+			echo event_calendar_view_all_orders();
+			break;
+//````````````````````````````````````````````````````````````````````````````````````````````````````
 	case 'manage_users':
 		echo event_calendar_get_page_content_manage_users($page[1]);
 		break;
@@ -234,6 +276,7 @@ echo"<hr>#1 (",$page[1],")<hr>";
 			$username = $page[1];
 			$user = get_user_by_username($username);
 			$user_guid = $user->guid;
+
 			if (isset($page[2])) {
 				$start_date = $page[2];
 				if (isset($page[3])) {

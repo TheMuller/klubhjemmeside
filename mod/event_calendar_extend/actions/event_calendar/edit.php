@@ -43,9 +43,10 @@ if ($event) {
 			$body = elgg_echo('event_calendar:denied:message', array(
 						$event->title));
 
-			notify_user($order->getOwnerGuid(), $_SESSION['user']->guid, $subject, $body);
+			
 					
 					if($order->status != 'accepted'){
+						notify_user($order->getOwnerGuid(), $_SESSION['user']->guid, $subject, $body);
 						$order->status = 'declined';
 						$order->save();
 					}

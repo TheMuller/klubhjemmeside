@@ -1,4 +1,5 @@
 <?php
+   
 //▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌
 //	X @ FILTER_MENU.PHP
 // generate a list of filter tabs
@@ -21,21 +22,26 @@ $url_start=str_replace('//','/',$url_start);
 $url_start=str_replace('all/all','all',$url_start);
 //▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌
 $tabs = array(
+    'upcoming' => array(
+        'text' => elgg_echo('event_calendar:show_upcoming'),
+        'href' => "$url_start/upcoming",
+        'selected' => ($filter_context == 'upcoming'),
+        'priority' => 200,	),
+    'regular' => array(
+        'text' => elgg_echo('event_calendar:show_regular'),
+        'href' => "$url_start/regular",
+        'selected' => ($filter_context == 'regular'),
+        'priority' => 201,	),
 	'all' => array(
 		'text' => elgg_echo('event_calendar:show_all'),
 		'href' => "$url_start/all",
 		'selected' => ($filter_context == 'all'),
-		'priority' => 200,	),
+		'priority' => 202,	),
 	'mine' => array(
 		'text' => elgg_echo('event_calendar:show_mine'),
 		'href' => "$url_start/mine",
 		'selected' => ($filter_context == 'mine'),
 		'priority' => 300,	),
-	'friend' => array(
-		'text' => elgg_echo('event_calendar:show_friends'),
-		'href' =>  "$url_start/friends",
-		'selected' => ($filter_context == 'friends'),
-		'priority' => 400,	),
 //````````````````````````````````````````
 //			..._extend/	filter_menu.php
 //:DC:	language texts!
@@ -79,10 +85,12 @@ foreach ($tabs as $name => $tab) {
 //	{$tab_rendered['open']}
 $menu = <<<__MENU
 <ul class="elgg-menu elgg-menu-filter elgg-menu-hz elgg-menu-filter-default">
+    {$tab_rendered['upcoming']}
+    {$tab_rendered['regular']}
 	{$tab_rendered['all']}
-	{$tab_rendered['mine']}
-	{$tab_rendered['friend']}
-	{$tab_rendered['past']}
+    {$tab_rendered['past']}
+    {$tab_rendered['mine']}
+
 </ul>
 __MENU;
 echo $menu;

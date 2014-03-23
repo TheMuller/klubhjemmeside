@@ -2,6 +2,13 @@
 
 	$english = array(
 
+//view all order
+    'event_calendar:orderid' => 'OrderID',
+    'event_calendar:eventtitle' => 'Event',
+    'event_calendar:attendee' => 'Attendee',
+    'event_calendar:amount' => 'Amount',
+    'awaitingapproval' =>'Awaiting Approval',
+    'event_calendar:pagelimit' => 'Records per page',
 //````````````````````````````````````````
 //			..._extend/	en.php
 //:DC:	language texts!
@@ -13,11 +20,15 @@
 	'event_calendar:cancel_ticket' => 'Cancel',
 	'event_calendar:cancel_ticket_title' => 'Cancel all your tickets on this Order (Type ',
 	'event_calendar:show_past' => 'Past Events ',
-
+    'event_calendar:show_upcoming' => 'Upcoming Events ',
+    'event_calendar:show_regular' => 'Regular Events ',
 	'event_calendar:listing_title:all' => "All events",
 	'event_calendar:listing_title:open' => "Open events",
 	'event_calendar:listing_title:mine' => "My calendar",
 	'event_calendar:listing_title:friends' => "Friends' calendars",
+    'event_calendar:listing_title:upcoming' => "Upcoming events",
+    'event_calendar:listing_title:regular' => "Regular events",
+    'event_calendar:ticket:reorder' => 'Continue',
 //:DC:	:END:
 //`
 
@@ -29,8 +40,10 @@
 	'event_calendar:settings:payment:md5secret' => 'MD5 secret key',
 	
 	'event_calendar:payment:accepted' => 'Payment accepted!',
+    'event_calendar:payment:accepted_detail' => '<p>Your payment was accepted</p><p><b>Order Ref: </b>%s</p><p><b>Transaction ID: </b> %s </p>',
+                     
 	'event_calendar:payment:declined' => 'Payment declined!',
-			
+	'event_calendar:payment:declined_detail' => 'Sorry, the payment was not accepted',		
 	
 	'event_calendar:settings:currency:title' => "Currency for fees to be shown in (eg. USD, DKK, GBP..)",
 		
@@ -50,10 +63,14 @@
 	'event_calendar:event:status:open' => 'open',
 	'event_calendar:event:status:private' => 'private',
 	
+    
 	'event_calendar:ticket:type' => 'Type',
 	'event_calendar:ticket:amount' => 'Cost (DKK)',
 	'event_calendar:ticket:spots' => 'Spots',
-	'event_calendar:ticket:spots:max' => 'Spots pr. users',
+	'event_calendar:ticket:spots:max' => 'Max. spots',
+	'event_calendar:ticket:spots:sold' => 'Sold',
+	'event_calendar:ticket:spots:left' => 'left',
+	'event_calendar:ticket:spots:total' => 'Total',
 	'event_calendar:ticket:list' => 'Select tickets',
 	'event_calendar:ticket:buynow' => 'Buy now!',
 	'event_calendar:ticket:problem' => 'There was a problem processing these tickets. Please try again.',
@@ -72,7 +89,7 @@
 	'event_calendar:review_order_menu_title' => 'See orders',
 	
 	'event_calendar:view_orders' => 'Orders placed for %s',
-
+    'event_calendar:view_all_orders' => 'All Orders',
 	'event_calendar:order:created:subject' => 'Order confirmation: Your order for the activity \'%s\' has been registered.',
 	'event_calendar:order:created:message' => 'We hereby confirm to have recieved your ticketorder for <b>%s</b>
 <p>Order id: %s</p>
