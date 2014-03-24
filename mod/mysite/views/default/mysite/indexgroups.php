@@ -37,8 +37,9 @@ foreach($groups as  $group)
 	$member_count = $group->getMembers(0, 0, TRUE);
 	$icon = elgg_view_entity_icon($group, 'large', array(
 		'img_class' => 'elgg-index-photo',
-		'width' => '700px',
+		'width' => '100%',
 		'height'=>'230px',
+		'max-width'=>'700px',
 		));
 	$events  = elgg_get_entities(array(
 		'limit' =>3,
@@ -58,9 +59,9 @@ foreach($groups as  $group)
 	
 	
 echo <<<___HTML
-<div id='project_tools_indexgroup_div_$count' style='display : none;'>
+<div id='project_tools_indexgroup_div_$count' style='display : none;max-width:702px;'>
 		$icon
-<div style="position:static;bottom:190px; width:702px;border-bottom-right-radius:15px;border-bottom-left-radius:15px;
+<div style="position:static;bottom:190px; width:100%; max-width:702px; border-bottom-right-radius:15px;border-bottom-left-radius:15px;
             background-color:black;opacity:0.8;filter:alpha(opacity=80); height:67px;">
  
  <div class="elgg-col" style="margin-left:20px;margin-top:5px;">
