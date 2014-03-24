@@ -149,15 +149,16 @@ else
 	{
         $menu_button1 = elgg_view('output/confirmlink',
                                   array(
-                                        'class' => "elgg-button elgg-button-delete",
+                                        'class' => "elgg-icon elgg-icon-delete-alt",
                                         'href' => 'action/event_calendar/order/decline?order_guid='
                                         .$event->guid.'&event_guid=' . $event->event_guid,
                                         'confirm' => elgg_echo('event_calendar:request:remove:check'),
-                                        'text' => elgg_echo('event_calendar:review_requests:reject'),
+                                       // 'text' => elgg_echo('event_calendar:review_requests:reject'),
                                         'title' => elgg_echo('event_calendar:review_requests:reject:title'),
                                         ));
+        if($event->status != 'awaitingpayment')
         $menu_button2 = elgg_view('output/url', array(
-                                                      'text' => elgg_echo('event_calendar:review_requests:accept'),
+                                                      'text' => "",
                                                       'title' => elgg_echo('event_calendar:review_requests:accept:title'),
                                                       'href' => "action/event_calendar/order/accept"
                                                       ."?order_guid="
@@ -165,7 +166,7 @@ else
                                                       ."&event_guid="
                                                       .$event->event_guid
                                                       ,
-                                                      'class' => "elgg-button elgg-button-submit",
+                                                      'class' => "elgg-icon elgg-icon-checkmark",
                                                       'is_action' => TRUE,
                                                       ));
 		$menu.='';

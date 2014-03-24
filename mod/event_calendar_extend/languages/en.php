@@ -9,6 +9,7 @@
     'event_calendar:amount' => 'Amount',
     'awaitingapproval' =>'Awaiting Approval',
     'event_calendar:pagelimit' => 'Records per page',
+	'event_calendar:status' => 'Status',
 //````````````````````````````````````````
 //			..._extend/	en.php
 //:DC:	language texts!
