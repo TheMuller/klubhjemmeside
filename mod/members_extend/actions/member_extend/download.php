@@ -41,22 +41,20 @@ foreach ($users as $user)
 	foreach($sugested_groupids as $suggested_groupid)
 	{
 		$objPHPExcel->getActiveSheet()->SetCellValue($j.$i,$suggested_groupid);
+		$sheet->getColumnDimension($j)->setAutoSize(true);
 		$j++;
 	}
 }
 
 $sheet = $objPHPExcel->getActiveSheet();
 $sheet->getColumnDimension("A")->setAutoSize(true);
-$sheet->getColumnDimension("B")->setAutoSize(true);
-$sheet->getColumnDimension("C")->setAutoSize(true);
-$sheet->getStyle("A1:B1")->applyFromArray(array("font" => array( "bold" => true)));
-$objPHPExcel->getActiveSheet()->setTitle('Simple111');
+$objPHPExcel->getActiveSheet()->setTitle('Sample');
 
 
 
 $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
 
-$file_path = $xlsf_url."/xyz.xlsx";
+$file_path = $xlsf_url."/member_download.xlsx";
  $objWriter->save($file_path);
 
 
@@ -65,7 +63,7 @@ header("Content-Disposition: attachment; filename=\"Sample.xlsx\"");
 			//header("Content-Type: text/csv; charset=UTF-16LE");
 			//header("Content-Type: text/csv; charset=iso-8859-1");
 			header("Content-Type: application/vnd.ms-excel charset=UTF-8; encoding=UTF-8");
-			echo file_get_contents($xlsf_url."/xyz.xlsx");
+			echo file_get_contents($xlsf_url."/member_download.xlsx");
 
 		exit;
 

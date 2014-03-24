@@ -43,7 +43,7 @@ else
 	$sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
 
 	//print_r($sheetData);
-
+$suggestedgroupids = unserialize($site->suggestedgroupids);
 	foreach ($sheetData as $data)
 	{
 
@@ -54,7 +54,11 @@ else
 
 			if($data[$i]!='')
 			{
-				$sugested_groupids[] = $data[$i];
+				$group= get_entity($data[$i]);
+				if ($group instanceof ElggGroup)
+					$sugested_groupids[] = $data[$i];
+				else
+					$wrong_group[] = $data[$i];
 			}
 		}
 		
@@ -66,13 +70,28 @@ else
 		else
 		{
 			//echo "User Not Exist...";
-			$suggestedgroupids = unserialize($site->suggestedgroupids);
-			$suggestedgroupids[$data[A]] = $sugested_groupids;
-			$site->suggestedgroupids = serialize($suggestedgroupids);
+			$sitesuggestedgroupids[$data[A]] = $sugested_groupids;
 		}
 	
 	}
-$content .="success";
+	$site->suggestedgroupids = serialize($sitesuggestedgroupids);
+	
+	$content .="Success...";
+	if(count($wrong_group))
+	{
+	$content .= "<br><hr width='35%' align='left'><font style='padding-left:5%'>Following Group Id's Does Not Exists</font><hr width='35%' align='left'>";
+	}
+	foreach($wrong_group as $wrong_groups){
+		$content .= $wrong_groups."<br>";
+	}
+	if(count($sitesuggestedgroupids))
+	{
+	$content .= "<hr width='80%' align='left'><font style='padding-left:5%'>Following User's Does Not Exists (When they will Ragistered in future We will Show their Suggested Group's)<font><hr width='80%' align='left'>";
+	}
+	foreach($sitesuggestedgroupids as $key=>$sitesuggestedgroupid){
+		$content .= $key."<br>";
+	}
+
 }
 
 $params = array(
@@ -84,6 +103,5 @@ $params = array(
 
 $body = elgg_view_layout('one_column', $params);
 
-    
 echo elgg_view_page($title, $body);
 ?>
