@@ -26,8 +26,14 @@ $approve = elgg_view('output/url', array(
 				'text' => "Remove",
 				'type' => 'button',
 			));
-echo "<div class='me_div_as_td'><img src=".$msg." height='30px' width='35px'></div>";
-echo "<div class='me_div_as_td' style='vertical-align:top;'>";
+echo "<div class='me_div_as_td'>";
+ echo   elgg_view('output/url', array(
+                                  'text' => "",
+                                  'title' => elgg_echo('mail'),
+                                  'href' => elgg_get_site_url()."messages/compose?send_to=".$user->guid,
+                                  'class' => "elgg-icon elgg-icon-mail-alt",
+                                  ));
+echo "</div><div class='me_div_as_td' style='vertical-align:top;'>";
 	$sugested_groupids = unserialize($user->suggestedgroupids);
     $options = array(
                     'type' => 'group',
