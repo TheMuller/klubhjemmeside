@@ -9,7 +9,6 @@ $myurl_delete= elgg_get_site_url()."action/member/delete";
  * @uses $vars['size']   Size of the icon
  */
  
-$msg = elgg_get_site_url()."mod/PHPExcel/msg_icon.png";
 if($vars['admin_view']   == true){
 $user = $vars['entity'];
 $myurl_approve .="?user_guid=".$user->guid;
@@ -110,7 +109,16 @@ echo "</div><div class='me_div_as_td' style='vertical-align:top;'>";
 echo "<div class='me_div_as_td'>";
 echo elgg_view_entity_icon($user,'tiny')."&nbsp;</div><div class='me_div_as_td'>";
     echo $user->name;echo "</div>";
-	echo "<div class='me_div_as_td'>5</div>";
+	echo "<div class='me_div_as_td'>";
+    $start_ts = time();
+    $day = 60*60*24;
+    $week = 7*$day;
+    $month = 31*$day;
+    $end_ts = $start_ts+6*$month;
+    elgg_load_library('elgg:event_calendar');
+    $count = event_calendar_get_events_for_user_between2($start_ts,$end_ts,true,0,0,$user->guid);
+    echo $count;
+    echo "</div>";
 	    
     $MemberFields       = explode(",",elgg_get_plugin_setting('MemberField', 'members_extend'));
     foreach($MemberFields as $MemberField){
