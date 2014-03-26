@@ -90,14 +90,14 @@ $suggestedgroupids = unserialize($site->suggestedgroupids);
 
 	$html = '<ul class="elgg-list elgg-list-distinct">';
 	foreach ($users as $user) {
-	$color = "red";
-		foreach($suggestedgroupids as $key=>$groupid){
+	$color = "black";
+			foreach($suggestedgroupids as $key=>$groupid){
 			if($user->username==$key){
-				$colour = "green";
+				$color = "red";
 			}
 		}
 	
-		$html .= "<li style='color: ".$color."' id=\"unvalidated-user-{$user->guid}\" class=\"elgg-item uservalidationbyadmin-unvalidated-user-item\">";
+		$html .= "<li style='color: ".$color.";' id=\"unvalidated-user-{$user->guid}\" class=\"elgg-item uservalidationbyadmin-unvalidated-user-item\">";
 		$html .= elgg_view('uservalidationbyadmin/unvalidated_user', array('user' => $user));
 		$html .= '</li>';
 	}
