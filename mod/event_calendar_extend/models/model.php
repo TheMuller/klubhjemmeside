@@ -422,25 +422,29 @@ function on_select_order(order){
 		if($orderid_arr!=0){
 			$options['wheres'][] = "e.guid >= $orderid_arr";
 		}
-		$sorting = get_input('sorting','');
-		$options["order_by"] .= $sorting;
+		
+
 		
     $orderby = get_input('orderby', '');
     if($orderby=='orderid'){
-        $options['order_by']="e.guid ASC";
-    }else if($orderby=='event'){
-    
-    $options['joins'][]  = "JOIN {$CONFIG->dbprefix}metadata lat on e.guid=lat.entity_guid";
-	$options['joins'][]  = "JOIN {$CONFIG->dbprefix}metastrings lat_name on lat.name_id=lat_name.id";
-	$options['joins'][]  = "JOIN {$CONFIG->dbprefix}metastrings lat_value on lat.value_id=lat_value.id";
-    $options['wheres'][] = "lat_name.string='event_guid'";
-	$options['joins'][]  = "JOIN {$CONFIG->dbprefix}metadata long on e.guid=long.entity_guid";
-	
-	$options["order_by"] = "lat_value.string ASC";
-    
+        $options['order_by']="e.guid ";
+    }else if($orderby=='eventname'){
+   $options['joins'][]  = "JOIN {$CONFIG->dbprefix}metadata eg on e.guid=eg.entity_guid";
+	$options['joins'][]  = "JOIN {$CONFIG->dbprefix}metastrings eg_name on eg.name_id=eg_name.id";
+	$options['joins'][]  = "JOIN {$CONFIG->dbprefix}metastrings eg_value on eg.value_id=eg_value.id";
+    $options['wheres'][] = "eg_name.string='event_guid'";
+/* $options['joins'][]  = "JOIN {$CONFIG->dbprefix}metadata et on et.entity_guid=eg_value.string";
+	$options['joins'][]  = "JOIN {$CONFIG->dbprefix}metastrings et_name on et.name_id=et_name.id";
+	$options['joins'][]  = "JOIN {$CONFIG->dbprefix}metastrings et_value on et.value_id=et_value.id";
+    $options['wheres'][] = "et_name.string='title'";	
+	$options["order_by"] = "et_value.string ";*/
+$options["order_by"] = "eg_value.string ";
     }else if($orderby=='attendee'){
-        $options["order_by"] = "e.owner_guid ASC";
+        $options["order_by"] = "e.owner_guid ";
     }
+$sorting = get_input('sorting','');
+	$options["order_by"] .=$sorting;
+
 		elgg_extend_view('user/default','event_calendar/calendar_toggle');
     $limits = array('10','15','20','30','50','70','100');
 	$content .= elgg_echo('event_calendar:pagelimit').
@@ -458,18 +462,68 @@ function on_select_order(order){
     $content .=  "<div class='table_order_list' style='background:#CCC;margin-bottom:-4px;'><div style='width:150px;".$text1.elgg_echo('event_calendar:orderid').
 	elgg_echo('').
                 elgg_view("input/text", array('name' => 'name','value' => $orderid_arr, 'onkeypress'=>'on_select_orderid(this.value,event)',))."</div>";
-    $content .=  "<div style='width:200px;".$text1.elgg_echo('event_calendar:eventtitle').
-	elgg_echo('').
-                elgg_view('input/button',array( 'name' => '^','value'=>'DESC','options'=>array_combine($sorting, $sorting)  ,'onclick'=>'on_select_sorting("attendee",this.value)',)).
-	elgg_echo('').
-                elgg_view('input/button',array( 'name' => '^','value'=>'ASC','options'=>array_combine($sorting, $sorting)  ,'onclick'=>'on_select_sorting("attendee",this.value)',))."</div>";
+				
+				
+    $sorting_path = elgg_get_site_url()."mod/event_calendar_extend/graphics/";
+	
+	if($orderby == 'eventname'){
+	$opacity = 1;
+		 if ($sorting == 'DESC'){
 
-    $content .=  "<div style='width:140px;".$text1.elgg_echo('event_calendar:attendee')."</div>";
-	//elgg_echo('').
-    //            elgg_view('input/button',array( 'name' => '^','value'=>'ASC','options'=>array_combine($sorting, $sorting)  ,'onclick'=>'on_select_sorting("eventname",this.value)',)).
-	//elgg_echo('').
-    //           elgg_view('input/button',array( 'name' => 'V','value'=>'DESC','options'=>array_combine($sorting, $sorting)  ,'onclick'=>'on_select_sorting("eventname",this.value)',)).
+        $sorting_path = "<img src='{$sorting_path}sort_down_green.png' height='20px' width='20px' style='opacity:$opacity;'></img>";
+		$newsorting='ASC';
+		//$orderby='event';
+    }else{
 
+        $sorting_path = "<img src='{$sorting_path}sort_up_green.png' height='20px' width='20px' style='opacity:$opacity;'></img>";
+		$newsorting='DESC';
+
+    }
+	}else{
+	$opacity =0.3;
+	        $sorting_path = "<img src='{$sorting_path}sort_up_green.png' height='20px' width='20px' style='opacity:$opacity;'></img>";
+		$newsorting='DESC';
+	}
+    	 
+
+    $content .=  "<div style='width:200px;".$text1.elgg_echo('event_calendar:eventtitle')."&nbsp;&nbsp;".
+	elgg_echo('').
+                elgg_view('output/url',array( 'name'=> 'event','text' => $sorting_path,'href' => "event_calendar/view_all_orders"
+                                                      ."?orderby=eventname"
+                                                      ."&sorting="
+                                                      .$newsorting,
+                                                      'is_action' => TRUE,
+													  )).
+	"</div>";
+
+	$orderby_path = elgg_get_site_url()."mod/event_calendar_extend/graphics/";
+	 
+     
+	 if (($orderby == '') or ($orderby == 'attendee')){
+	 $opacity = 1;
+	 if ($sorting == 'DESC'){
+        $orderby_path = "<img src='{$orderby_path}sort_down_green.png' height='20px' width='20px' style='opacity:$opacity;'></img>";
+		$newsorting='ASC';
+
+    }else{
+        $orderby_path = "<img src='{$orderby_path}sort_up_green.png' height='20px' width='20px' style='opacity:$opacity;'></img>";
+		$newsorting='DESC';
+		}
+	}else{
+		$opacity =0.3;
+	        $orderby_path = "<img src='{$orderby_path}sort_up_green.png' height='20px' width='20px' style='opacity:$opacity;'></img>";
+		$newsorting='DESC';
+	}
+    $content .=  "<div style='width:140px;".$text1.elgg_echo('event_calendar:attendee').
+elgg_echo('').
+                elgg_view('output/url',array('name'=> 'attendee', 'text' => $orderby_path,
+				'href' => "event_calendar/view_all_orders"
+                                                      ."?orderby=attendee"
+                                                      ."&sorting="
+                                                      .$newsorting,
+                                                      'is_action' => TRUE,
+													  )).
+	"</div>";
     $content .=  "<div style='width:100px;".$text1.elgg_echo('event_calendar:amount').
 	elgg_echo('').
                 elgg_view('input/dropdown',array( 'name' => 'amount_value','value'=>$amount_arr,'options'=>array_combine($amount_value, $amount_value)  ,'onchange'=>'on_select_amount(this.value)',))."</div>";
