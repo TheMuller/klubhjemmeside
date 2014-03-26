@@ -55,7 +55,8 @@ foreach($yellowgroupids as $yellowgroupid)
 		}else{
 				$last_dates[$yellowgroupid] = $group->group_paid_MembershipEnd;
 			}
-			
+    $user->last_dates =$last_dates;
+    $user->save();
 			join_group($yellowgroupid, $user_guid);
 			}
 	

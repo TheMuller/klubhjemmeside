@@ -17,6 +17,7 @@ function members_extend_init() {
 	elgg_register_action("member/approve", "$action_path/approve.php");
 	elgg_register_action("member/delete", "$action_path/delete.php");
 	elgg_register_action("members/selected_groups", "$action_path/selected_groups.php");
+    elgg_register_event_handler('login','user','check_first_login');
 }
 
 /**
@@ -51,3 +52,29 @@ include elgg_get_plugins_path().members_extend/actions/member_extend/download.ph
 	}
 	return true;
 }
+    function check_first_login($login_event, $user_type, $user) {
+        $site = elgg_get_site_entity();
+        $last_dates = unserialize($user->last_dates);
+        foreach($site->suggested_guids[$user->username] as $guid){
+            $group = get_entity($guid);
+            $msg_text.= $group->name.",";
+            if (!$last_dates[$guid] || $last_dates[$guid] =='')
+            {
+                $last_dates[$guid] = date('Y-m-d H:i');
+            }
+            
+            if($group->group_period_type =='duration'){
+                $cmd= "+".$group->group_paid_LockedPeriod." month";
+                $last_dates[$guid] = date('Y-m-d H:i',strtotime($cmd,strtotime($last_dates[$group_guid])));
+            }else{
+                $last_dates[$guid] = $group->group_paid_MembershipEnd;
+            }
+            $user->last_dates =$last_dates;
+            $user->save();
+            join_group($guid, $user->guid);
+            $site->suggested_guids[$user->username] ='';
+        }
+        if($msg_text)system_message("You are member of ".$msg_text);
+        
+        return true;
+    }
