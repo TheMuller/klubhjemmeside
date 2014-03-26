@@ -32,12 +32,35 @@ if($user){
         $MemberFieldLabels  = explode(",",elgg_get_plugin_setting('MemberFieldLabel', 'members_extend'));
 		$MemberFields  = explode(",",elgg_get_plugin_setting('MemberField', 'members_extend'));
 		
-        echo "<li id='table_header' class ='me_div_as_th' style='display:none;'> <div class ='me_div_as_td' >Msg's</div><div class ='me_div_as_td' >Suggested Group</div><div class ='me_div_as_td' >Not Suggested Group</div><div class ='me_div_as_td' >Member Group</div><div class ='me_div_as_td' >Image</div><div class ='me_div_as_td' >Name".
+		$orderby = get_input('orderby','');	
+		$sorting = get_input('sorting','');
+		
+		$sorting_path = elgg_get_site_url()."mod/event_calendar_extend/graphics/";
+	
+	if($orderby == 'name'){
+	$opacity = 1;
+		 if ($sorting == 'DESC'){
+        $sorting_path = "<img src='{$sorting_path}sort_down_green.png' height='20px' width='20px' style='opacity:$opacity;'></img>";
+		$newsorting='ASC';
+    }else{
+        $sorting_path = "<img src='{$sorting_path}sort_up_green.png' height='20px' width='20px' style='opacity:$opacity;'></img>";
+		$newsorting='DESC';
+    }
+	}else{
+		$opacity =0.3;
+	    $sorting_path = "<img src='{$sorting_path}sort_up_green.png' height='20px' width='20px' style='opacity:$opacity;'></img>";
+		$newsorting='DESC';
+	}
+		
+        echo "<li id='table_header' class ='me_div_as_th' style='display:none;'> <div class ='me_div_as_td' >Msg's</div><div class ='me_div_as_td' >Suggested Group</div><div class ='me_div_as_td' >Not Suggested Group</div><div class ='me_div_as_td' >Member Group</div><div class ='me_div_as_td' >Image</div><div class ='me_div_as_td' >Name"."&nbsp;&nbsp;".
 				elgg_echo('').
-                elgg_view('input/button',array( 'name' => '^','value'=>'DESC','options'=>array_combine($sorting, $sorting)  ,'onclick'=>'on_select_sorting("name",this.value)',)).
-				
-				elgg_echo('').
-                elgg_view('input/button',array( 'name' => 'v','value'=>'ASC','options'=>array_combine($sorting, $sorting)  ,'onclick'=>'on_select_sorting("name",this.value)',))."</div><div class ='me_div_as_td' >Event's</div>";
+                elgg_view('output/url',array( 'name'=> 'event','text' => $sorting_path,'href' => "members"
+                                                      ."?orderby=name"
+                                                      ."&sorting="
+                                                      .$newsorting,
+                                                      'is_action' => TRUE,
+													  )).
+	"</div><div class ='me_div_as_td' >Event's</div>";
 				
 		  foreach($MemberFieldLabels as $key=>$MemberFieldLabel){
 				echo "<div class ='me_div_as_td' >$MemberFieldLabel".
