@@ -68,8 +68,10 @@ switch ($vars['page']) {
 		break;
 }
 
-$params = array(
-	'content' => elgg_view('members/nav', array('selected' => $vars['page'])).$content,
+	$group_list .= elgg_view_form('members/selected_groups',array());
+	
+	$params = array(
+	'content' => elgg_view('members/nav', array('selected' => $vars['page'])).$group_list.$content,
 	'sidebar' => elgg_view('members/sidebar'),
 	'title' => $title . " ($num_members)",
 	'filter_override' => false,
