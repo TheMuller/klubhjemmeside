@@ -90,10 +90,10 @@ $suggestedgroupids = unserialize($site->suggestedgroupids);
 
 	$html = '<ul class="elgg-list elgg-list-distinct">';
 	foreach ($users as $user) {
-	$color = "black";
+	$color = "red";
 			foreach($suggestedgroupids as $key=>$groupid){
 			if($user->username==$key){
-				$color = "red";
+				$color = "green";
 			}
 		}
 	
