@@ -266,12 +266,12 @@ foreach($OrderZ as $kEO=>$vEO)
 		//http://localhost/_atensci.us_kenneth/action/event_calendar/order/decline?order_guid=67&event_guid=60&__elgg_ts=1353504656&__elgg_token=cb57e5bac315fbcbbd52b61d5d7de660
 		//http://ensci.us/kenneth/action/event_calendar/order/decline?order_guid=83&event_guid=71&__elgg_ts=1353533718&__elgg_token=992e39254f4abf32b87532604228d50b
 		$body.='<div '.'style="width:400px;float:right;text-align:right;margin-top:-12px;">'
-        .'&nbsp;'
-        .elgg_view(
+        .'&nbsp;';
+        $decline = elgg_view(
                    'output/confirmlink',
                    array(
                          'class'   => "elgg-button elgg-button-delete",	//:DC:	-2
-                         'style'  => "width:65px;text-align:center;margin-right:10px;margin-bottom:5px;",
+                         'style'  => "width:65px;text-align:center;margin-bottom:5px;",
                          'href'    => 'action/event_calendar/order/decline'
                          .'?order_guid='.$kEO
                          .'&event_guid='.$event->guid,
@@ -292,11 +292,11 @@ foreach($OrderZ as $kEO=>$vEO)
                    );
         if($OrderStatus[$kEO]=='awaitingpayment')
         {
-          $body.=  elgg_view(
+          $payment =  elgg_view(
                    'output/url',
                    array(
                          'class'   => "elgg-button elgg-button-delete",	//:DC:	-2
-                         'style'  => "width:125px;text-align:center;;",
+                         'style'  => "width:125px;text-align:center;margin-right:10px;",
                          'href'    => elgg_add_action_tokens_to_url(elgg_get_site_url() . 'action/event_calendar/payment_retry'
                                                                     .'?order_guid='.$kEO),
                          'text'    => elgg_echo('event_calendar:ticket:reorder'),
@@ -305,13 +305,15 @@ foreach($OrderZ as $kEO=>$vEO)
                     );
         }
         $body.='</div>';
+		
     }//if(	$event->status == 'awaitingpayment')
     //````````````````````````````````````````
     $body.='<CZ></CZ>';
     //Ticket order 97 (button: cancel)
     //+		Ticket A	2	x	30,25 =		60,50
     //+		TYPE		CTR	x	EACH  =		LINETOT
-    $body.='<div style="width:100%;float:left;text-align:left;">'.$OrderDetails[$kEO].'<div>';
+    $body.='<div style="width:100%;float:left;text-align:left;">'.$OrderDetails[$kEO];
+	$body.= '<div style="float:right;">'.$payment.$decline.'</div></div>';
 }//foreach($OrderZ as $kEO=>$vEO)
 //````````````````````````````````````````
 //	::	SELECT TICKETS TO ORDER	::
