@@ -19,36 +19,30 @@ include 'PHPExcel/Writer/Excel2007.php';
 
 $headers = "Suggested Group's";
 $objPHPExcel = new PHPExcel();
+$sheet = $objPHPExcel->getActiveSheet();
+$sheet->SetCellValue('A1', 'Username');
+$sheet->SetCellValue('B1', $headers);
 
-$objPHPExcel->getActiveSheet()->SetCellValue('A1', 'Username');
-$objPHPExcel->getActiveSheet()->SetCellValue('B1', $headers);
-//$objPHPExcel->getActiveSheet()->SetCellValue('C1', 'E-mail');
 $i = 1;
 foreach ($users as $user)
 {
-
-	
 	$i++;
 	$objPHPExcel->setActiveSheetIndex(0);
-	
-	$objPHPExcel->getActiveSheet()->SetCellValue('A'.$i, $user->username);
-	//$objPHPExcel->getActiveSheet()->SetCellValue('B'.$i, $sugested_groupids);
-	//$objPHPExcel->getActiveSheet()->SetCellValue('C'.$i, $user->email);
-	
+	$sheet->SetCellValue('A'.$i, $user->username);
 	$sugested_groupids = unserialize($user->suggestedgroupids);
 	$j='B';
 	
 	foreach($sugested_groupids as $suggested_groupid)
 	{
-		$objPHPExcel->getActiveSheet()->SetCellValue($j.$i,$suggested_groupid);
+		$sheet->SetCellValue($j.$i,$suggested_groupid);
 		$sheet->getColumnDimension($j)->setAutoSize(true);
 		$j++;
 	}
 }
 
-$sheet = $objPHPExcel->getActiveSheet();
+
 $sheet->getColumnDimension("A")->setAutoSize(true);
-$objPHPExcel->getActiveSheet()->setTitle('Sample');
+$sheet->setTitle('Sample');
 
 
 
