@@ -171,6 +171,7 @@ function paidgroup_manage_unpaid_members($hook, $type, $value, $params) {
         //ok so $group is really a group
         if($user  instanceof  ElggUser){
             $last_dates = unserialize($user->last_dates);
+            var_dump($user->last_dates);
             if($last_dates){
                 $last_date = $last_dates[$group->guid];
                 if($last_date and $last_date !=''){

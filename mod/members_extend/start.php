@@ -55,27 +55,30 @@ include elgg_get_plugins_path().members_extend/actions/member_extend/download.ph
    function check_first_login($login_event, $user_type, $user) {
         $site = elgg_get_site_entity();
         $last_dates = unserialize($user->last_dates);
+       
+       if($user && $user->last_login == 0) {
+        $ia = elgg_set_ignore_access(true);
 		$suggestedgroupids = unserialize($site->suggestedgroupids);
         foreach($suggestedgroupids[$user->username] as $guid){
             $group = get_entity($guid);
             $msg_text.= $group->name.",";
-            if (!$last_dates[$guid] || $last_dates[$guid] =='')
-            {
-                $last_dates[$guid] = date('Y-m-d H:i');
-            }
-            
+
             if($group->group_period_type =='duration'){
-			 $last_dates[$guid] = date('Y-m-d H:i');
+			 $last_dates[$guid] = date('Y-m-d H:i');///first login so must be empty
                 $cmd= "+".$group->group_paid_LockedPeriod." month";
-                $last_dates[$guid] = date('Y-m-d H:i',strtotime($cmd,strtotime($last_dates[$group_guid])));
+                $last_dates[$guid] = date('Y-m-d H:i',strtotime($cmd,strtotime($last_dates[$guid])));
             }else{
                 $last_dates[$guid] = $group->group_paid_MembershipEnd;
             }
-            $user->last_dates =$last_dates;
-            $user->save();
+            $user->last_dates =serialize($last_dates);
             join_group($guid, $user->guid);
-            $site->suggestedgroupids[$user->username] ='';
+            $user->suggestedgroupids = serialize($suggestedgroupids[$user->username]);
+            $user->save();
+            unset($suggestedgroupids[$user->username]);
+            $site->suggestedgroupids[$user->username] =$suggestedgroupids;
         }
+       elgg_set_ignore_access($ia);
         if($msg_text)system_message("You are member of ".$msg_text);
+       }
         return true;
     } 
