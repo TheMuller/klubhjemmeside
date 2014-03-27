@@ -74,8 +74,8 @@ include elgg_get_plugins_path().members_extend/actions/member_extend/download.ph
             join_group($guid, $user->guid);
             $user->suggestedgroupids = serialize($suggestedgroupids[$user->username]);
             $user->save();
-            unset($suggestedgroupids[$user->username]);
-            $site->suggestedgroupids[$user->username] =$suggestedgroupids;
+           // unset($suggestedgroupids[$user->username]);     //TBD dont know why
+           // $site->suggestedgroupids =serialize($suggestedgroupids);
         }
        elgg_set_ignore_access($ia);
         if($msg_text)system_message("You are member of ".$msg_text);
