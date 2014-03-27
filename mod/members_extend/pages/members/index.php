@@ -3,7 +3,16 @@
  * Members index
  *
  */
-
+$site = elgg_get_site_entity();
+$suggestedgroupids = unserialize($site->suggestedgroupids);
+		foreach($suggestedgroupids as $key=>$suggestedgroupid){
+		echo $key;
+		var_dump($suggestedgroupid);
+		$xyz = unserialize($suggestedgroupid);
+		foreach($suggestedgroupid as $xyzx)
+		echo $xyzx;
+			//system_message(unserialize($suggestedgroupid));
+		}
 $base = elgg_get_plugins_path() . 'members_extend/pages/members';
 $num_members = get_number_users();
 
@@ -68,8 +77,12 @@ switch ($vars['page']) {
 		break;
 }
 
-	$group_list .= elgg_view_form('members/selected_groups',array());
 	
+	if(elgg_is_admin_logged_in() and 
+	(($vars['page'] == 'newest') or ($vars['page'] == 'popular') or ($vars['page'] == 'online')))
+		{
+	$group_list .= elgg_view_form('members/selected_groups',array());
+	}
 	$params = array(
 	'content' => elgg_view('members/nav', array('selected' => $vars['page'])).$group_list.$content,
 	'sidebar' => elgg_view('members/sidebar'),
