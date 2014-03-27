@@ -3,16 +3,6 @@
  * Members index
  *
  */
-$site = elgg_get_site_entity();
-$suggestedgroupids = unserialize($site->suggestedgroupids);
-		foreach($suggestedgroupids as $key=>$suggestedgroupid){
-		echo $key;
-		var_dump($suggestedgroupid);
-		$xyz = unserialize($suggestedgroupid);
-		foreach($suggestedgroupid as $xyzx)
-		echo $xyzx;
-			//system_message(unserialize($suggestedgroupid));
-		}
 $base = elgg_get_plugins_path() . 'members_extend/pages/members';
 $num_members = get_number_users();
 
