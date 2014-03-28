@@ -40,6 +40,7 @@ function info_pages_init() {
 
 	//add metatags to the page
 	elgg_extend_view('page/elements/head', 'info_pages/metatags');
+	elgg_extend_view('groups/sidebar/members', 'info_pages/sidebar_group');
 
 	// Register entity type for search
 	elgg_register_entity_type('object', 'info_page');
