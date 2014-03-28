@@ -3,6 +3,38 @@
  * Members index
  *
  */
+function member_extend_get_users(array $options = array(),$func='elgg_get_entities'){
+    $countopt = $options['count'];
+    $limitopt = $options['limit'];
+    $offsetopt = $options['offset'];
+     if(!$_SESSION[$options['sobj']]){
+        $options['count'] = false;$options['limit'] = 0;$options['offset'] =0;
+        $_SESSION[$options['sobj']] = $options['func']($options);
+        if(!empty($_SESSION['member_extend_selected_groups'])){
+            foreach($_SESSION[$options['sobj']] as $key=>$user){
+                $found = false;
+                foreach($_SESSION['member_extend_selected_groups'] as $group_guid){
+                    $group = get_entity($group_guid);
+                    if($group->isMember($user)){
+                        if($last_dates and ($group->group_paid_flag =='yes')){
+                            $last_date = $last_dates[$group->guid];
+                            if(!$last_date or $last_date =='')continue;
+                        }
+                        $found = true;break;
+                    }
+                }
+                if(!$found)unset($_SESSION[$options['sobj']][$key]);
+            }
+        }
+     }
+    if($countopt) {
+        return count($_SESSION[$options['sobj']]);
+    }
+    else {
+        return array_slice($_SESSION[$options['sobj']],$offsetopt,$limitopt);
+    }
+}
+
 /*$user = elgg_get_logged_in_user_entity();
 echo $user->suggestedgroupids."/";
 $site = elgg_get_site_entity();
@@ -43,7 +75,9 @@ switch ($vars['page']) {
 	case 'popular':
 		$options['relationship'] = 'friend';
 		$options['inverse_relationship'] = false;
-		$content = elgg_list_entities_from_relationship_count($options);
+        $options['func'] = "elgg_get_entities_from_relationship_count";
+        $options['sobj'] = "mxuserslist_p";
+        $content = elgg_list_entities($options,'member_extend_get_users','elgg_view_entity_list');
 		break;
 	case 'online':
 			global $CONFIG;
@@ -54,7 +88,10 @@ switch ($vars['page']) {
 			$options['order_by'] = "u.last_action desc";
 			
 		//$content = get_online_users();
-		$content = elgg_list_entities($options);
+		//$content = elgg_list_entities($options,'member_extend_get_online_users','elgg_view_entity_list');
+        $options['func'] = "elgg_get_entities";
+        $options['sobj'] = "mxuserslist_o";
+        $content = elgg_list_entities($options,'member_extend_get_users','elgg_view_entity_list');
 		break;
 		
 	case 'unvalidated':
@@ -71,7 +108,9 @@ switch ($vars['page']) {
 	/*case 'xl upload':
 		require_once "$base/upload.php";*/
 	default:
-		$content = elgg_list_entities($options);
+        $options['func'] = "elgg_get_entities";
+        $options['sobj'] = "mxuserslist";
+		$content = elgg_list_entities($options,'member_extend_get_users','elgg_view_entity_list');
 		break;
 }
 
