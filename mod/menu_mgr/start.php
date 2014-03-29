@@ -13,56 +13,58 @@ elgg_unregister_menu_item('topbar', 'elgg_logo');
 //site menu  
 elgg_register_plugin_hook_handler('register', 'menu:site', 'menu_builder_site_menu_register2');
 elgg_register_plugin_hook_handler('register', 'menu:topbar', 'menu_builder_top_menu_register');
+elgg_register_admin_menu_item('administer', 'settings', 'users','100');
+elgg_register_event_handler('pagesetup', 'system', 'menu_mgr_setup_sidebar_menus');
 
 }
+//top bar
 function menu_builder_top_menu_register($hook, $type, $values) {
- $user = elgg_get_logged_in_user_entity();
- if($user) {
-  $myprojecturl = elgg_get_site_url()."projects/users/".$user->username;
-  $menu_options = array("name" => 'myproject',"text" => '<b>My projects</b>', "href" => '#','priority' => '900',"id" => 'myproject',);
-  $values[] = ElggMenuItem::factory($menu_options);
-
-   $myprojecturl = elgg_get_site_url()."projects/users/".$user->username;
-   $menu_options = array("name" => 'listproject',"text" => 'List projects', "href" => $myprojecturl,'priority' => '100',"id" => 'listproject',"parent_name" =>'myproject');
-   $values[] = ElggMenuItem::factory($menu_options);  
-   
-   $url = elgg_get_site_url()."project/create/".$user->guid;
-   $menu_options = array("name" => 'createproject',"text" => 'Create project', "href" => $url,'priority' => '100',"id" => 'createproject',"parent_name" =>'myproject');
-   $values[] = ElggMenuItem::factory($menu_options);
-
-
-  
-  $menu_options = array("name" => 'NGO',"text" => 'NGO', "href" => "/grps/ngo/all","id" => 'groups-NGO',"parent_name" =>'Groups','priority'=>50);
- $result[] = ElggMenuItem::factory($menu_options);
-   
- }
+$site = elgg_get_site_entity();
+$materials = unserialize($site->material);
+	foreach($materials as $material){
+		if($material[type]=='1'){
+			if(($material[visibility]=='2') && (!elgg_is_logged_in()))		continue;
+			if(($material[visibility]=='1') && (!elgg_is_admin_logged_in())) continue;
+			$menu_options = array("name" => $material['name'],"text" => $material['name'], "href" => $material['url'],"id" => $material['name'],'priority'=>'900');
+			 $values[] = ElggMenuItem::factory($menu_options);
+		}
+		}
+	elgg_register_admin_menu_item('configure', 'menu_mgr', 'appearance');
  return $values;
 }
-
+//site menu
 function menu_builder_site_menu_register2($hook, $type, $values) {
 //If you use $values it will go at end.
 $result = array();
-
-$menu_options = array("name" => 'Home',"text" => 'Home', "href" => "/","id" => 'home','priority'=>50);
-$result[] = ElggMenuItem::factory($menu_options);
-
-if(!elgg_is_logged_in()){
-	$menu_options = array("name" => 'MyPage',"text" => 'MyPage', "href" => "/mypage","id" => 'mypage','priority'=>51);
+$site = elgg_get_site_entity();
+$materials = unserialize($site->material);
+	foreach($materials as $material){
+		if($material[type]=='2'){
+			if(($material[visibility]=='2') && (!elgg_is_logged_in()))		continue;
+			if(($material[visibility]=='1') && (!elgg_is_admin_logged_in())) continue;
+			$menu_options = array("name" => $material['name'],"text" => $material['name'], "href" => $material['url'],"id" => $material['name'],'priority'=>'50');
+			$result[] = ElggMenuItem::factory($menu_options);
+		}
 	$result[] = ElggMenuItem::factory($menu_options);
 	}
-
-$menu_options = array("name" => 'Projects',"text" => 'Projects', "href" => "/projects/all","id" => 'Projects','priority'=>52);
-$result[] = ElggMenuItem::factory($menu_options);
-	
-$menu_options = array("name" => 'Groups',"text" => 'Groups', "href" => "/grps/Nonprofit/all","id" => 'Groups','priority'=>53);
-$result[] = ElggMenuItem::factory($menu_options);
-
-$menu_options = array("name" => 'members',"text" => 'Members', "href" => "/members","id" => 'members','priority'=>54);
-$result[] = ElggMenuItem::factory($menu_options);
-	
-
-
 return $result;
 
+}
+//side bar
+function menu_mgr_setup_sidebar_menus() {
+
+	// Get the page owner entity
+	
+$site = elgg_get_site_entity();
+$materials = unserialize($site->material);
+	foreach($materials as $material){
+		if($material[type]=='3'){
+			if(($material[visibility]=='2') && (!elgg_is_logged_in()))		continue;
+			if(($material[visibility]=='1') && (!elgg_is_admin_logged_in())) continue;
+			$menu_options = array("name" => $material['name'],"text" => $material['name'], "href" => $material['url'],"id" => $material['name'],'priority'=>'50');
+			$result[] = ElggMenuItem::factory($menu_options);
+		}
+	}
+	$page_owner = elgg_get_page_owner_entity();
 }
 
