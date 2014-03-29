@@ -56,7 +56,7 @@ if($user){
                                                       ."?orderby=name"
                                                       ."&sorting="
                                                       .$newsorting,
-                                                      'is_action' => TRUE,
+                                                  //    'is_action' => TRUE,
 													  )).
 			"</div><div class ='me_div_as_td' >Event's</div>";
 				
@@ -83,7 +83,7 @@ if($user){
                                                       ."?orderby=".$MemberFields[$key]
                                                       ."&sorting="
                                                       .$newsorting,
-                                                      'is_action' => TRUE,
+                                                   //   'is_action' => TRUE,
 													  ))."</div>";
 			}
 			echo "</li>";

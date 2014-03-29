@@ -3,6 +3,13 @@
  * Members index
  *
  */
+
+function compare_users($usera, $userb)
+{
+    $orderby = get_input('orderby','');
+    return strcmp($usera->$orderby,$userb->$orderby);
+}
+    
 function member_extend_get_users(array $options = array(),$func='elgg_get_entities'){
     $countopt = $options['count'];
     $limitopt = $options['limit'];
@@ -33,7 +40,17 @@ function member_extend_get_users(array $options = array(),$func='elgg_get_entiti
             }
        }
     }
-
+    $orderby = get_input('orderby','');
+    if($_SESSION['mxorderby'] !=$sorting ){
+        $_SESSION['mxorderby'] = $sorting;
+        usort($_SESSION[$options['sobj']."2"],'compare_users');
+    }
+    $sorting = get_input('sorting','');
+    if($_SESSION['mxsorting'] !=$sorting ){
+        echo $sorting;
+        $_SESSION['mxsorting'] = $sorting;
+        if($sorting == 'DESC') $_SESSION[$options['sobj']."2"] = array_reverse($_SESSION[$options['sobj']."2"]);
+    }
     if($countopt) {
         return count($_SESSION[$options['sobj']."2"]);
     }
@@ -62,7 +79,7 @@ $options = array('type' => 'user',
                  'limit'=>10,//sachin tbc
                  'list_class'=> 'me_ul_as_table',
                  'item_class' =>'me_li_as_tr');
-$orderby = get_input('orderby','');				 
+$orderby = get_input('orderby','');
 if($orderby =='name'){
 $options['joins'] = array("JOIN " . $dbprefix . "users_entity u ON e.guid=u.guid");
 $options["order_by"] = "u.name ";
