@@ -10,7 +10,13 @@ function member_extend_get_users(array $options = array(),$func='elgg_get_entiti
      if(!$_SESSION[$options['sobj']]){
         $options['count'] = false;$options['limit'] = 0;$options['offset'] =0;
         $_SESSION[$options['sobj']] = $options['func']($options);
-        if(!empty($_SESSION['member_extend_selected_groups'])){
+     }
+    if($_SESSION['member_extend_selected_groups_changed'] or empty($_SESSION[$options['sobj']."2"])){
+        $_SESSION['member_extend_selected_groups_changed'] = false;
+        unset($_SESSION[$options['sobj']."2"]);
+        if(empty($_SESSION['member_extend_selected_groups'])){
+            $_SESSION[$options['sobj']."2"] = $_SESSION[$options['sobj']];
+        }else{
             foreach($_SESSION[$options['sobj']] as $key=>$user){
                 $found = false;
                 foreach($_SESSION['member_extend_selected_groups'] as $group_guid){
@@ -23,15 +29,16 @@ function member_extend_get_users(array $options = array(),$func='elgg_get_entiti
                         $found = true;break;
                     }
                 }
-                if(!$found)unset($_SESSION[$options['sobj']][$key]);
+                if($found)$_SESSION[$options['sobj']."2"][]=$user;
             }
-        }
-     }
+       }
+    }
+
     if($countopt) {
-        return count($_SESSION[$options['sobj']]);
+        return count($_SESSION[$options['sobj']."2"]);
     }
     else {
-        return array_slice($_SESSION[$options['sobj']],$offsetopt,$limitopt);
+        return array_slice($_SESSION[$options['sobj']."2"],$offsetopt,$limitopt);
     }
 }
 
