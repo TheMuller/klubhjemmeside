@@ -14,7 +14,6 @@ function member_extend_get_users(array $options = array(),$func='elgg_get_entiti
     $countopt = $options['count'];
     $limitopt = $options['limit'];
     $offsetopt = $options['offset'];
-    $orderby = get_input('orderby','');
      if(!$_SESSION[$options['sobj']]){
         $options['count'] = false;$options['limit'] = 0;$options['offset'] =0;
         $_SESSION[$options['sobj']] = $options['func']($options);
@@ -48,21 +47,12 @@ function member_extend_get_users(array $options = array(),$func='elgg_get_entiti
                 }
            }
        }
-    }
-    $orderby = get_input('orderby','');
-    if($_SESSION['mxorderby'] !=$sorting ){
-        $_SESSION['mxorderby'] = $sorting;
-        usort($_SESSION[$options['sobj']."ASC"],'compare_users');
+       usort($_SESSION[$options['sobj']."ASC"],'compare_users');
     }
     $sorting = get_input('sorting','');
     if($_SESSION['mxsorting'] !=$sorting ){
         $_SESSION['mxsorting'] = $sorting;
-        
-        
-        if($sorting == 'DESC') {
-            $_SESSION[$options['sobj']."DESC"] = array_reverse($_SESSION[$options['sobj']."ASC"],false);
-
-        }
+        if($sorting == 'DESC')    $_SESSION[$options['sobj']."DESC"] = array_reverse($_SESSION[$options['sobj']."ASC"],false);
     }
     if($countopt) {
          return count($_SESSION[$options['sobj']."ASC"]);
