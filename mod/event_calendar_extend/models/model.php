@@ -333,6 +333,68 @@ function event_calendar_view_orders($event_guid)
 	$body = elgg_view_layout("content", $params);
 	return elgg_view_page($title, $body);
 }
+////////////////////////
+function compare_tickets($ticketa, $ticketb){
+    $orderby = $_SESSION['ectktorderby'];
+	if($orderby == 'attendee'){
+		$owner1 = get_entity($ticketa->owner_guid);
+	$owner2 = get_entity($ticketb->owner_guid);
+	return strcmp($owner1->username,$owner2->username);
+	}elseif($orderby == 'eventname'){
+		$eventa = get_entity($ticketa->event_guid);
+	$eventb = get_entity($ticketb->event_guid);
+	//echo $eventa."/".$eventb;
+	return strcmp($eventa->title,$eventb->title);
+	}
+}
+function event_calendar_get_tickets(array $options = array(),$func='elgg_get_entities'){
+    $countopt = $options['count'];
+    $limitopt = $options['limit'];
+    $offsetopt = $options['offset'];
+	$orderby = get_input('orderby','');
+     if(!$_SESSION['ectkts']){
+        $options['count'] = false;$options['limit'] = 0;$options['offset'] =0;
+        $_SESSION['ectkts'] = $options['func']($options);
+    }
+	$status_filter = get_input('status','');
+	
+	if($_SESSION['status_filter'] != $status_filter  ){
+	$_SESSION['ectktsASC'] = $_SESSION['ectkts'];
+	}
+  
+	
+	if($_SESSION['status_filter'] != $status_filter){
+		$_SESSION['status_filter'] = $status_filter;
+		if($status_filter!='all'){
+		foreach ($_SESSION['ectktsASC'] as $key=>$ticket){
+			if($ticket->status !=$status_filter){
+			unset($_SESSION['ectktsASC'][$key]);
+			}
+		}
+	  }
+	}
+	if(($_SESSION['status_filter'] != $status_filter) or ($_SESSION['ectktorderby'] !=$orderby)){
+		if($_SESSION['ectktorderby'] !=$orderby){
+			$_SESSION['ectktorderby'] = $orderby;
+		} 
+		usort($_SESSION['ectktsASC'],'compare_tickets');
+	}
+
+    $sorting = get_input('sorting','');
+    if($_SESSION['ectktsorting'] !=$sorting){
+        $_SESSION['ectktsorting'] = $sorting;
+        if($sorting == 'DESC') 
+		$_SESSION['ectktsDESC'] = array_reverse($_SESSION['ectktsASC'],false);
+    }
+   if($countopt) {
+        return count($_SESSION['ectktsASC']);
+    }
+    else {
+	        return array_slice($_SESSION['ectkts'.$sorting],$offsetopt,$limitopt);
+    }
+
+}
+////////////////////////////
 function event_calendar_view_all_orders($event_guid)
 {
 ?>
@@ -386,6 +448,26 @@ function on_select_orderid(orderid,e){
 			document.getElementById('btnSearch').click();
         }
 }
+function on_select_events(events,e){
+     if (typeof e == 'undefined' && window.event) { e = window.event; }
+        if (e.keyCode == 13)
+        {
+			window.location =  updateQueryStringParameter(window.location.href,'events',events);
+			document.getElementById('btnSearch').click();
+		}
+}
+function on_select_attendee(){
+var search = document.getElementById('search_attendee').value;
+     if (typeof e == 'undefined' && window.event) { e = window.event; }
+	 if(events == search){
+        if (e.keyCode == 13)
+        {
+			
+			window.location =  updateQueryStringParameter(window.location.href,'events',events);
+			document.getElementById('btnSearch').click();
+			}
+        }
+}
 function on_select_order(order){
     window.location =  updateQueryStringParameter(window.location.href,'orderby',order);
 }
@@ -396,7 +478,7 @@ function on_select_order(order){
     elgg_push_breadcrumb(elgg_echo('event_calendar:show_events_title'), 'event_calendar/list');
     $title = elgg_echo('event_calendar:view_all_orders' );
 
- 		$limit = get_input('limit', 10);
+ 		$limit = get_input('limit', 50);
 		$offset = get_input('offset', 0);
     
     
@@ -411,9 +493,6 @@ function on_select_order(order){
                          'item_class' =>'table_order_item'
                          );
 		$status_arr = get_input('status','');
-		if($status_arr!='' and $status_arr!='all'){
-			$options['metadata_name_value_pairs'][] = array('name' => 'status', 'value' => $status_arr, 'operand' => '=');
-		}
 		$amount_arr = get_input('amount',0);
 		if($amount_arr!=0){
 			$options['metadata_name_value_pairs'][] = array('name' => 'total', 'value' => $amount_arr, 'operand' => '>=');
@@ -422,28 +501,25 @@ function on_select_order(order){
 		if($orderid_arr!=0){
 			$options['wheres'][] = "e.guid >= $orderid_arr";
 		}
-		
+		$events_arr = get_input('events','');
+	
 
 		
     $orderby = get_input('orderby', '');
-    if($orderby=='orderid'){
+   /*  if($orderby=='orderid'){
         $options['order_by']="e.guid ";
     }else if($orderby=='eventname'){
    $options['joins'][]  = "JOIN {$CONFIG->dbprefix}metadata eg on e.guid=eg.entity_guid";
 	$options['joins'][]  = "JOIN {$CONFIG->dbprefix}metastrings eg_name on eg.name_id=eg_name.id";
 	$options['joins'][]  = "JOIN {$CONFIG->dbprefix}metastrings eg_value on eg.value_id=eg_value.id";
     $options['wheres'][] = "eg_name.string='event_guid'";
-/* $options['joins'][]  = "JOIN {$CONFIG->dbprefix}metadata et on et.entity_guid=eg_value.string";
-	$options['joins'][]  = "JOIN {$CONFIG->dbprefix}metastrings et_name on et.name_id=et_name.id";
-	$options['joins'][]  = "JOIN {$CONFIG->dbprefix}metastrings et_value on et.value_id=et_value.id";
-    $options['wheres'][] = "et_name.string='title'";	
-	$options["order_by"] = "et_value.string ";*/
+
 $options["order_by"] = "eg_value.string ";
     }else if($orderby=='attendee'){
         $options["order_by"] = "e.owner_guid ";
-    }
+    } */
 $sorting = get_input('sorting','');
-	$options["order_by"] .=$sorting;
+
 
 		elgg_extend_view('user/default','event_calendar/calendar_toggle');
     $limits = array('10','15','20','30','50','70','100');
@@ -494,6 +570,8 @@ $sorting = get_input('sorting','');
                                                       .$newsorting,
                                                       'is_action' => TRUE,
 													  )).
+													  elgg_echo('').
+                elgg_view("input/text", array('name' => 'event','value' => '', 'onkeypress'=>'on_select_events(this.value,event)',)).
 	"</div>";
 
 	$orderby_path = elgg_get_site_url()."mod/event_calendar_extend/graphics/";
@@ -522,7 +600,8 @@ elgg_echo('').
                                                       ."&sorting="
                                                       .$newsorting,
                                                       'is_action' => TRUE,
-													  )).
+													  )).elgg_echo('').
+                elgg_view("input/text", array('id' => 'search_attendee','name' => 'attendee','value' => '', 'onkeypress'=>'on_select_attendee()',)).
 	"</div>";
     $content .=  "<div style='width:100px;".$text1.elgg_echo('event_calendar:amount').
 	elgg_echo('').
@@ -533,9 +612,8 @@ elgg_echo('').
                 elgg_view('input/dropdown',array( 'name' => 'status_value','value'=>$status_arr,'options'=>array_combine($status_value, $status_value)  ,'onchange'=>'on_select_status(this.value)',))."</div>";
     $content .=  "</div>";
 
-    
-		$content .= elgg_list_entities_from_metadata($options);
-    
+        $options['func'] = "elgg_get_entities_from_metadata";
+        $content .= elgg_list_entities($options,'event_calendar_get_tickets','elgg_view_entity_list');    
     
     $params = array('title' => $title, 'content' => $content, 'filter' => '', 'sidebar' => $sidebar);
 	$body = elgg_view_layout("content", $params);
