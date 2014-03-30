@@ -110,9 +110,11 @@ function on_select_sorting(field,sorting){
 }
 $(document).ready(function() {
     var node = document.getElementById('table_header');
-	$(".me_ul_as_table").prepend($("#table_header"));
-	$('#table_header').show();
-                  });
+    if($(".me_ul_as_table").length){
+        $(".me_ul_as_table").prepend($("#table_header"));
+        $('#table_header').show();
+    }
+});
 </script>
 <?php
 		$tabs = array(

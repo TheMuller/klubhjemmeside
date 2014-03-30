@@ -1,16 +1,15 @@
 <?php
 
 $options = array('type' => 'group',);
-$visibility=array(
-	'1'=>'Name',
-	'2'=>'Mobile Phone',
-	'3'=>'Location',
-);				 
-    $groups = elgg_get_entities($options);
-	foreach($groups as $group)
-    {
+$MemberFieldLabels  = explode(",",elgg_get_plugin_setting('MemberFieldLabel', 'members_extend'));
+$MemberFields  = explode(",",elgg_get_plugin_setting('MemberField', 'members_extend'));
+$search_fields = array_combine($MemberFields,$MemberFieldLabels);
+    
+$groups = elgg_get_entities($options);
+foreach($groups as $group){
 	$myarr[$group->name] = $group->guid;
-	}
+}
+
 echo elgg_view('input/checkboxes', array(
             'options' =>$myarr,   
             'align' => 'horizontal',
@@ -19,18 +18,18 @@ echo elgg_view('input/checkboxes', array(
         ));
 echo elgg_view('input/text',
 	array(
-		'name'=> 'search',
-		'value' =>'ajay',
-		'style'=>'width: 150px; height: 50%;float:left;',
+		'name'=> 'searchquery',
+		'value' =>$_SESSION['searchquery'],
+		'style'=>'width: 150px; float:left;',
 		
 	)
 );
 echo elgg_view('input/dropdown',
 	array(
-		'name' => 'type',
-		'options_values' => $visibility,
-		'value' => $item[visibility],
-		'style'=>'width: 90px; height: 50%;',
+		'name' => 'searchfield',
+		'options_values' => $search_fields,
+		'value' => $_SESSION['searchfield'],
+		'style'=>'width: 150px; ',
 	)
 );
 	

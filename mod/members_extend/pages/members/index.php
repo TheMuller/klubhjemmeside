@@ -39,6 +39,14 @@ function member_extend_get_users(array $options = array(),$func='elgg_get_entiti
                 if($found)$_SESSION[$options['sobj']."2"][]=$user;
             }
        }
+       if(!empty($_SESSION['searchquery'])){
+           foreach($_SESSION[$options['sobj']."2"] as $key=>$user){
+
+                if(strpos($user->$_SESSION['searchfield'],$_SESSION['searchquery'])    === FALSE){
+                    unset($_SESSION[$options['sobj']."2"][$key]);
+                }
+           }
+       }
     }
     $orderby = get_input('orderby','');
     if($_SESSION['mxorderby'] !=$sorting ){
@@ -47,7 +55,6 @@ function member_extend_get_users(array $options = array(),$func='elgg_get_entiti
     }
     $sorting = get_input('sorting','');
     if($_SESSION['mxsorting'] !=$sorting ){
-        echo $sorting;
         $_SESSION['mxsorting'] = $sorting;
         if($sorting == 'DESC') $_SESSION[$options['sobj']."2"] = array_reverse($_SESSION[$options['sobj']."2"]);
     }
