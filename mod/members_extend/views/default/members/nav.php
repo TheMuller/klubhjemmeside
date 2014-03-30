@@ -35,7 +35,7 @@ if($user){
 			$sorting = get_input('sorting','');
 			$sorting_path = elgg_get_site_url()."mod/event_calendar_extend/graphics/";
 	
-			if($orderby == 'name'){
+			if($orderby == 'username'){
 				$opacity = 1;
 				if ($sorting == 'DESC'){
 					$sorting_path = "<img src='{$sorting_path}sort_down_green.png' height='20px' width='20px' style='opacity:$opacity;'></img>";
@@ -53,7 +53,7 @@ if($user){
 			echo "<li id='table_header' class ='me_div_as_th' style='display:none;'> <div class ='me_div_as_td' >Msg's</div><div class ='me_div_as_td' >Suggested Group</div><div class ='me_div_as_td' >Not Suggested Group</div><div class ='me_div_as_td' >Member Group</div><div class ='me_div_as_td' >Image</div><div class ='me_div_as_td' >Name"."&nbsp;&nbsp;".
 				elgg_echo('').
                 elgg_view('output/url',array('text' => $sorting_path,'href' => "members"
-                                                      ."?orderby=name"
+                                                      ."?orderby=username"
                                                       ."&sorting="
                                                       .$newsorting,
                                                   //    'is_action' => TRUE,
