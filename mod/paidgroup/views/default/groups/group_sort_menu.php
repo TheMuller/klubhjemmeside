@@ -8,22 +8,22 @@
 $tabs = array(
 	'newest' => array(
 		'text' => elgg_echo('groups:newest'),
-		'href' => 'groups/all?filter=newest&list_type=gallery',
+		'href' => 'groups/all?filter=newest',
 		'priority' => 200,
 	),
 	'popular' => array(
 		'text' => elgg_echo('groups:popular'),
-		'href' => 'groups/all?filter=popular&list_type=gallery',
+		'href' => 'groups/all?filter=popular',
 		'priority' => 300,
 	),
 	'discussion' => array(
 		'text' => elgg_echo('groups:latestdiscussion'),
-		'href' => 'groups/all?filter=discussion&list_type=gallery',
+		'href' => 'groups/all?filter=discussion',
 		'priority' => 400,
 	),
 	'inactive' => array(
 		'text' => elgg_echo('inactive'),
-		'href' => 'groups/all?filter=inactive&list_type=gallery',
+		'href' => 'groups/all?filter=inactive',
 		'priority' => 500,
 	),
 );

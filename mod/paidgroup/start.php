@@ -318,15 +318,16 @@ function paidgroup_hook_forward_system($hook, $type, $returnvalue, $params) {
         
         switch ($segments[0]) {
             case 'all':
-                if(get_input("list_type","list") =="list"){
+			$type = get_input("list_type","list");
+                if($type =="list"){
                     elgg_register_menu_item('title', array('name' => 'project:invite','href' => 'groups/all/?list_type=gallery','text' => elgg_echo('gallery') ,'link_class' => 'elgg-button elgg-button-action',));
                     elgg_load_library('elgg:groups');
-                 groups_handle_all_page();
+					paidgroup_groups_handle_all_page($type);
                 }
                 else {
                     elgg_register_menu_item('title', array('name' => 'project:invite','href' => 'groups/all','text' => elgg_echo('list') ,'link_class' => 'elgg-button elgg-button-action',));
                     elgg_load_css("paidgroup.paidgroup");
-                    paidgroup_groups_handle_all_page();
+                    paidgroup_groups_handle_all_page($type);
                 }
                 
                 break;
@@ -336,9 +337,30 @@ function paidgroup_hook_forward_system($hook, $type, $returnvalue, $params) {
         return true;
     }
 
-
-function paidgroup_groups_handle_all_page(){
-    
+function paidgroup_groups_inactive_group(array $options = array(),$func='elgg_get_entities'){
+	$user = elgg_get_logged_in_user_entity();
+	$countopt = $options['count'];
+    $limitopt = $options['limit'];
+    $offsetopt = $options['offset'];
+	$options['count'] = false;$options['limit'] = 0;$options['offset'] =0;
+	$groups = elgg_get_entities_from_relationship($options);
+	$last_dates = unserialize($user->last_dates);
+	foreach($groups as $group){
+		if($last_dates and ($group->group_paid_flag =='yes')){
+			$last_date = $last_dates[$group->guid];
+			if(!$last_date or $last_date ==''){
+				$inactivegroups[]=$group;
+			}
+		}
+	}
+	 if($countopt) {
+         return count($inactivegroups);
+    }
+    else {
+         return array_slice($inactivegroups,$offsetopt,$limitopt);
+    }
+}
+function paidgroup_groups_handle_all_page($type){
 	// all groups doesn't get link to self
 	elgg_pop_breadcrumb();
 	elgg_push_breadcrumb(elgg_echo('groups'));
@@ -350,53 +372,98 @@ function paidgroup_groups_handle_all_page(){
 	$selected_tab = get_input('filter', 'newest');
 	switch ($selected_tab) {
 		case 'popular':
-			$content = elgg_list_entities_from_relationship_count(array(
-                                                                        'type' => 'group',
-                                                                        'relationship' => 'member',
-                                                                        'inverse_relationship' => false,
-                                                                        'full_view' => false,
-                                                                        'paid_view' => true,
-                                                                        'list_type' =>"gallery",
-                                                                        'item_class'=>'group-gallery-item ',
-                                                                        'gallery_class'=> 'clearfix',
-                                                                        ));
+		$option = array('type' => 'group',
+		'relationship' => 'member',
+		'inverse_relationship' => false,
+		'full_view' => false,
+		'list_type' =>$type,                                                                        
+         );
+			if($type == 'gallery'){
+				$option['item_class']='group-gallery-item ';
+				$option['gallery_class']= 'clearfix';
+				$option['paid_view'] = true;
+			}else{
+				$option['paid_view'] = false;		
+			}
+			$content = elgg_list_entities_from_relationship_count($option);
+		
 			if (!$content) {
 				$content = elgg_echo('groups:none');
 			}
 			break;
 		case 'discussion':
-			$content = elgg_list_entities(array(
-                                                'type' => 'object',
-                                                'subtype' => 'groupforumtopic',
-                                                'order_by' => 'e.last_action desc',
-                                                'limit' => 40,
-                                                'full_view' => false,
-                                                ));
+				$option = array('type' => 'object',
+							'subtype' => 'groupforumtopic',
+							'order_by' => 'e.last_action desc',
+							'limit' => 40,
+							'full_view' => false,
+							'list_type' =>$type,
+							);
+			if($type == 'gallery'){
+				$option['item_class']='group-gallery-item ';
+				$option['gallery_class']= 'clearfix';
+				$option['paid_view'] = true;
+			}else{
+				$option['paid_view'] = false;		
+			}
+			$content = elgg_list_entities($option);
+			
 			if (!$content) {
 				$content = elgg_echo('discussion:none');
 			}
 			break;
+		case 'inactive':
+				$user = elgg_get_logged_in_user_entity();	
+				$options = array(
+							'type' => 'group',
+							'relationship' => 'member',
+							'relationship_guid' => $user->guid,
+							'inverse_relationship' => false,
+							'full_view' => false,
+							'list_type' =>$type,
+							
+							);
+					if($type == 'gallery'){
+						$option['paid_view'] = true;
+						$option['item_class']='group-gallery-item ';
+						$option['gallery_class']= 'clearfix';
+						$option['full_view'] = true;
+					}else{
+						$option['paid_view'] = false;		
+					}
+				$content = elgg_list_entities($options,'paidgroup_groups_inactive_group','elgg_view_entity_list');
+			
+				if (!$content) {
+					$content = elgg_echo('inactive:none');
+				}
+			break;
 		case 'newest':
 		default:
-			$content = elgg_list_entities(array(
-                                                'type' => 'group',
-                                                'full_view' => false,
-                                                'paid_view' => true,
-                                                'list_type' =>"gallery",
-                                                'item_class'=>'group-gallery-item ',
-                                                'gallery_class'=> 'clearfix',
-                                                ));
+			$option = array('type' => 'group',
+			'full_view' => false,
+			'list_type' =>$type,
+			);
+			if($type == 'gallery'){
+				$option['item_class']='group-gallery-item ';
+				$option['gallery_class']= 'clearfix';
+				$option['paid_view'] = true;
+			}else{
+				$option['paid_view'] = false;		
+			}
+			
+			$content = elgg_list_entities($option);
 			if (!$content) {
 				$content = elgg_echo('groups:none');
 			}
 			break;
 	}
-    
-	$filter = elgg_view('groups/groupgallery_sort_menu', array('selected' => $selected_tab));
-    
+    if($type == 'gallery'){
+				$filter = elgg_view('groups/groupgallery_sort_menu', array('selected' => $selected_tab));
+			}else{
+				$filter = elgg_view('groups/group_sort_menu', array('selected' => $selected_tab));
+			}
 	$sidebar = elgg_view('groups/sidebar/find');
 	$sidebar .= elgg_view('groups/sidebar/featured');
-    
 	$params = array(
                     'content' => $content,
                     'sidebar' => $sidebar,
