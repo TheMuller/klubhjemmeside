@@ -45,18 +45,33 @@
     }
 	$view_type = get_input('view_type','');
 	//echo $view_type;
-	if($view_type == 'inactive'){
+	if($view_type == 'inactive' or $view_type == ''){
 		//echo "this is inactive...";
-		echo elgg_view("output/url", array( "href" => '?view_type=all', "text" => elgg_echo('all'), "is_trusted" => true,"class" => "elgg-button elgg-button-submit"));
+		echo "<div align='right' style='margin-right:1cm;'>";
+		echo elgg_view("output/url", array( "href" => '?view_type=all', "text" => elgg_echo('all'), "is_trusted" => true,"class" => "elgg-button elgg-button-submit"));echo "</div><br>";
 		if($my_inactive_guids){
 		$options['wheres'][] = "e.guid  IN (".$my_inactive_guids.")";
 		    $ia = elgg_set_ignore_access(true);
 			echo elgg_list_entities_from_metadata($options);
+			echo $my_inactive_guids;
 		}
 		else echo "No inactive";
-	}elseif($view_type == 'all'){
-	//echo "all";
-		echo elgg_view("output/url", array( "href" => '?view_type=inactive', "text" => elgg_echo('inActive'), "is_trusted" => true,"class" => "elgg-button elgg-button-submit"));
+		if(count($my_inactive_guids)){
+			
+		}else{
+			if($view_type == 'inactive'){
+			echo "no inactive";
+			}else{
+				$view_type = 'all';
+			}
+			
+		}
+		
+	}
+	if($view_type == 'all'){
+	echo "<div align='right' style='margin-right:1cm;'>";
+		echo elgg_view("output/url", array( "href" => '?view_type=inactive', "text" => elgg_echo('inActive'), "is_trusted" => true,"class" => "elgg-button elgg-button-submit",'alignment' =>
+'horizontal'));echo "</div><br>";
 	
      if($my_group_guids){ //exclude groups which I already joined, (and active if paid).
       //  $options['joins'][]= "JOIN {$CONFIG->dbprefix}entity_relationships r on r.guid_two = e.guid";
