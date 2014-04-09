@@ -3,7 +3,18 @@
 <h2>Select (Premium) Group</h2>
 <div style='min-height:400px'>
 <?php
-    
+/* 	$inactive_group = get_input('inactive','');
+    echo  elgg_view('input/dropdown', array(
+	'name' => 'inactive',
+	'id' => 'blog_comments_on',
+	'options' => array('all','inactive'),
+	'onchange'=>'on_select_status()',
+)); */
+
+
+	
+
+
 	$Groups_Access_Style=elgg_get_plugin_setting('groups_access_style','paidgroup');
 	
     $options = array(
@@ -24,12 +35,29 @@
         if($mygroup->group_paid_flag =='yes'   ){
             $last_date = $last_dates[$mygroup->guid];
             if(!$last_date or $last_date ==''){
-                continue; //skip this since I am inactive
+				if(!$my_inactive_guids)$my_inactive_guids =$mygroup->guid;
+				else $my_inactive_guids .=",".$mygroup->guid;
+				continue; //skip this since I am inactive
             }
         }
         if(!$my_group_guids)$my_group_guids =$mygroup->guid;
         else $my_group_guids .=",".$mygroup->guid;
     }
+	$view_type = get_input('view_type','');
+	//echo $view_type;
+	if($view_type == 'inactive'){
+		//echo "this is inactive...";
+		echo elgg_view("output/url", array( "href" => '?view_type=all', "text" => elgg_echo('all'), "is_trusted" => true,"class" => "elgg-button elgg-button-submit"));
+		if($my_inactive_guids){
+		$options['wheres'][] = "e.guid  IN (".$my_inactive_guids.")";
+		    $ia = elgg_set_ignore_access(true);
+			echo elgg_list_entities_from_metadata($options);
+		}
+		else echo "No inactive";
+	}elseif($view_type == 'all'){
+	//echo "all";
+		echo elgg_view("output/url", array( "href" => '?view_type=inactive', "text" => elgg_echo('inActive'), "is_trusted" => true,"class" => "elgg-button elgg-button-submit"));
+	
      if($my_group_guids){ //exclude groups which I already joined, (and active if paid).
       //  $options['joins'][]= "JOIN {$CONFIG->dbprefix}entity_relationships r on r.guid_two = e.guid";
        // $options['wheres'][] = "e.guid NOT IN (select guid_two from {$CONFIG->dbprefix}entity_relationships  where relationship = 'member' AND guid_one = ".$user_guid.")";
@@ -69,11 +97,11 @@
         }
     }
 	$options['wheres'][] = $newwhereclause;
-    
     // echo elgg_list_entities($options,'elgg_get_entities','paid_group_viewer');
     $ia = elgg_set_ignore_access(true);
    
-    echo elgg_list_entities_from_metadata($options);
+    echo elgg_list_entities_from_metadata($options);	
+    }
      elgg_set_ignore_access($ia);
 //``````````````````````````````````````````````````````````````````````````````````````````````````
 ////////////////////////////////////////////////////////////////////////////////////////////////////
