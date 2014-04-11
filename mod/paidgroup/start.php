@@ -338,11 +338,9 @@ function paidgroup_hook_forward_system($hook, $type, $returnvalue, $params) {
     }
 
 function paidgroup_groups_inactive_group(array $options = array(),$func='elgg_get_entities'){
+global $inactive;
 	$user = elgg_get_logged_in_user_entity();
-	$countopt = $options['count'];
-    $limitopt = $options['limit'];
-    $offsetopt = $options['offset'];
-	$options['count'] = false;$options['limit'] = 0;$options['offset'] =0;
+	$options['count'] = false;$options['limit'] = 0;$options['offset'] =0; 
 	$groups = elgg_get_entities_from_relationship($options);
 	$last_dates = unserialize($user->last_dates);
 	foreach($groups as $group){
@@ -353,14 +351,12 @@ function paidgroup_groups_inactive_group(array $options = array(),$func='elgg_ge
 			}
 		}
 	}
-	 if($countopt) {
-         return count($inactivegroups);
-    }
-    else {
-         return array_slice($inactivegroups,$offsetopt,$limitopt);
-    }
+	$inactive = $inactivegroups;
+	return $inactive;
 }
-function paidgroup_groups_handle_all_page($type){
+function paidgroup_groups_handle_all_page($type,array $inactivegroups =array(),$inactive){
+global $inactive;
+paidgroup_groups_inactive_group();
 	// all groups doesn't get link to self
 	elgg_pop_breadcrumb();
 	elgg_push_breadcrumb(elgg_echo('groups'));
@@ -368,8 +364,8 @@ function paidgroup_groups_handle_all_page($type){
 	if (elgg_get_plugin_setting('limited_groups', 'groups') != 'yes' || elgg_is_admin_logged_in()) {
 		elgg_register_title_button();
 	}
-    
-	$selected_tab = get_input('filter', 'newest');
+    if(count($inactive)){$selected_tab = get_input('filter', 'inactive');}
+	else{$selected_tab = get_input('filter', 'newest');}
 	switch ($selected_tab) {
 		case 'popular':
 		$option = array('type' => 'group',
@@ -434,7 +430,7 @@ function paidgroup_groups_handle_all_page($type){
 				$content = elgg_list_entities($options,'paidgroup_groups_inactive_group','elgg_view_entity_list');
 			
 				if (!$content) {
-					$content = elgg_echo('inactive:none');
+					$content = elgg_echo('No inActive Groups');
 				}
 			break;
 		case 'newest':

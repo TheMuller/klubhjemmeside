@@ -3,17 +3,6 @@
 <h2>Select (Premium) Group</h2>
 <div style='min-height:400px'>
 <?php
-/* 	$inactive_group = get_input('inactive','');
-    echo  elgg_view('input/dropdown', array(
-	'name' => 'inactive',
-	'id' => 'blog_comments_on',
-	'options' => array('all','inactive'),
-	'onchange'=>'on_select_status()',
-)); */
-
-
-	
-
 
 	$Groups_Access_Style=elgg_get_plugin_setting('groups_access_style','paidgroup');
 	
@@ -44,16 +33,13 @@
         else $my_group_guids .=",".$mygroup->guid;
     }
 	$view_type = get_input('view_type','');
-	//echo $view_type;
 	if($view_type == 'inactive' or $view_type == ''){
-		//echo "this is inactive...";
 		echo "<div align='right' style='margin-right:1cm;'>";
 		echo elgg_view("output/url", array( "href" => '?view_type=all', "text" => elgg_echo('all'), "is_trusted" => true,"class" => "elgg-button elgg-button-submit"));echo "</div><br>";
 		if($my_inactive_guids){
 		$options['wheres'][] = "e.guid  IN (".$my_inactive_guids.")";
 		    $ia = elgg_set_ignore_access(true);
 			echo elgg_list_entities_from_metadata($options);
-			echo $my_inactive_guids;
 		}
 		else echo "No inactive";
 		if(count($my_inactive_guids)){
