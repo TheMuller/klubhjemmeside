@@ -320,16 +320,13 @@ function paidgroup_hook_forward_system($hook, $type, $returnvalue, $params) {
             case 'all':
 			$type = get_input("list_type","list");
                 if($type =="list"){
-                    elgg_register_menu_item('title', array('name' => 'project:invite','href' => 'groups/all/?list_type=gallery','text' => elgg_echo('gallery') ,'link_class' => 'elgg-button elgg-button-action',));
-                    elgg_load_library('elgg:groups');
-					paidgroup_groups_handle_all_page($type);
+                    elgg_register_menu_item('title', array('name' => 'toggle_view','href' => 'groups/all/?list_type=gallery','text' => elgg_echo('gallery') ,'link_class' => 'elgg-button elgg-button-action',));
                 }
                 else {
-                    elgg_register_menu_item('title', array('name' => 'project:invite','href' => 'groups/all','text' => elgg_echo('list') ,'link_class' => 'elgg-button elgg-button-action',));
+                    elgg_register_menu_item('title', array('name' => 'toggle_view','href' => 'groups/all','text' => elgg_echo('list') ,'link_class' => 'elgg-button elgg-button-action',));
                     elgg_load_css("paidgroup.paidgroup");
-                    paidgroup_groups_handle_all_page($type);
                 }
-                
+                paidgroup_groups_handle_all_page($type);
                 break;
             default:
                 return call_user_func("groups_page_handler", $segments, $handle);//sachin
@@ -388,21 +385,13 @@ paidgroup_groups_inactive_group();
 			}
 			break;
 		case 'discussion':
-				$option = array('type' => 'object',
-							'subtype' => 'groupforumtopic',
-							'order_by' => 'e.last_action desc',
-							'limit' => 40,
-							'full_view' => false,
-							'list_type' =>$type,
-							);
-			if($type == 'gallery'){
-				$option['item_class']='group-gallery-item ';
-				$option['gallery_class']= 'clearfix';
-				$option['paid_view'] = true;
-			}else{
-				$option['paid_view'] = false;		
-			}
-			$content = elgg_list_entities($option);
+			$content = elgg_list_entities(array(
+                                                'type' => 'object',
+                                                'subtype' => 'groupforumtopic',
+                                                'order_by' => 'e.last_action desc',
+                                                'limit' => 40,
+                                                'full_view' => false,
+                                                ));
 			
 			if (!$content) {
 				$content = elgg_echo('discussion:none');
