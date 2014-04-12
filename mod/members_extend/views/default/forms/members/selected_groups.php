@@ -3,7 +3,7 @@
 $options = array('type' => 'group',);
 $MemberFieldLabels  = explode(",",elgg_get_plugin_setting('MemberFieldLabel', 'members_extend'));
 $MemberFields  = explode(",",elgg_get_plugin_setting('MemberField', 'members_extend'));
-$search_fields = array_combine($MemberFields,$MemberFieldLabels);
+$search_fields = array_merge(array("name"=>"Name"),array_combine($MemberFields,$MemberFieldLabels));
     
 $groups = elgg_get_entities($options);
 foreach($groups as $group){

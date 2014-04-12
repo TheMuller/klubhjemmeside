@@ -6,7 +6,7 @@
 
 function compare_users($usera, $userb)
 {
-    $orderby = get_input('orderby','');
+    $orderby = get_input('orderby','name');
     return strcmp($usera->$orderby,$userb->$orderby);
 }
     
@@ -50,14 +50,11 @@ function member_extend_get_users(array $options = array(),$func='elgg_get_entiti
        usort($_SESSION[$options['sobj']."ASC"],'compare_users');
     }
     $sorting = get_input('sorting','ASC');
-    if($_SESSION['mxsorting'] !=$sorting ){
-        $_SESSION['mxsorting'] = $sorting;
-    }
     if($countopt) {
          return count($_SESSION[$options['sobj']."ASC"]);
     }
     else {
-        if($_SESSION['mxsorting'] == DESC) {
+        if($sorting == DESC) {
             $count = count($_SESSION[$options['sobj']."ASC"]);
             if($count > ($offsetopt+$limitopt)){ $offsetopt = $count-$offsetopt- $limitopt;}
             else {$limitopt=$count-$offsetopt;$offsetopt=0;}
@@ -67,14 +64,6 @@ function member_extend_get_users(array $options = array(),$func='elgg_get_entiti
     }
 }
 
-/*$user = elgg_get_logged_in_user_entity();
-echo $user->suggestedgroupids."/";
-$site = elgg_get_site_entity();
-$suggestedgroupids = unserialize($site->suggestedgroupids);
-		foreach($suggestedgroupids as $key=>$suggestedgroupid){
-		echo $key;
-		var_dump($suggestedgroupid);
-		}*/
 $base = elgg_get_plugins_path() . 'members_extend/pages/members';
 $num_members = get_number_users();
 

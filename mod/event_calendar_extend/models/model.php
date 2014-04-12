@@ -381,14 +381,12 @@ function event_calendar_get_tickets(array $options = array(),$func='elgg_get_ent
 	}
 
     $sorting = get_input('sorting','ASC');
-    if($_SESSION['ectktsorting'] !=$sorting){
-        $_SESSION['ectktsorting'] = $sorting;
-    }
+
    if($countopt) {
         return count($_SESSION['ectktsASC']);
     }
     else {
-        if($_SESSION['ectktsorting'] == DESC) {
+        if($sorting == DESC) {
             $count = count($_SESSION[$options['ectktsASC']]);
             if($count > ($offsetopt+$limitopt)){ $offsetopt = $count-$offsetopt- $limitopt;}
             else {$limitopt=$count-$offsetopt;$offsetopt=0;}
