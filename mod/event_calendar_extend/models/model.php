@@ -380,7 +380,7 @@ function event_calendar_get_tickets(array $options = array(),$func='elgg_get_ent
 		usort($_SESSION['ectktsASC'],'compare_tickets');
 	}
 
-    $sorting = get_input('sorting','');
+    $sorting = get_input('sorting','ASC');
     if($_SESSION['ectktsorting'] !=$sorting){
         $_SESSION['ectktsorting'] = $sorting;
         if($sorting == 'DESC') 

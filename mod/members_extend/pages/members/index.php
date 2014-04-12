@@ -49,7 +49,7 @@ function member_extend_get_users(array $options = array(),$func='elgg_get_entiti
        }
        usort($_SESSION[$options['sobj']."ASC"],'compare_users');
     }
-    $sorting = get_input('sorting','');
+    $sorting = get_input('sorting','ASC');
     if($_SESSION['mxsorting'] !=$sorting ){
         $_SESSION['mxsorting'] = $sorting;
         if($sorting == 'DESC')    $_SESSION[$options['sobj']."DESC"] = array_reverse($_SESSION[$options['sobj']."ASC"],false);
