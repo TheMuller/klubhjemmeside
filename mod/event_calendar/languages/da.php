@@ -87,8 +87,8 @@
 				
 	'event_calendar:users_for_event_menu_title' => "Personer der har lagt denne event ind på deres personlig kalender",
 	'event_calendar:users_for_event_title' => "Personlige kalender for \"%s'\"",
-	'event_calendar:personal_event_calendars_link' => "%s er tilmeldt",
-	'event_calendar:personal_event_calendars_link_one' => "1 er tilmeldt",
+	'event_calendar:personal_event_calendars_link' => "Liste med tilmeldte",
+	'event_calendar:personal_event_calendars_link_one' => "Liste med tilmeldte",
 	'event_calendar:users_for_event_breadcrumb' => "Personlige kalendere",
 	'event_calendar:settings:group_profile_display:title' => "Gruppe kalender profil visning (hvis gruppe kalendere er aktiveret)",
 	'event_calendar:settings:group_profile_display_option:left' => "venstre kolonne",

@@ -86,8 +86,8 @@
 				
 	'event_calendar:users_for_event_menu_title' => "People listing this event on their personal calendars",
 	'event_calendar:users_for_event_title' => "Personal calendars for \"%s'\"",
-	'event_calendar:personal_event_calendars_link' => "On %s calendars",
-	'event_calendar:personal_event_calendars_link_one' => "On 1 calendar",
+	'event_calendar:personal_event_calendars_link' => "Attendee list",
+	'event_calendar:personal_event_calendars_link_one' => "Attendee list",
 	'event_calendar:users_for_event_breadcrumb' => "Personal calendars",
 	'event_calendar:settings:group_profile_display:title' => "Group calendar profile display (if group calendars are enabled)",
 	'event_calendar:settings:group_profile_display_option:left' => "left column",

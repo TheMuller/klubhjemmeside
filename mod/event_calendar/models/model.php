@@ -161,6 +161,8 @@ event_calendar_set_event_from_form
 	}
 	return $event;
 }
+
+    
 function event_calendar_get_events_between(
 	$start_date,
 	$end_date,
@@ -169,18 +171,19 @@ function event_calendar_get_events_between(
 	$offset=0,
 	$container_guid=0,
 	$region='-',
-	$order_by=''
+	$order_by='',
+    $regular=''
 	)
 {
 //echo'<h2>(*) ==>ORDER_BY<==',$order_by,'</h2>';
 	if ($is_count) {
 		$count = event_calendar_get_entities_from_metadata_between2('start_date','end_date',
-			$start_date, $end_date, "object", "event_calendar", 0, $container_guid, $limit,$offset,0,false,true,$region);
+			$start_date, $end_date, "object", "event_calendar", 0, $container_guid, $limit,$offset,0,false,true,$region,$order_by,$regular);
 		return $count;
 	} else {
 		$events = event_calendar_get_entities_from_metadata_between2('start_date','end_date',
 			$start_date, $end_date, "object", "event_calendar", 0, $container_guid, $limit,$offset,0,false,false,$region			
-			,$order_by);
+			,$order_by,$regular);
 		//return event_calendar_vsort($events,'start_date');
 		return $events;
 	}
@@ -189,11 +192,11 @@ function event_calendar_get_open_events_between($start_date,$end_date,
 $is_count,$limit=10,$offset=0,$container_guid=0,$region='-', $meta_max = 'spots', $annotation_name = 'personal_event') {
 	if ($is_count) {
 		$count = event_calendar_get_entities_from_metadata_between2('start_date','end_date',
-		$start_date, $end_date, "object", "event_calendar", 0, $container_guid, $limit,$offset,"",0,false,true,$region,$meta_max,$annotation_name);
+		$start_date, $end_date, "object", "event_calendar", 0, $container_guid, $limit,$offset,"",0,false,true,$region,"","",$meta_max,$annotation_name);
 		return $count;
 	} else {
 		$events = event_calendar_get_entities_from_metadata_between2('start_date','end_date',
-		$start_date, $end_date, "object", "event_calendar", 0, $container_guid, $limit,$offset,"",0,false,false,$region,$meta_max,$annotation_name);
+		$start_date, $end_date, "object", "event_calendar", 0, $container_guid, $limit,$offset,"",0,false,false,$region,"","",$meta_max,$annotation_name);
 		//return event_calendar_vsort($events,'start_date');
 		return $events;
 	}
@@ -211,7 +214,7 @@ function event_calendar_get_events_for_user_between($start_date,$end_date,$is_co
 		return $events;
 	}
 }
-function event_calendar_get_events_for_user_between2($start_date,$end_date,$is_count,$limit=10,$offset=0,$user_guid,$container_guid=0,$region='-') {
+function event_calendar_get_events_for_user_between2($start_date,$end_date,$is_count,$limit=10,$offset=0,$user_guid,$container_guid=0,$region='-',$regular='') {
 	$options_new_way = 	array(
 	'type' => 'object',
 	'subtype' => 'event_calendar',
@@ -546,7 +549,8 @@ function event_calendar_get_entities_from_metadata_between2
 	,$entity_type = "", $entity_subtype = "", $owner_guid = 0, $container_guid = 0
 	,$limit = 10, $offset = 0, $site_guid = 0, $filter = false, $count = false
 	,$region='-'
-	,$order_by
+	,$order_by=''
+    ,$regular=''
 	,$meta_max = ''
 	,$annotation_name = ''
 	)
@@ -656,6 +660,22 @@ function event_calendar_get_entities_from_metadata_between2
 		$query .= "JOIN {$CONFIG->dbprefix}metastrings ms ON (a.name_id = ms.id) ";
 		$query .= "JOIN {$CONFIG->dbprefix}metastrings ms2 ON (a.value_id = ms2.id) ";
 	}
+     if ($regular=='yes') {
+         $query .=   " JOIN {$CONFIG->dbprefix}metadata lat on e.guid=lat.entity_guid ";
+         $query .=   " JOIN {$CONFIG->dbprefix}metastrings lat_name on lat.name_id=lat_name.id ";
+         $query .= " JOIN {$CONFIG->dbprefix}metastrings lat_value on lat.value_id=lat_value.id ";
+         $where[] =  " lat_name.string='event_type' ";
+         $where[] =  " lat_value.string='Regular' ";
+         
+	 }else if ($regular=='no') {
+         $query .=   " JOIN {$CONFIG->dbprefix}metadata lat on e.guid=lat.entity_guid ";
+         $query .=   " JOIN {$CONFIG->dbprefix}metastrings lat_name on lat.name_id=lat_name.id ";
+         $query .= " JOIN {$CONFIG->dbprefix}metastrings lat_value on lat.value_id=lat_value.id ";
+         $where[] =  " lat_name.string='event_type' ";
+         $where[] =  " lat_value.string!='Regular' ";
+         
+	 }
+    
 	if ($region && $region != '-') {
 		$query .= "JOIN {$CONFIG->dbprefix}metadata m3 ON (e.guid = m3.entity_guid) ";
 	}
@@ -1472,7 +1492,8 @@ function event_calendar_generate_listing_params(
 		//	http://localhost/_atensci.us_kenneth/event_calendar/list/YYYY-MM-DD/month/all/-/pastevents
 		//echo"<h2>\$pastevents ? ($pastevents) ? ($filter)</h2>";
 		if($pastevents&&$pastevents=='pastevents')
-			{					//:DC: ++PAST EVENTS
+			{
+                //:DC: ++PAST EVENTS
 				//````````````````````````````````````````````````````````````````````````````````````````````````````
 											//:DC: ++PAST EVENTS<	
 				//echo'<hr size=5 color=blue noshade>';//	`	`	<	
@@ -1519,13 +1540,34 @@ AFTER
 			}
 //:DC:	:END:
 //````````````````````````````````````````
-
+        //echo "FILTER = ".$pastevents&&$pastevents;
+//echo "start_date = ".$start_date;
+//sachin        echo "end_date = ".$end_date;
 		//	````````````````````````````````````````````````````````````````````````````````
 		if($pastevents&&$pastevents=='pastevents')	//:DC: ++PAST EVENTS
 			{
+                	
 				$start_ts=$start_date;
 				$end_ts  =$end_date;
 			}
+        if ($filter == 'upcoming')				//:DC:
+        {
+            $event_calendar_listing_format='paged';
+            $start_ts=time()-(86400*1);//:DC: *1 b/c metadata call fetch is *inclusive
+            $count  = event_calendar_get_events_between($start_ts,$end_ts,true, $limit,$offset,$container_guid,$region
+                                                        ,$order_by,'no');
+            $events = event_calendar_get_events_between($start_ts,$end_ts,false,$limit,$offset,$container_guid,$region
+                                                        ,$order_by,'no');
+			//sachin
+        }
+        if ($filter == 'regular')				//:DC:
+        {
+            $start_ts=time()-(86400*1);//:DC: *1 b/c metadata call fetch is *inclusive
+            $count  = event_calendar_get_events_between($start_ts,$end_ts,true, $limit,$offset,$container_guid,$region
+                                                        ,$order_by,'yes');
+            $events = event_calendar_get_events_between($start_ts,$end_ts,false,$limit,$offset,$container_guid,$region
+                                                        ,$order_by,'yes');
+        }
 		//	````````````````````````````````````````````````````````````````````````````````
 		if ($filter == 'pastevents')				//:DC:
 			{
@@ -1611,6 +1653,7 @@ AFTER
 		)
 		</h2>";
 	**/
+        
 	$content = elgg_view('event_calendar/show_events', $vars);
 	//	````````````````````````````````````````````````````````````````````````````````
 	$vars['start_date']=$start_date;	//:DC: ++PAST EVENTS
