@@ -52,12 +52,17 @@ function member_extend_get_users(array $options = array(),$func='elgg_get_entiti
     $sorting = get_input('sorting','ASC');
     if($_SESSION['mxsorting'] !=$sorting ){
         $_SESSION['mxsorting'] = $sorting;
-        if($sorting == 'DESC')    $_SESSION[$options['sobj']."DESC"] = array_reverse($_SESSION[$options['sobj']."ASC"],false);
     }
     if($countopt) {
          return count($_SESSION[$options['sobj']."ASC"]);
     }
     else {
+        if($_SESSION['mxsorting'] == DESC) {
+            $count = count($_SESSION[$options['sobj']."ASC"]);
+            if($count > ($offsetopt+$limitopt)){ $offsetopt = $count-$offsetopt- $limitopt;}
+            else {$limitopt=$count-$offsetopt;$offsetopt=0;}
+            return array_reverse(array_slice($_SESSION[$options['sobj']."ASC"],$offsetopt,$limitopt));
+        }else
          return array_slice($_SESSION[$options['sobj'].$sorting],$offsetopt,$limitopt);
     }
 }
