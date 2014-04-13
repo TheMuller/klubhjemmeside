@@ -358,12 +358,16 @@ function event_calendar_get_tickets(array $options = array(),$func='elgg_get_ent
         $_SESSION['ectkts'] = $options['func']($options);
     }
 	$status_filter = get_input('status','');
-	$amount_filter = get_input('amount','');
+	
     if(($status_filter!='' ) and ($_SESSION['status_filter'] != $status_filter)  ){//condition 1
         $_SESSION['status_filter'] = $status_filter; $redo=true;
     }
     if(($amount_filter!='' ) and ($_SESSION['amount_filter'] != $amount_filter)  ){//condition 2
         $_SESSION['amount_filter'] = $amount_filter;$redo=true;
+    }
+    $events_filter = get_input('events','');
+    if(($events_filter!='' ) and ($_SESSION['events_filter'] != $events_filter)  ){//condition 2
+        $_SESSION['events_filter'] = $events_filter;$redo=true;
     }
     if($_SESSION['ectktsASC']===false) $redo=true;
     
@@ -384,6 +388,14 @@ function event_calendar_get_tickets(array $options = array(),$func='elgg_get_ent
                         unset($_SESSION['ectktsASC'][$key]);
                     }
                 }
+        }
+        if($_SESSION['events_filter'] !=''){
+            foreach ($_SESSION['ectktsASC'] as $key=>$ticket){
+                $event = get_entity($ticket->event_guid);
+                if(strpos($event->title,$_SESSION['events_filter'])    === FALSE){
+                    unset($_SESSION['ectktsASC'][$key]);
+                }
+            }
         }
     }
 	
@@ -563,7 +575,8 @@ function on_select_order(order){
 		$newsorting='DESC';
 	}
     	 
-
+    
+    $events_filter = get_input('events',$_SESSION['events_filter']);
     $content .=  "<div style='width:200px;".$text1.elgg_echo('event_calendar:eventtitle')."&nbsp;&nbsp;".
 	elgg_echo('').
                 elgg_view('output/url',array( 'name'=> 'event','text' => $sorting_path,'href' => "event_calendar/view_all_orders"
@@ -573,7 +586,7 @@ function on_select_order(order){
                                                       'is_action' => TRUE,
 													  )).
 													  elgg_echo('').
-                elgg_view("input/text", array('name' => 'event','value' => '', 'onkeypress'=>'on_select_events(this.value,event)',)).
+                elgg_view("input/text", array('name' => 'event','value' => $events_filter, 'onkeypress'=>'on_select_events(this.value,event)',)).
 	"</div>";
 
 	$orderby_path = elgg_get_site_url()."mod/event_calendar_extend/graphics/";
