@@ -54,7 +54,7 @@ function member_extend_get_users(array $options = array(),$func='elgg_get_entiti
          return count($_SESSION[$options['sobj']."ASC"]);
     }
     else {
-        if($sorting == DESC) {
+        if($sorting == 'DESC') {
             $count = count($_SESSION[$options['sobj']."ASC"]);
             if($count > ($offsetopt+$limitopt)){ $offsetopt = $count-$offsetopt- $limitopt;}
             else {$limitopt=$count-$offsetopt;$offsetopt=0;}
