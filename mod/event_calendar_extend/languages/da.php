@@ -63,6 +63,10 @@
 	'event_calendar:event:status:open' => 'Åben tilmelding (du tilmeldes automatisk arrangementet)',
 	'event_calendar:event:status:private' => 'Privat arrangementet',
 
+    'event_calendar:ticket:usertotalspot' =>'Billetter Du har allerede købt:',
+    'event_calendar:ticket:usermaxspot' =>'Max. Antal ved brugeren:',
+    'event_calendar:ticket:usertotalleft' =>'Max. Antal, som du kan købe:',
+     'event_calendar:ticket:usertotalconsumed' =>'Du kan ikke købe mere',
 	'event_calendar:ticket:type' => 'Billet:',
 	'event_calendar:ticket:amount' => 'Pris:',
 	'event_calendar:ticket:spots' => 'Antal:',

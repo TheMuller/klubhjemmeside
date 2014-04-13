@@ -8,6 +8,11 @@
 *
 * @uses $vars['class'] Additional CSS class
 **/
+    echo '<div class="ticket_option">';
+    echo elgg_echo('event_calendar:ticket:usermaxspot');
+    echo '<input type="text" class="ticket_option_spots" name="ticket_option_user_maxspots" value="';
+    echo $vars['entity']->ticket_option_user_maxspots;
+    echo '" ></div>';
 if (isset($vars['class'])) {
 	$vars['class'] = "elgg-input-text {$vars['class']}";
 } else {

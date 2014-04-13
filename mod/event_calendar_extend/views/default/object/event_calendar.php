@@ -18,12 +18,16 @@
 		document.getElementById("confirm_order").innerHTML = '<br>';
 		var theForm = document.forms["tickets"];
 		var total=0;
+        var totalspot=0;
 		var freectr=0;
 		for($i = 1; $i <=5; $i++){
 			//
 			var type = theForm.elements["ticket_option_type_"+$i];
 			var amount = theForm.elements["ticket_option_amount_"+$i];
 			var spots = $("#ticket_option_spots_"+$i+" option:selected").text();
+            if(type  && spots > 0){
+                totalspot = totalspot+ parseInt(spots);
+            }
 			//:DC: Euro Currency Number Format - START
 			if(type && amount && spots > 0)		//:DC:
 			{
@@ -47,16 +51,22 @@
 					;
 				}
 			}//:DC: Euro Currency Number Format - END
-		}	
-		if(total>0){
+		}
+        if(totalspot > usertotalleft){
+			document.getElementById("confirm_order").innerHTML += '' +	//:DC:
+            '<br><b><?php echo elgg_echo('event_calendar:ticket:usertotalleft');?>'+usertotalleft+'</b><br><br>';
+            $("#submitConfirm").hide();
+        }
+		else if(total>0){
 			document.getElementById("confirm_order").innerHTML += '' +	//:DC:
 				'&nbsp;&nbsp;&nbsp;&nbsp;<b>Total: </b>' + 
 				EuroCurrency(total) 						+ 
 				' DKK<br><br>';
+            $("#submitConfirm").show();
 		}else{
 			document.getElementById("confirm_order").innerHTML += '' +	//:DC:
 				'<br><b>Nothing to Pay !</b><br><br>';
-			//$("#submitConfirm").css('display', 'none');
+			$("#submitConfirm").show();
 		}
 	}
 	function formSubmit()

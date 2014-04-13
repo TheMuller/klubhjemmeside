@@ -321,7 +321,29 @@ $body.='<br>';
 $body.='<div style="margin-top:55px;padding-top:15px;border-top:1px solid #CCCCCC;"><h2>'.elgg_echo('event_calendar:ticket:list').':</h2><br><CZ></CZ>';//:DC:
 $spots_counter = 0;
 $doublecheckCTR=0;
+
+for($i = 1; $i <=5; $i++)				//:DC:
+{
+    $type_var = 'ticket_option_type_' . $i;
+    $ticket_type = $event->$type_var;
+    $user_total_spots +=$vEO_CTRS[$ticket_type];
+}
+$tktleft = $event->ticket_option_user_maxspots;
+
+
+if($user_total_spots >0) {
+    $body .='<C2 style="color:red;width:300px;">'.elgg_echo('event_calendar:ticket:usertotalspot')."&nbsp;".$user_total_spots.'</C2>';
+    $tktleft = $tktleft - $user_total_spots;
+    if($tktleft >0){
+        $body .='<C2 style="color:red;width:300px;">'.elgg_echo('event_calendar:ticket:usertotalleft').$tktleft.'</C2>';
+    }else{
+     $body .='<C2 style="color:red;width:300px;">'.elgg_echo('event_calendar:ticket:usertotalconsumed').'&nbsp;</C2>';
+    }
+    $body .='<br clear="all">';
+}
+$body .= "<script>var usertotalleft = ".$tktleft.";</script>";
 //````````````````````````````````````````
+if($tktleft >0){
 for($i = 1; $i <=5; $i++)				//:DC:
 {
     $type_var = 'ticket_option_type_' . $i;
@@ -348,7 +370,7 @@ for($i = 1; $i <=5; $i++)				//:DC:
             
             $body .= elgg_view('input/hidden', array('name'=>$spots_var,'value'=>0));
             $body .= '<br clear="all">'
-            .'<C1><b>'.$ticket_type.':</b></C1>&nbsp;<C2>'.$ticket_amount_X.'</C2><C2 style="color:red;">'.elgg_echo('event_calendar:ticket:soldout').'</C2>';
+            .'<C1><b>'.$ticket_type.':</b></C1>&nbsp;<C2>'.$ticket_amount_X.'</C2><C2 style="color:red;">'.elgg_echo('event_calendar:ticket:soldout').'</C2><br clear="all">';
         }//if($ticket_spots==0)
         //````````````````````````````````````````
         //	::OVER LIMIT::
@@ -434,7 +456,7 @@ for($i = 1; $i <=5; $i++)				//:DC:
     }//
     $spots_counter = $spots_counter + $ticket_spots;
 }//	for($i = 1; $i <=5; $i++){			//:DC:
-
+}//$tktleft >0
 $body.='<div style="clear:both;">';
 $body .= elgg_view('input/hidden', array('name'=>'guid', 'value'=>$event->getGUID()));
 $doublecheck = '<div id="confirm_order"></div>';

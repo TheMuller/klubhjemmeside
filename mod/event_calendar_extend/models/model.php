@@ -148,6 +148,7 @@ function event_calendar_extend_set_event_from_form($event_guid, $group_guid) {
 	$event->organiser = get_input('organiser');
 	$event->tags = string_to_tag_array(get_input('tags'));
 	$event->long_description = get_input('long_description');
+    $event->ticket_option_user_maxspots = get_input('ticket_option_user_maxspots');
 	$event->real_end_time = event_calendar_get_end_time($event);
 	//Add the ticket types
 	//limited to 5

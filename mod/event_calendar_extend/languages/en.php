@@ -64,7 +64,10 @@
 	'event_calendar:event:status:open' => 'open',
 	'event_calendar:event:status:private' => 'private',
 	
-    
+    'event_calendar:ticket:usertotalspot' =>'Tickets You already bought:',
+    'event_calendar:ticket:usermaxspot' =>'Max. spots per user:',
+    'event_calendar:ticket:usertotalleft' =>' Max. spots you can buy:',
+    'event_calendar:ticket:usertotalconsumed' =>'You can not buy more',
 	'event_calendar:ticket:type' => 'Type',
 	'event_calendar:ticket:amount' => 'Cost (DKK)',
 	'event_calendar:ticket:spots' => 'Spots',
