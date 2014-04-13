@@ -358,9 +358,10 @@ function event_calendar_get_tickets(array $options = array(),$func='elgg_get_ent
         $_SESSION['ectkts'] = $options['func']($options);
     }
 	$status_filter = get_input('status','');
-	
+	$amount_filter = get_input('amount','');
 	if((($status_filter!='' ) and ($_SESSION['status_filter'] != $status_filter)  ) or
-       ($_SESSION['ectktsASC']===false)){//you can add more condition'
+       (($amount_filter!='' ) and ($_SESSION['amount_filter'] != $amount_filter)  ) or
+       ($_SESSION['ectktsASC']===false)){
         $_SESSION['ectktsASC'] = $_SESSION['ectkts'];
         $dosorting = true;
 	}
@@ -375,6 +376,16 @@ function event_calendar_get_tickets(array $options = array(),$func='elgg_get_ent
 			}
 		}
 	  }
+	}
+	if(($amount_filter!='' ) and ($_SESSION['amount_filter'] != $amount_filter)  ){//condition 2
+		$_SESSION['amount_filter'] = $amount_filter;
+		if($amount_filter>0){
+            foreach ($_SESSION['ectktsASC'] as $key=>$ticket){
+                if($ticket->total  <$amount_filter){
+                    unset($_SESSION['ectktsASC'][$key]);
+                }
+            }
+        }
 	}
 	if(($dosorting) or ($_SESSION['ectktorderby'] !=$orderby)){
 		if($_SESSION['ectktorderby'] !=$orderby){
@@ -498,10 +509,7 @@ function on_select_order(order){
                          'item_class' =>'table_order_item'
                          );
 
-		$amount_arr = get_input('amount',0);
-		if($amount_arr!=0){
-			$options['metadata_name_value_pairs'][] = array('name' => 'total', 'value' => $amount_arr, 'operand' => '>=');
-		}
+
 		$orderid_arr = get_input('orderid',0);
 		if($orderid_arr!=0){
 			$options['wheres'][] = "e.guid >= $orderid_arr";
@@ -511,22 +519,11 @@ function on_select_order(order){
 
 		
     $orderby = get_input('orderby', '');
-   /*  if($orderby=='orderid'){
-        $options['order_by']="e.guid ";
-    }else if($orderby=='eventname'){
-   $options['joins'][]  = "JOIN {$CONFIG->dbprefix}metadata eg on e.guid=eg.entity_guid";
-	$options['joins'][]  = "JOIN {$CONFIG->dbprefix}metastrings eg_name on eg.name_id=eg_name.id";
-	$options['joins'][]  = "JOIN {$CONFIG->dbprefix}metastrings eg_value on eg.value_id=eg_value.id";
-    $options['wheres'][] = "eg_name.string='event_guid'";
 
-$options["order_by"] = "eg_value.string ";
-    }else if($orderby=='attendee'){
-        $options["order_by"] = "e.owner_guid ";
-    } */
-$sorting = get_input('sorting','');
+    $sorting = get_input('sorting','');
 
 
-		elgg_extend_view('user/default','event_calendar/calendar_toggle');
+    elgg_extend_view('user/default','event_calendar/calendar_toggle');
     $limits = array('10','15','20','30','50','70','100');
 	$content .= elgg_echo('event_calendar:pagelimit').
                 elgg_view('input/dropdown',array( 'name' => 'limit','value'=>$limit,'options'=>array_combine($limits, $limits)  ,'onchange'=>'on_select_limit(this.value)'));
@@ -610,7 +607,7 @@ elgg_echo('').
 	"</div>";
     $content .=  "<div style='width:100px;".$text1.elgg_echo('event_calendar:amount').
 	elgg_echo('').
-                elgg_view('input/dropdown',array( 'name' => 'amount_value','value'=>$amount_arr,'options'=>array_combine($amount_value, $amount_value)  ,'onchange'=>'on_select_amount(this.value)',))."</div>";
+                elgg_view('input/dropdown',array( 'name' => 'amount_value','value'=>$_SESSION['amount_filter'],'options'=>array_combine($amount_value, $amount_value)  ,'onchange'=>'on_select_amount(this.value)',))."</div>";
 
     $content .=  "<div style='width:130px;".$text1.elgg_echo('event_calendar:status').
 	elgg_echo('').
