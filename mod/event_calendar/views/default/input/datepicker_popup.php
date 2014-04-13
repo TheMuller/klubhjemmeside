@@ -16,6 +16,10 @@ if ($vars['dateformat']) {
 } else {
 	$date_format = "yy/mm/dd";
 }
+$user = elgg_get_logged_in_user_entity();
+if($user->language =='da'){
+?><script type="text/javascript" src="<?php echo elgg_get_site_url();?>vendors/jquery/i18n/jquery.ui.datepicker-da.js"></script><?php
+}
 ?>
 
 <script language="javascript">
