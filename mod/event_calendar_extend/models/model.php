@@ -357,14 +357,16 @@ function event_calendar_get_tickets(array $options = array(),$func='elgg_get_ent
         $options['count'] = false;$options['limit'] = 0;$options['offset'] =0;
         $_SESSION['ectkts'] = $options['func']($options);
     }
-	$status_filter = get_input('status','all');
+	$status_filter = get_input('status','');
 	
-	if($_SESSION['status_filter'] != $status_filter  ){//you can add more condition
-	$_SESSION['ectktsASC'] = $_SESSION['ectkts'];
+	if((($status_filter!='' ) and ($_SESSION['status_filter'] != $status_filter)  ) or
+       ($_SESSION['ectktsASC']===false)){//you can add more condition'
+        $_SESSION['ectktsASC'] = $_SESSION['ectkts'];
+        $dosorting = true;
 	}
-  
+    
 	
-	if($_SESSION['status_filter'] != $status_filter){//condition 1
+	if(($status_filter!='' ) and ($_SESSION['status_filter'] != $status_filter)  ){//condition 1
 		$_SESSION['status_filter'] = $status_filter;
 		if($status_filter!='all'){
 		foreach ($_SESSION['ectktsASC'] as $key=>$ticket){
@@ -374,7 +376,7 @@ function event_calendar_get_tickets(array $options = array(),$func='elgg_get_ent
 		}
 	  }
 	}
-	if(($_SESSION['status_filter'] != $status_filter) or ($_SESSION['ectktorderby'] !=$orderby)){
+	if(($dosorting) or ($_SESSION['ectktorderby'] !=$orderby)){
 		if($_SESSION['ectktorderby'] !=$orderby){
 			$_SESSION['ectktorderby'] = $orderby;
 		} 
@@ -495,7 +497,7 @@ function on_select_order(order){
                          'list_class'=> 'table_order_list',
                          'item_class' =>'table_order_item'
                          );
-		$status_arr = get_input('status','');
+
 		$amount_arr = get_input('amount',0);
 		if($amount_arr!=0){
 			$options['metadata_name_value_pairs'][] = array('name' => 'total', 'value' => $amount_arr, 'operand' => '>=');
@@ -612,7 +614,7 @@ elgg_echo('').
 
     $content .=  "<div style='width:130px;".$text1.elgg_echo('event_calendar:status').
 	elgg_echo('').
-                elgg_view('input/dropdown',array( 'name' => 'status_value','value'=>$status_arr,'options'=>array_combine($status_value, $status_value)  ,'onchange'=>'on_select_status(this.value)',))."</div>";
+                elgg_view('input/dropdown',array( 'name' => 'status_value','value'=>$_SESSION['status_filter'],'options'=>array_combine($status_value, $status_value)  ,'onchange'=>'on_select_status(this.value)',))."</div>";
     $content .=  "</div>";
 
         $options['func'] = "elgg_get_entities_from_metadata";
