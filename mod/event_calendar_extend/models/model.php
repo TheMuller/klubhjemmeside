@@ -359,12 +359,12 @@ function event_calendar_get_tickets(array $options = array(),$func='elgg_get_ent
     }
 	$status_filter = get_input('status','');
 	
-	if($_SESSION['status_filter'] != $status_filter  ){
+	if($_SESSION['status_filter'] != $status_filter  ){//you can add more condition
 	$_SESSION['ectktsASC'] = $_SESSION['ectkts'];
 	}
   
 	
-	if($_SESSION['status_filter'] != $status_filter){
+	if($_SESSION['status_filter'] != $status_filter){//condition 1
 		$_SESSION['status_filter'] = $status_filter;
 		if($status_filter!='all'){
 		foreach ($_SESSION['ectktsASC'] as $key=>$ticket){
@@ -388,10 +388,10 @@ function event_calendar_get_tickets(array $options = array(),$func='elgg_get_ent
     }
     else {
         if($sorting == DESC) {
-            $count = count($_SESSION[$options['ectktsASC']]);
+            $count = count($_SESSION['ectktsASC']);
             if($count > ($offsetopt+$limitopt)){ $offsetopt = $count-$offsetopt- $limitopt;}
             else {$limitopt=$count-$offsetopt;$offsetopt=0;}
-            return array_reverse(array_slice($_SESSION[$options['ectktsASC']],$offsetopt,$limitopt));
+            return array_reverse(array_slice($_SESSION['ectktsASC'],$offsetopt,$limitopt));
         }else
 	        return array_slice($_SESSION['ectktsASC'],$offsetopt,$limitopt);
     }
