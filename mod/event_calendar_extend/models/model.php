@@ -355,6 +355,8 @@ function event_calendar_get_tickets(array $options = array(),$func='elgg_get_ent
 	$orderby = get_input('orderby','');
      if(!$_SESSION['ectkts']){
         $options['count'] = false;$options['limit'] = 0;$options['offset'] =0;
+        $redo=true;
+        $_SESSION['status_filter'] ='all';
         $_SESSION['ectkts'] = $options['func']($options);
     }
 	$status_filter = get_input('status','');
@@ -369,7 +371,6 @@ function event_calendar_get_tickets(array $options = array(),$func='elgg_get_ent
     if(($events_filter!='' ) and ($_SESSION['events_filter'] != $events_filter)  ){//condition 2
         $_SESSION['events_filter'] = $events_filter;$redo=true;
     }
-    if($_SESSION['ectktsASC']===false) $redo=true;
     
 	if($redo){
         $_SESSION['ectktsASC'] = $_SESSION['ectkts'];
@@ -407,7 +408,6 @@ function event_calendar_get_tickets(array $options = array(),$func='elgg_get_ent
 	}
 
     $sorting = get_input('sorting','ASC');
-
    if($countopt) {
         return count($_SESSION['ectktsASC']);
     }
