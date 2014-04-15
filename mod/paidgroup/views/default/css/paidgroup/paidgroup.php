@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 ?>
 
@@ -25,7 +25,7 @@ position:absolute;
     font-size:0.9em;
 color:rgba(51,51,51,0.9);
 bottom:20px;/* ensure link text is visible under tooltip */
-right:-60px;  /* align both tooltip and link right edges */
+right:-30px;  /* align both tooltip and link right edges */
 width:9em;  /* a reasonable width to wrap tooltip text */
     text-align:center;
 padding:4px;
@@ -171,6 +171,9 @@ opacity:1;
     
 }
 .group-gallery-item-footer {
+font-size:11px;
+padding-left: 10px;
+font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
 height:40px;
 background:#000;
 color:gray;
@@ -183,6 +186,7 @@ border: 5px;
 	//font-weight:bold;
 	font-size-adjust: 0.58;
 color:gray;
+font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
 height:20px;
 background:#000000;
 border: 5px;
@@ -205,15 +209,16 @@ cursor:pointer;
 color:#ffffff;
 	font-family:arial;
 	font-size:16px;
-padding:3px 7px;
+padding: 0 7px 7px 7px;
     width :auto;
-height:10px;
-	
+height:20px;
+font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
 	text-shadow:0px 1px 0px #2f6627;
 }
 .joinButton:hover {
     text-decoration:none;
-	background-color:#5cbf2a;
+	background-color:#009900;
+    color:#ffffff;
 }
 .joinButton:active {
 position:relative;
