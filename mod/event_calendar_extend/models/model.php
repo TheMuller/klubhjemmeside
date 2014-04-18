@@ -439,6 +439,20 @@ display: table-row;
     border-collapse: collapse;
 }
 
+.table_order_list .table_order_item:nth-child(even){
+    background-color:#ffffff  ;
+}
+.table_order_list .table_order_item:nth-child(odd){
+    background-color:#e5e5e5;
+}
+.me_div_as_th
+{
+	background-color:gray;
+	font-size:16px;
+	font-weight:bold;
+	display:table-row;
+	border: 1px solid #000000;
+}
 </style>
 <script>
 function updateQueryStringParameter(uri, key, value) {
@@ -549,7 +563,7 @@ function on_select_order(order){
 	$amount_value = array('0','10','50','70','100','120','150','200','250','300','400','500','1000','2000','5000'); //aj1
 	
 	
-    $content .=  "<div class='table_order_list' style='background:#CCC;margin-bottom:-4px;'><div style='width:150px;".$text1.elgg_echo('event_calendar:orderid').
+    $content .=  "<li id='table_header' style='display:none;' class ='me_div_as_th'><div  style='width:150px;".$text1.elgg_echo('event_calendar:orderid').
 	elgg_echo('').
                 elgg_view("input/text", array('name' => 'name','value' => $orderid_arr, 'onkeypress'=>'on_select_orderid(this.value,event)',))."</div>";
 				
@@ -629,13 +643,24 @@ elgg_echo('').
     $content .=  "<div style='width:130px;".$text1.elgg_echo('event_calendar:status').
 	elgg_echo('').
                 elgg_view('input/dropdown',array( 'name' => 'status_value','value'=>$status_filter,'options'=>array_combine($status_value, $status_value)  ,'onchange'=>'on_select_status(this.value)',))."</div>";
-    $content .=  "</div>";
+    $content .=  "</li>";
 
         $options['func'] = "elgg_get_entities_from_metadata";
         $content .= elgg_list_entities($options,'event_calendar_get_tickets','elgg_view_entity_list');    
     
     $params = array('title' => $title, 'content' => $content, 'filter' => '', 'sidebar' => $sidebar);
 	$body = elgg_view_layout("content", $params);
+$body .= <<<___HTML
+	<script  type="text/javascript">
+	$(document).ready(function() {
+    if($(".table_order_list").length){
+        $(".table_order_list").prepend($("#table_header"));
+        $('#table_header').show();
+    }
+});
+</script>
+___HTML;
+	
 	return elgg_view_page($title, $body);
 }
     
