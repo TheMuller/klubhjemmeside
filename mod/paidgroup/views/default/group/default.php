@@ -7,19 +7,41 @@
  * @package ElggGroups
  */
 $group = $vars['entity'];
+
 if($vars['paid_view']   == true){
     echo "<div class='group-gallery-item-header'>";
     echo "&nbsp&nbsp";
-    echo $group->name;
+	$group_path =  elgg_get_site_url()."groups/profile/".$group->getGUID()."/".$group->name;
+	echo elgg_view("output/url", array(
+                                       "href" => $group_path,
+                                       "text" => elgg_echo($group->name),
+                                       "style" =>"color:grey;",
+                                       ));
+	
     $url = elgg_get_site_url() . "action/groups/join?group_guid={$group->getGUID()}";
     $url = elgg_add_action_tokens_to_url($url);
-    echo elgg_view("output/url", array(
+	$user = elgg_get_logged_in_user_entity();
+
+	$showjoinbutton = true;
+    if($group->isMember($user)){
+		$showjoinbutton = false;
+        if($last_dates and ($group->group_paid_flag =='yes')){
+            $last_date = $last_dates[$group->guid];
+            if(!$last_date or $last_date ==''){
+				$showjoinbutton = true;
+			}
+        }
+
+    }
+	if($showjoinbutton == true){
+			echo elgg_view("output/url", array(
                                        "href" => $url,
                                        "text" => elgg_echo('Join'),
                                        "is_trusted" => true,
                                        "class" => "joinButton",
                                        "style" =>"float:right;height:13px;",
                                        ));
+	}
     echo "</div>";
     echo "<div class='group-gallery-item-img'>";
     echo    elgg_view('output/img', array(
@@ -31,10 +53,10 @@ if($vars['paid_view']   == true){
     echo "</div>";
 	
     echo "<div class='group-gallery-item-footer'>";
-	echo "<ul class='elgg-menu elgg-menu-hz' style='line-height: fixed'>";
+	echo "<ul class='elgg-menu elgg-menu-hz' style='line-height: fixed;'>";
     //$membercount =  $group->getMembers(0, 0, TRUE);
-    $membercount =  group_get_getActiveMembers($group);
-    echo "&nbsp;&nbsp;&nbsp;<li class='tooltip1' data-tooltip1='".$membercount." members' style='width:10px;'>";
+    $membercount =  group_get_getActiveMembers($group)."&nbsp;member";
+    echo "&nbsp;&nbsp;&nbsp;<li class='tooltip1' data-tooltip1='".$membercount."' style='width:60px;float: right;'>";
     echo "<span>".$membercount."</span>";
     $membership = $group->membership;
     echo "</li >";
@@ -55,7 +77,7 @@ if($vars['paid_view']   == true){
         if($group->group_period_type =='duration'){
             $GRPS = $group->group_paid_price * $group->group_paid_LockedPeriod;
             if($GRPS <=0)$GRPS=0;
-            echo $GRPS." DKK for ".$group->group_paid_LockedPeriod." month";
+            echo "<div style='clear:both;'>".$GRPS." DKK for ".$group->group_paid_LockedPeriod." month</div></div>";
             if($group->group_paid_LockedPeriod >1) echo "s";
         }else{
             if($group->group_price_type == 'fixed'){
@@ -66,9 +88,10 @@ if($vars['paid_view']   == true){
                 $GRPS = $group->group_paid_price * $daystopay;
             }
             if($GRPS <=0)$GRPS=0;
-            echo $GRPS." DKK till ".$group->group_paid_MembershipEnd;
+            echo "<div style='clear:both;'>".$GRPS." DKK till ".$group->group_paid_MembershipEnd."</div></div>";
         }
     }
+
     
     
 

@@ -500,7 +500,7 @@ function group_get_getActiveMembers($group){
                 continue;
             }
             $count++;
-            echo "w".$count;
+            //echo "w".$count;
         }
         elgg_set_ignore_access($ia);
         return $count;
