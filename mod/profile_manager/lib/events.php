@@ -149,6 +149,12 @@
 		if(isset($_FILES["profile_icon"])){
 			add_profile_icon($object);
 		}
+		
+		if($terms = elgg_get_plugin_setting("registration_terms", "profile_manager")){
+			$object->setPrivateSetting("general_terms_accepted", time());
+		}
+		
+		elgg_clear_sticky_form('profile_manager_register');
 	}	
 	
 	/**

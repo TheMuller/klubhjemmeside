@@ -31,7 +31,8 @@
 	
 	$reserved_metadata_names = array(
 		"guid", "title", "access_id", "owner_guid", "container_guid", "type", "subtype", "name", "username", "email", "membership", "group_acl", "icon", "site_guid", 
-		"time_created", "time_updated", "enabled", "tables_split", "tables_loaded", "password", "salt", "language", "code", "banned", "admin", "custom_profile_type"
+		"time_created", "time_updated", "enabled", "tables_split", "tables_loaded", "password", "salt", "language", "code", "banned", "admin", "custom_profile_type",
+		"icontime", "x1", "x2", "y1", "y2"
 	);
 	
 	if($guid){
@@ -137,6 +138,9 @@
 				} else {
 					register_error(elgg_echo("profile_manager:actions:new:error:unknown"));
 				}
+				
+				// update system cache
+				elgg_get_system_cache()->delete("profile_manager_" . $type . "_fields_" . $site_guid);
 			} else {
 				register_error(elgg_echo("profile_manager:actions:new:error:metadata_options"));
 			}
