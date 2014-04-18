@@ -18,11 +18,11 @@
 		$tabbed = true;
 	}
 	
-	echo "<fieldset>";
+	$result = "";
 	
 	// mandatory profile icon
 	if($profile_icon == "yes"){
-		echo elgg_view("input/profile_icon");
+		$result .= elgg_view("input/profile_icon");
 	}
 
 	$categorized_fields = profile_manager_get_categorized_fields(null, true, true);
@@ -74,15 +74,15 @@
 											"name" => "custom_profile_fields_custom_profile_type",
 											"id" => "custom_profile_fields_custom_profile_type",
 											"options_values" => $types_options_values,
-											"js" => "onchange='changeProfileType();'",
+											"js" => "onchange='elgg.profile_manager.change_profile_type_register();'",
 											"value" => $custom_profile_fields_custom_profile_type)
 										);
 			
 			$types_result .= $types_description;
 			$types_result .= "</div>";
+			
+			$result .= $types_result;
 		}	
-	
-		echo $types_result;
 	}
 	
 	if(count($fields) > 0){
@@ -151,7 +151,7 @@
 					$title = $cat->getTitle();
 				}
 				if($tabbed){
-					$tabbed_cat_titles .= "<li class='" . $class . "'><a href='javascript:void(0);' onclick='toggle_tabbed_nav(\"" . $cat_guid . "\", this);'>" . $title . "</a></li>";
+					$tabbed_cat_titles .= "<li class='" . $class . "'><a href='javascript:void(0);' onclick='elgg.profile_manager.toggle_tabbed_nav(\"" . $cat_guid . "\", this);'>" . $title . "</a></li>";
 				} else {
 					$cat_result .= "<h3 class='settings'>" . $title . "</h3>";
 				} 
@@ -163,22 +163,25 @@
 			if($tabbed){
 				$tabbed_cat_content .= $cat_result;
 			} else {
-				echo $cat_result;
+				$result .= $cat_result;
 			}
 		}
 		if($tabbed){
 			if($tabbed_cat_titles){
 				
-				echo "<ul class='elgg-tabs elgg-htabs' id='profile_manager_register_tabbed'>";
-				echo $tabbed_cat_titles;
-				echo "</ul>";
+				$result .= "<ul class='elgg-tabs elgg-htabs' id='profile_manager_register_tabbed'>";
+				$result .= $tabbed_cat_titles;
+				$result .= "</ul>";
 				
-				echo "<div>";
-				echo $tabbed_cat_content;
-				echo "</div>";
+				$result .= "<div>";
+				$result .= $tabbed_cat_content;
+				$result .= "</div>";
 			} else {
-				echo $tabbed_cat_content;
+				$result .= $tabbed_cat_content;
 			}
 		}
 	} 	
-	echo "</fieldset>";
+	
+	if(!empty($result)){
+		echo "<fieldset>" . $result . "</fieldset>";
+	}

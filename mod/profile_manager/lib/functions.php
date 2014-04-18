@@ -125,54 +125,35 @@
 	 * @return unknown_type
 	 */
 	function add_profile_icon($user){
-		$topbar = get_resized_image_from_uploaded_file('profile_icon',16,16, true);
-		$tiny = get_resized_image_from_uploaded_file('profile_icon',25,25, true);
-		$small = get_resized_image_from_uploaded_file('profile_icon',40,40, true);
-		$medium = get_resized_image_from_uploaded_file('profile_icon',100,100, true);
-		$large = get_resized_image_from_uploaded_file('profile_icon',200,200);
-		$master = get_resized_image_from_uploaded_file('profile_icon',550,550);
 		
+		$icon_sizes = elgg_get_config('icon_sizes');
 		
-		$prefix = $user->guid;
-		$cur_version = get_version();
-		if($cur_version < 2010071002){
-			$prefix = $user->name;
+		// get the images and save their file handlers into an array
+		// so we can do clean up if one fails.
+		$files = array();
+		foreach ($icon_sizes as $name => $size_info) {
+			$resized = get_resized_image_from_uploaded_file('profile_icon', $size_info['w'], $size_info['h'], $size_info['square'], $size_info['upscale']);
+		
+			if ($resized) {
+				$file = new ElggFile();
+				$file->owner_guid = $user->guid;
+				$file->setFilename("profile/{$user->guid}{$name}.jpg");
+				$file->open('write');
+				$file->write($resized);
+				$file->close();
+				$files[] = $file;
+			} else {
+				// cleanup on fail
+				foreach ($files as $file) {
+					$file->delete();
+				}
+		
+				register_error(elgg_echo('avatar:resize:fail'));
+				forward(REFERER);
+			}
 		}
 		
-		if ($small !== false
-			&& $medium !== false
-			&& $large !== false
-			&& $tiny !== false) {
-		
-			$filehandler = new ElggFile();
-			$filehandler->owner_guid = $user->getGUID();
-			$filehandler->setFilename("profile/" . $prefix . "large.jpg");
-			$filehandler->open("write");
-			$filehandler->write($large);
-			$filehandler->close();
-			$filehandler->setFilename("profile/" . $prefix . "medium.jpg");
-			$filehandler->open("write");
-			$filehandler->write($medium);
-			$filehandler->close();
-			$filehandler->setFilename("profile/" . $prefix . "small.jpg");
-			$filehandler->open("write");
-			$filehandler->write($small);
-			$filehandler->close();
-			$filehandler->setFilename("profile/" . $prefix . "tiny.jpg");
-			$filehandler->open("write");
-			$filehandler->write($tiny);
-			$filehandler->close();
-			$filehandler->setFilename("profile/" . $prefix . "topbar.jpg");
-			$filehandler->open("write");
-			$filehandler->write($topbar);
-			$filehandler->close();
-			$filehandler->setFilename("profile/" . $prefix . "master.jpg");
-			$filehandler->open("write");
-            $filehandler->write($master);
-			$filehandler->close();
-			
-			$user->icontime = time();
-		}
+		$user->icontime = time();
 	}
 	
 	/**
@@ -189,9 +170,7 @@
 		}
 		
 		if(!empty($user) && ($user instanceof ElggUser)){
-			$user_metadata = profile_manager_get_user_profile_data($user);
-			
-			$profile_type_guid = profile_manager_get_user_profile_data_value($user_metadata, "custom_profile_type");
+			$profile_type_guid = $user->custom_profile_type;
 			
 			if(!empty($profile_type_guid)){
 				$profile_type = get_entity($profile_type_guid);
@@ -282,7 +261,7 @@
 				}
 				
 				$admin_only = $field->admin_only;
-				if($admin_only != "yes" || elgg_is_admin_logged_in()){
+				if($register || $admin_only != "yes" || elgg_is_admin_logged_in()){
 					if($edit){
 						if(!$register || $field->show_on_register == "yes"){
 							$filtered_ordered_cats[$cat_guid][$field->order] = $field;
@@ -290,7 +269,7 @@
 					} else {
 						// only add if value exists
 						$metadata_name = $field->metadata_name;
-						$user_value = profile_manager_get_user_profile_data_value($user_metadata, $metadata_name);
+						$user_value = $user->$metadata_name;
 						
 						if(!empty($user_value) || $user_value === 0){
 							$filtered_ordered_cats[$cat_guid][$field->order] = $field;
@@ -443,52 +422,7 @@
 		
 		return $result;
 	}
-	
-	function profile_manager_get_user_profile_data(ElggUser $user){
-		$profile_fields = elgg_get_config('profile_fields');
-		$result = false;
-		if(!empty($user) && !empty($profile_fields)){
-			
-			$fields = array_keys($profile_fields);
-			$fields[] = "custom_profile_type";
-			
-			$options = array(
-				"metadata_names" => $fields,
-				"guid" => $user->getGUID(),
-				"limit" => false
-			);
-			
-			$rows = elgg_get_metadata($options);
-			
-			if($rows){
-				$result = array();
-				foreach($rows as $row){
-					
-					if(!array_key_exists($row->name, $result)){
-						// create object						
-						$object = new stdClass();
-						$object->name = $row->name;
-						$object->value = $row->value;
-						$object->access_id = $row->access_id;
-						$result[$row->name] = $object;
-					} else {
-						$result[$row->name]->value = $row->value . ", " . $result[$row->name]->value;
-					}					 
-				}
-			}	
-		} 
 		
-		return $result;
-	}
-	
-	function profile_manager_get_user_profile_data_value($data, $name){
-		$result = NULL;
-		if(!empty($data) && is_array($data) && array_key_exists($name, $data)){
-			$result = $data[$name]->value;
-		}
-		return $result;
-	}
-	
 	function profile_manager_authenticate($username, $password){
 		$result = false;
 		

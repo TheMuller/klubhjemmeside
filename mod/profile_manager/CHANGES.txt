@@ -1,5 +1,44 @@
 = Version history =
 
+7.6.1 (2013-08-28):
+
+- fixed: about me field uses custom field name as label
+- fixed: auto suggested usernames no longer contains invalid characters
+- fixed: input multiselect correctly encodes options
+- fixed: incorrect listing of categories on admin configuration page if more than 10 are created
+
+7.6 (2013-05-06):
+
+- added: admin option to show hints on default account fields on register form
+- fixed: live validation of account details not working in walled garden mode
+- fixed: categorized profile fields can not be reset to general category
+- fixed: only show categorie titles/tabs if there are visible fields on profile edit form
+- fixed: some php notices
+
+7.5.2 (2013-04-05):
+
+- changed: better use of system cache for profile entities
+- changed: use core metadata caching instead of own version
+- changed: autoprepend http on url profile fields if missing
+- changed: query cache is disabled during profile export to prevent OOM issues
+- fixed: sticky register form values not cleared after registration
+- fixed: show correct tabs when switching profile types
+
+7.5.1 (2013-03-11):
+
+- added: backup of completeness count setting
+- changed: removed metadata caching in favor of elgg metadata caching
+
+7.5 (2013-01-30):
+
+- added: live form validation (username, email, password) on registration form
+- added: a few new exportable profile fields
+- changed: now using config('iconsizes') for thumbnail generation
+- fixed: some inline css en js (moved to global)
+- fixed: group profile fields export not working
+- fixed: some WCAG related issues 
+- fixed: general terms acceptance is not enforced in registration action 
+
 7.4.1 (2012-10-30):
 
 - fixed: trigger some object saves to prevent memcache issues
@@ -16,6 +55,7 @@
 - added: optional river event on site join (default enabled)
 - added: remember me code part of user system category
 - added: registration form widget (experimental)
+- added: user login history page 
 - changed: multiselect now uses different/better js library
 - changed: moved some code around so plugin settings are only check when needed (reduces query amount)
 - fixed: field type names now use core language keys

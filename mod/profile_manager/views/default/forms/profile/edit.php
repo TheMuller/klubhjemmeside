@@ -27,8 +27,6 @@
 	$cats = $categorized_fields['categories'];
 	$fields = $categorized_fields['fields'];
 	
-	$user_metadata = profile_manager_get_user_profile_data($vars['entity']);
-	
 	$edit_profile_mode = elgg_get_plugin_setting("edit_profile_mode", "profile_manager");
 	$simple_access_control = elgg_get_plugin_setting("simple_access_control","profile_manager");
 	
@@ -53,6 +51,7 @@
 			); 
 			
 			if($types = elgg_get_entities($options)){
+				$types_description = "";
 				
 				$dropdown_options = array();
 				$dropdown_options[""] = elgg_echo("profile_manager:profile:edit:custom_profile_type:default");
@@ -75,7 +74,7 @@
 				?>
 				<script type="text/javascript">
 					$(document).ready(function(){
-						changeProfileType();
+						elgg.profile_manager.change_profile_type();
 					});
 				</script>
 				<?php
@@ -85,18 +84,18 @@
 				echo elgg_view("input/dropdown", array("name" => "custom_profile_type",
 														"id" => "custom_profile_type",
 														"options_values" => $dropdown_options,
-														"onchange" => "changeProfileType();",
-														"value" => profile_manager_get_user_profile_data_value($user_metadata, "custom_profile_type")));
+														"onchange" => "elgg.profile_manager.change_profile_type();",
+														"value" => $vars['entity']->custom_profile_type));
 				echo elgg_view('input/hidden', array('name' => 'accesslevel[custom_profile_type]', 'value' => ACCESS_PUBLIC)); 
 				echo "</div>";
 				
 				echo $types_description;
 			}
 		} else {
-			$profile_type = profile_manager_get_user_profile_data_value($user_metadata, "custom_profile_type");
+			$profile_type = $vars['entity']->custom_profile_type;
 			
 			if(!empty($profile_type)){
-				echo elgg_view("input/hidden", array("name" => custom_profile_type, "value" => $profile_type));
+				echo elgg_view("input/hidden", array("name" => "custom_profile_type", "value" => $profile_type));
 				?>
 				<script type="text/javascript">
 					$(document).ready(function(){
@@ -114,9 +113,9 @@
 		foreach($cats as $cat_guid => $cat){
 			// make nice title for category		
 			if(empty($cat_guid) || !($cat instanceof ProfileManagerCustomFieldCategory)) {
-				$title = elgg_echo("profile_manager:categories:list:default");
+				$cat_title = elgg_echo("profile_manager:categories:list:default");
 			} else {
-				$title = $cat->getTitle();
+				$cat_title = $cat->getTitle();
 			}
 		
 			$class = "";
@@ -143,24 +142,20 @@
 					}
 				}
 			}
-		
-			$tabs[] = array(
-				'title' => $title,
-				'url' => "#" . $cat_guid,
-				'id' => $cat_guid,
-				'class' => $class
-			);
-			
+					
 			$tab_content .= "<div id='profile_manager_profile_edit_tab_content_" . $cat_guid . "' class='profile_manager_profile_edit_tab_content'>\n";
 				
 			$list_content .= "<div id='" . $cat_guid . "' class='" . $class . "'>";
 			if(count($cats) > 1){
-				$list_content .= "<h3 class='settings'>" . $title . "</h3>";
+				$list_content .= "<h3 class='settings'>" . $cat_title . "</h3>";
 			}
 			$list_content .= "<fieldset>";
 			
 			// display each field for currect category
 			$hide_non_editables = elgg_get_plugin_setting("hide_non_editables", "profile_manager");
+			
+			$visible_fields = 0;
+			
 			foreach($fields[$cat_guid] as $field){
 				$metadata_name = $field->metadata_name;
 				
@@ -177,9 +172,17 @@
 				$title = $field->getTitle();
 								
 				// get value
-				if(!empty($user_metadata) && array_key_exists($metadata_name, $user_metadata)){
-					$value = $user_metadata[$metadata_name]->value;
-					$access_id = $user_metadata[$metadata_name]->access_id;
+				$metadata = elgg_get_metadata(array(
+					'guid' => $vars['entity']->guid,
+					'metadata_name' => $metadata_name,
+					'limit' => false
+				));
+				
+				if($metadata){
+					$metadata = $metadata[0];
+					
+					$value = $vars['entity']->$metadata_name;
+					$access_id = $metadata->access_id;
 				} else {
 					$value = '';
 					$access_id = get_default_access($vars["entity"]);
@@ -188,6 +191,7 @@
 				if($hide_non_editables == "yes" && ($valtype == "non_editable")){
 					$field_result = "<div class='hidden_non_editable'>";
 				} else {
+					$visible_fields++;
 					$field_result = "<div>";
 				}	
 				
@@ -218,6 +222,16 @@
 				
 				$tab_content .= $field_result;
 				$list_content .= $field_result;
+			}
+			
+			if($visible_fields){
+				// only add tab if there are visible fields
+				$tabs[] = array(
+						'title' => $cat_title,
+						'url' => "#" . $cat_guid,
+						'id' => $cat_guid,
+						'class' => $class
+				);
 			}
 			
 			$tab_content .= "</div>\n";
