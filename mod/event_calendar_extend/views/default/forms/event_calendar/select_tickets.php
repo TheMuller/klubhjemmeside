@@ -426,6 +426,8 @@ for($i = 1; $i <=5; $i++)				//:DC:
                     $vEO_CTRS_Max=$ticket_max_spots;
                     if($vEO_CTRS[$ticket_type]>0)
                         $vEO_CTRS_Max=$ticket_max_spots - $vEO_CTRS[$ticket_type];
+                    if($vEO_CTRS_Max > $ticket_spots)
+                        $vEO_CTRS_Max=$ticket_spots;
                     $body.='<C3>&nbsp;x&nbsp;</C3>
                     <C5><style>select{width:55px;}</style>'
 					.elgg_view(
@@ -437,12 +439,10 @@ for($i = 1; $i <=5; $i++)				//:DC:
                                      'size'=> 1
                                      )
                                );
-                    $spots_var        =           'ticket_option_spots_'     . $i;
-
-                    $body.='</C5>&nbsp;&nbsp;('.$event->$spots_var.' ' . elgg_echo('event_calendar:ticket:spots:left') . ')';
+                    $body.='</C5>&nbsp;&nbsp;('.$ticket_spots.' ' . elgg_echo('event_calendar:ticket:spots:left') . ')';
                     if(elgg_is_admin_logged_in()){
                         $sold_spot = $grand_total_spot['ticket_type_' . $i];
-                        $total_spot = $event->$spots_var + $sold_spot;
+                        $total_spot = $ticket_spots + $sold_spot;
                         $body.='<C9>' . elgg_echo('event_calendar:ticket:spots:max') . '&nbsp;'.$ticket_max_spots.' | ' . elgg_echo('event_calendar:ticket:spots:sold') . '&nbsp;'.$sold_spot.' | ' . elgg_echo('event_calendar:ticket:spots:total') . '&nbsp;'.$total_spot.'</C9>';
 						
                     }	
