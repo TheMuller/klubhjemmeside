@@ -343,7 +343,7 @@ if($user_total_spots >0) {
 }
 $body .= "<script>var usertotalleft = ".$tktleft.";</script>";
 //````````````````````````````````````````
-if($tktleft >0){
+
 for($i = 1; $i <=5; $i++)				//:DC:
 {
     $type_var = 'ticket_option_type_' . $i;
@@ -456,9 +456,14 @@ for($i = 1; $i <=5; $i++)				//:DC:
     }//
     $spots_counter = $spots_counter + $ticket_spots;
 }//	for($i = 1; $i <=5; $i++){			//:DC:
-}//$tktleft >0
+
+
+    
+
 $body.='<div style="clear:both;">';
+if($tktleft >0){
 $body .= elgg_view('input/hidden', array('name'=>'guid', 'value'=>$event->getGUID()));
+
 $doublecheck = '<div id="confirm_order"></div>';
 $doublecheck .= elgg_view(
                           'input/submit'
@@ -506,6 +511,8 @@ if($doublecheckCTR>0){
 else{
 	$body .= '<br><br></div>';
 }
+    
+}//$tktleft >0
 //$body .= elgg_view('input/submit', array('name'=>'submit','value'=>elgg_echo('event_calendar:ticket:buynow'), ));
 
 echo $body;
