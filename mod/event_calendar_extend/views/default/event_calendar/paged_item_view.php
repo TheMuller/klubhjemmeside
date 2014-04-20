@@ -20,7 +20,16 @@ $info .=
 	.'</td>'
 	;
 $info .= '<td class="event_calendar_paged_time">'.$time_bit.'</td>';
-$info .= '<td class="event_calendar_paged_title"><a href="'.$event->getUrl().'">'.$event->title.'</a></td>';
+$soldouttext = elgg_echo('event_calendar:ticket:soldout')."&nbsp;";
+for($i = 1; $i <=5; $i++)				//:DC:
+{
+    $spots_var = 'ticket_option_spots_' . $i;
+    $ticket_spots = $event->$spots_var;
+    if($ticket_spots >0){$soldouttext='';break;}
+}
+
+    
+$info .= '<td class="event_calendar_paged_title"><a href="'.$event->getUrl().'">'.$soldouttext.$event->title.'</a></td>';
 $info .= '<td class="event_calendar_paged_venue">'.$event->venue.'</td>';
 /**
 if ($vars['personal_manage']!='no'){
