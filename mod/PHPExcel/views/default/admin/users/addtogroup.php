@@ -105,7 +105,7 @@
         }
 		if(count($_SESSION['not_member']))
         echo elgg_view("output/url",
-                       array('href' => elgg_get_site_url().'admin/PHPExcel/settings?step=3&group_guid='.$group_guid,'text' => elgg_echo('submit'),
+                       array('href' => elgg_get_site_url().'admin/users/addtogroup?step=3&group_guid='.$group_guid,'text' => elgg_echo('submit'),
                              'class' => 'elgg-button elgg-button-delete',));
 		
 		if(count($not_users))
