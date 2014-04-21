@@ -80,6 +80,7 @@
 			{
                 die('Error loading file "'.pathinfo($target,PATHINFO_BASENAME).'": '.$e->getMessage());
             }
+			$objPHPExcel->getActiveSheet()->removeRow(1,1);
             $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
 			foreach ($sheetData as $data)
             {
@@ -111,7 +112,6 @@
 		{
         echo "<hr width='40%' align='left'>";
 		echo "<p style='padding-left:1cm'><b>Following User's Are Not Member Of This Site</b></p>";echo "<hr width='40%' align='left'>";
-		//$objPHPExcel->getActiveSheet()->removeRow(1,1);  Remove First line excel
 		}
         foreach ($not_users as $not_user)
         {	
