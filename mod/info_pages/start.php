@@ -273,13 +273,13 @@ function info_pages_sidebar_menu_setup($hook, $type, $return, $params) {
 				$parentofparent = get_entity($parent->parent_guid);
 			} catch (Exception $e){
 			}
-            $priority =  $page->orderno != 0 ? $page->orderno : ($page->sub_orderno /100) + ($parent->orderno ? $parent->orderno : ($parent->sub_orderno / 100) + $parentofparent->orderno);
+            $priority =  $page->orderno != 0 ? $page->orderno*100 : $page->sub_orderno  + ($parent->orderno ? $parent->orderno*100 : $parent->sub_orderno  + $parentofparent->orderno*100);
             
 			$options = array(
 				'name' => $page->title,
 				'text' => $page->title,
 				'href' => $page->getUrl(),
-				'priority' =>  $priority*100,
+				'priority' =>  $priority,
 				'class' => $page->parent_guid ? $parentofparent ? 'sub_subpage'  : 'subpage' : '',
 			);
 
