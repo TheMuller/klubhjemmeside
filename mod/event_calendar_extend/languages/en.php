@@ -64,6 +64,15 @@
 	'event_calendar:event:status:closedfuture_no_list' => 'Closed for future requests',
 	'event_calendar:event:status:open' => 'Open requesting (your request needs no approval from administrator)',
 	'event_calendar:event:status:private' => 'Private event',
+	'event_calendar:ticket:menu:type' => 'Type',
+	'event_calendar:ticket:menu:price' => 'Price',
+	'event_calendar:ticket:menu:action' => 'Action',
+	'event_calendar:ticket:menu:left_tickets' => 'Left <br>Tickets',
+	'event_calendar:ticket:menu:meximum_spot' => 'Meximum <br>Spots',
+	'event_calendar:ticket:menu:sold_tickets' => 'Sold <br>Tickets',
+	'event_calendar:ticket:menu:total_tickets' => 'Total <br>Tickets',
+	
+
 	
     'event_calendar:ticket:usertotalspot' =>'Tickets - you already bought:',
     'event_calendar:ticket:usermaxspot' =>'Max. tickets per member:',
