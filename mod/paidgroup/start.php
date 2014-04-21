@@ -414,9 +414,10 @@ paidgroup_groups_inactive_group();
 						$option['gallery_class']= 'clearfix';
 						$option['full_view'] = true;
 					}else{
-						$option['paid_view'] = false;		
+						$option['paid_view'] = false;
+$option['full_view'] = false;						
 					}
-				$content = elgg_list_entities($options,'paidgroup_groups_inactive_group','elgg_view_entity_list');
+				$content = elgg_list_entities($option,'paidgroup_groups_inactive_group','elgg_view_entity_list');
 			
 				if (!$content) {
 					$content = elgg_echo('No inActive Groups');
