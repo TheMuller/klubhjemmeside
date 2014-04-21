@@ -238,12 +238,12 @@ function info_pages_entity_menu_setup($hook, $type, $return, $params) {
  */
 function info_pages_sidebar_menu_setup($hook, $type, $return, $params) {
 	
-	
-	$pages = elgg_get_entities_from_metadata(array(
-		'types' => 'object',
-		'subtypes' => 'info_page',
-	));
-	
+	$group = elgg_get_page_owner_entity();
+    $options = array('types' => 'object','subtypes' => 'info_page', );
+	if($group instanceof ELGGGroup){
+        $options['container_guid']=$group->guid;
+    }
+	$pages = elgg_get_entities_from_metadata($options);
 	foreach($pages as $page){
 		
 		//check for subpages
@@ -273,11 +273,13 @@ function info_pages_sidebar_menu_setup($hook, $type, $return, $params) {
 				$parentofparent = get_entity($parent->parent_guid);
 			} catch (Exception $e){
 			}
+            $priority =  $page->orderno != 0 ? $page->orderno : ($page->sub_orderno /100) + ($parent->orderno ? $parent->orderno : ($parent->sub_orderno / 100) + $parentofparent->orderno);
+            
 			$options = array(
 				'name' => $page->title,
 				'text' => $page->title,
 				'href' => $page->getUrl(),
-				'priority' => $page->orderno != 0 ? $page->orderno : ($page->sub_orderno /100) + ($parent->orderno ? $parent->orderno : ($parent->sub_orderno / 100) + $parentofparent->orderno),
+				'priority' =>  $priority*100,
 				'class' => $page->parent_guid ? $parentofparent ? 'sub_subpage'  : 'subpage' : '',
 			);
 

@@ -17,7 +17,13 @@ if (!$page) {
 set_page_owner($page_guid);
 
 $title = $page->title;
-
+$group = get_entity($page->container_guid);
+if($group instanceof ELGGGroup){
+    elgg_set_page_owner_guid($group->guid);
+    elgg_pop_breadcrumb();
+    elgg_push_breadcrumb(elgg_echo('groups'),'groups/all');
+    elgg_push_breadcrumb($group->name,$group->getURL());
+}
 elgg_push_breadcrumb($title);
 
 
