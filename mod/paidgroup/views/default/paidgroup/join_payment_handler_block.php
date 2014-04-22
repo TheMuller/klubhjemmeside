@@ -35,17 +35,18 @@
 	$view_type = get_input('view_type','');
 	if($view_type == 'inactive' or $view_type == ''){
 		echo "<div align='right' style='margin-right:1cm;'>";
-		echo elgg_view("output/url", array( "href" => '?view_type=all', "text" => elgg_echo('all'), "is_trusted" => true,"class" => "elgg-button elgg-button-submit"));echo "</div><br>";
+
 		if($my_inactive_guids){
 		$options['wheres'][] = "e.guid  IN (".$my_inactive_guids.")";
 		    $ia = elgg_set_ignore_access(true);
 			echo elgg_list_entities_from_metadata($options);
 		}
-		else echo "No inactive";
+		//else echo "No inactive";
 		if(count($my_inactive_guids)){
-			
+			echo elgg_view("output/url", array( "href" => '?view_type=all', "text" => elgg_echo('all'), "is_trusted" => true,"class" => "elgg-button elgg-button-submit"));echo "</div><br>";			
 		}else{
 			if($view_type == 'inactive'){
+					echo elgg_view("output/url", array( "href" => '?view_type=all', "text" => elgg_echo('all'), "is_trusted" => true,"class" => "elgg-button elgg-button-submit"));echo "</div><br>";
 			echo "no inactive";
 			}else{
 				$view_type = 'all';
