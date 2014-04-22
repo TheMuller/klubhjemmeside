@@ -14,16 +14,22 @@ if(elgg_is_admin_logged_in()){
 elgg_register_title_button();
 }
 
-$content .= elgg_view('info_pages/index');
+//$content .= elgg_view('info_pages/index');
 
 if(elgg_is_admin_logged_in()){
 //$content .= elgg_view_title(elgg_echo('info_pages:more'));
-$content .= elgg_list_entities_from_metadata(array(
-	'types' => 'object',
-	'subtypes' => 'info_page',
-	'full_view' => false,
-	'order_by_metadata' =>	array('name' => 'orderno', 'direction' => ASC, 'as' => integer)
-));
+    $options = array(
+                     'types' => 'object',
+                     'subtypes' => 'info_page',
+                     'full_view' => false,
+                     'order_by_metadata' =>	array('name' => 'orderno', 'direction' => ASC, 'as' => integer)
+                     );
+    $entities = elgg_get_entities_from_metadata($options);
+    foreach($entities as $key=>$entity){
+        $group = get_entity($entity->container_guid);
+         if($group instanceof ELGGGroup) unset($entities[$key]);
+    }
+    $content .= elgg_view_entity_list($entities,$options);
 if (!$content) {
 	$content .= '<p>' . elgg_echo('info_pages:none') . '</p>';
 }

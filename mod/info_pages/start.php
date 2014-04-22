@@ -245,7 +245,10 @@ function info_pages_sidebar_menu_setup($hook, $type, $return, $params) {
     }
 	$pages = elgg_get_entities_from_metadata($options);
 	foreach($pages as $page){
-		
+		if(!($group instanceof ELGGGroup)){
+            $entity = get_entity($page->container_guid);
+            if($entity instanceof ELGGGroup)continue;
+        }
 		//check for subpages
 		$subpages = elgg_get_entities_from_metadata(array(
 			'types' => 'object',
