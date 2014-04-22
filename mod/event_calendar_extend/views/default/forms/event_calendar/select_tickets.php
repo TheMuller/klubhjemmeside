@@ -343,9 +343,9 @@ if($user_total_spots >0) {
 $body .= "<script>var usertotalleft = ".$tktleft.";</script>";
 $body.="";
 if(elgg_is_admin_logged_in()){
-	$body.="<li id='table_header' class ='me_div_as_th' style='width:100%; color:white;'><div class ='me_div_as_td' style='width:160px;'>".elgg_echo('event_calendar:ticket:menu:type')."</div><div class ='me_div_as_td' style='width:80px;'>".elgg_echo('event_calendar:ticket:menu:price')."</div><div class ='me_div_as_td' style='width:120px;'>".elgg_echo('event_calendar:ticket:menu:action')."</div><div class ='me_div_as_td' >".elgg_echo('event_calendar:ticket:menu:left_tickets')."</div><div class ='me_div_as_td' >".elgg_echo('event_calendar:ticket:menu:meximum_spot')."</div><div class ='me_div_as_td' >".elgg_echo('event_calendar:ticket:menu:sold_tickets')."</div><div class ='me_div_as_td' >".elgg_echo('event_calendar:ticket:menu:total_tickets')."</div></li>";
+	$body.="<ul class='me_ul_as_table'><li id='table_header' class ='me_div_as_th' style='width:100%; color:white;'><div class ='me_div_as_td' style='width:160px;'>".elgg_echo('event_calendar:ticket:menu:type')."</div><div class ='me_div_as_td' style='width:80px;'>".elgg_echo('event_calendar:ticket:menu:price')."</div><div class ='me_div_as_td' style='width:120px;'>".elgg_echo('event_calendar:ticket:menu:select')."</div><div class ='me_div_as_td' >".elgg_echo('event_calendar:ticket:menu:left_tickets')."</div><div class ='me_div_as_td' >".elgg_echo('event_calendar:ticket:menu:meximum_spot')."</div><div class ='me_div_as_td' >".elgg_echo('event_calendar:ticket:menu:sold_tickets')."</div><div class ='me_div_as_td' >".elgg_echo('event_calendar:ticket:menu:total_tickets')."</div></li>";
 }else{
-	$body.="<li id='table_header' class ='me_div_as_th' style='width:100%; color:white;'><div class ='me_div_as_td' style='width:200px;'>".elgg_echo('event_calendar:ticket:menu:type')."</div><div class ='me_div_as_td' style='width:100px;'>".elgg_echo('event_calendar:ticket:menu:price')."</div><div class ='me_div_as_td' style='width:150px;'>".elgg_echo('event_calendar:ticket:menu:action')."</div><div class ='me_div_as_td' style='width:100px;'>".elgg_echo('event_calendar:ticket:menu:left_tickets')."</div></li>";
+	$body.="<ul class='me_ul_as_table'><li id='table_header' class ='me_div_as_th' style='width:100%; color:white;'><div class ='me_div_as_td' style='width:200px;'>".elgg_echo('event_calendar:ticket:menu:type')."</div><div class ='me_div_as_td' style='width:100px;'>".elgg_echo('event_calendar:ticket:menu:price')."</div><div class ='me_div_as_td' style='width:150px;'>".elgg_echo('event_calendar:ticket:menu:select')."</div><div class ='me_div_as_td' style='width:100px;'>".elgg_echo('event_calendar:ticket:menu:left_tickets')."</div></li>";
 }
 
 //````````````````````````````````````````
@@ -376,8 +376,14 @@ $body.="<li class='me_li_as_tr'>";
             $ticket_amount_X=number_format($ticket_amount,2,',','.');
             
             $body .= elgg_view('input/hidden', array('name'=>$spots_var,'value'=>0));
-            $body .= '<br clear="all">'
-            .'<div class=me_div_as_td><b>'.$ticket_type.':</b></div>&nbsp;<div class=me_div_as_td>'.$ticket_amount_X.'</div><C2 style="color:red;">'.elgg_echo('event_calendar:ticketk:soldout').'</C2><br clear="all">';
+            $body .= ''
+            .'<div class=me_div_as_td><b>'.$ticket_type.':</b></div><div class=me_div_as_td>'.$ticket_amount_X.'</div><div class=me_div_as_td style="color:red;">'.elgg_echo('event_calendar:ticket:soldout').'</div><div class=me_div_as_td>&nbsp;&nbsp;'.$ticket_spots.'</div>';
+            if(elgg_is_admin_logged_in()){
+                        $sold_spot = $grand_total_spot['ticket_type_' . $i];
+                        $total_spot = $ticket_spots + $sold_spot;
+                        $body.='<div class=me_div_as_td>&nbsp;'.$ticket_max_spots.'</div><div class=me_div_as_td>&nbsp;'.$sold_spot.'</div><div class=me_div_as_td>&nbsp;'.$total_spot.'</div>';
+						
+                    }
         }//if($ticket_spots==0)
         //````````````````````````````````````````
         //	::OVER LIMIT::
@@ -402,6 +408,12 @@ $body.="<li class='me_li_as_tr'>";
                 .elgg_echo('event_calendar:ticketsmax')//You have bought tickets to the Max. Limit, You cannot buy more.'
                 .'</span></div><div class=me_div_as_td>&nbsp;&nbsp;'.$ticket_spots.'</div>'
                 ;
+               	 if(elgg_is_admin_logged_in()){
+                        $sold_spot = $grand_total_spot['ticket_type_' . $i];
+                        $total_spot = $ticket_spots + $sold_spot;
+                        $body.='<div class=me_div_as_td>&nbsp;'.$ticket_max_spots.'</div><div class=me_div_as_td>&nbsp;'.$sold_spot.'</div><div class=me_div_as_td>&nbsp;'.$total_spot.'</div>';
+						
+                    }
 				//$body.='<!--div style="width:8%;float:left;text-align:left;"-->';
 				//$body.='&nbsp;<span style="color:red;">'
 				//	.$vEO_CTRS[$ticket_type]
@@ -464,7 +476,7 @@ $body.="<li class='me_li_as_tr'>";
     $spots_counter = $spots_counter + $ticket_spots;
 	$body.="</li>";
 }//	for($i = 1; $i <=5; $i++){			//:DC:
-
+$body.="</ul>";
 
     
 
@@ -528,7 +540,7 @@ echo $body;
 ?>
 <style type="text/css">
 .me_ul_as_table {
-	display:table;
+	//display:table;
 	border-collapse: collapse;
 	border-spacing: 0;
 	width:100%;

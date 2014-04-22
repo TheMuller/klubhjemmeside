@@ -66,7 +66,7 @@
 	'event_calendar:event:status:private' => 'Private event',
 	'event_calendar:ticket:menu:type' => 'Type',
 	'event_calendar:ticket:menu:price' => 'Price',
-	'event_calendar:ticket:menu:action' => 'Action',
+	'event_calendar:ticket:menu:select' => 'Select',
 	'event_calendar:ticket:menu:left_tickets' => 'Left <br>Tickets',
 	'event_calendar:ticket:menu:meximum_spot' => 'Meximum <br>Spots',
 	'event_calendar:ticket:menu:sold_tickets' => 'Sold <br>Tickets',
