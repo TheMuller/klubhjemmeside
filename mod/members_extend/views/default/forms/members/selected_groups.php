@@ -32,7 +32,12 @@ echo elgg_view('input/dropdown',
 		'style'=>'width: 150px; ',
 	)
 );
-	
+ echo "Wrong Group :";
+    echo "<input type='hidden' name='wrong_group' value='0'/>";
+    if($_SESSION['wrong_group'] =='1')
+    echo "<input type='checkbox' name='wrong_group' value='1' checked/>";
+    else
+    echo "<input type='checkbox' name='wrong_group' value='1' />";
 echo elgg_view('input/submit', array('name'=>'submit','value'=>elgg_echo('event_calendar:submit')));
 echo $_GET['search'];
 

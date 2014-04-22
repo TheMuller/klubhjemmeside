@@ -28,7 +28,7 @@ function member_extend_get_users(array $options = array(),$func='elgg_get_entiti
                 $found = false;
                 foreach($_SESSION['member_extend_selected_groups'] as $group_guid){
                     $group = get_entity($group_guid);
-                    if($group->isMember($user)){
+                    if(($group instanceof Elgggroup) and $group->isMember($user)){
                         if($last_dates and ($group->group_paid_flag =='yes')){
                             $last_date = $last_dates[$group->guid];
                             if(!$last_date or $last_date =='')continue;
@@ -47,6 +47,41 @@ function member_extend_get_users(array $options = array(),$func='elgg_get_entiti
                 }
            }
        }
+	   if($_SESSION['wrong_group']){
+		
+			foreach($_SESSION[$options['sobj']."ASC"] as $key=>$user){
+
+				$sugested_groupids = unserialize($user->suggestedgroupids);
+				$myoptions = array(
+                    'type' => 'group',
+                    'relationship' => 'member',
+                    'relationship_guid' => $user->guid,
+                    'inverse_relationship' => false,
+                    );
+				unset($groups);
+				$groups = elgg_get_entities_from_relationship($myoptions);
+				$last_dates = unserialize($user->last_dates);
+				$hasred = false;
+				
+				foreach($groups as $group)
+				{
+					if($last_dates and ($group->group_paid_flag =='yes')){
+						$last_date = $last_dates[$group->guid];
+						if(!$last_date or $last_date ==''){
+							$inactivegroupids[]=$group->guid;
+							continue;
+						}
+					}
+					if(!in_array($group->guid,$sugested_groupids)){
+						$hasred = true;
+						break;
+					}
+				}
+				if(!$hasred){
+					unset($_SESSION[$options['sobj']."ASC"][$key]);
+				}
+			}
+	   }
        usort($_SESSION[$options['sobj']."ASC"],'compare_users');
     }
     $sorting = get_input('sorting','ASC');
