@@ -360,6 +360,8 @@ function event_calendar_get_tickets(array $options = array(),$func='elgg_get_ent
         $_SESSION['ectkts'] = $options['func']($options);
     }
 	$status_filter = get_input('status','');
+	$amount_filter = get_input('amount','');
+	$orderid_filter = get_input('orderid','');
 	
     if(($status_filter!='' ) and ($_SESSION['status_filter'] != $status_filter)  ){//condition 1
         $_SESSION['status_filter'] = $status_filter; $redo=true;
@@ -367,9 +369,16 @@ function event_calendar_get_tickets(array $options = array(),$func='elgg_get_ent
     if(($amount_filter!='' ) and ($_SESSION['amount_filter'] != $amount_filter)  ){//condition 2
         $_SESSION['amount_filter'] = $amount_filter;$redo=true;
     }
+	if(($_SESSION['orderid_filter'] != $orderid_filter)  ){//condition 2
+        $_SESSION['orderid_filter'] = $orderid_filter;$redo=true;
+    }
     $events_filter = get_input('events','');
-    if(($events_filter!='' ) and ($_SESSION['events_filter'] != $events_filter)  ){//condition 2
+    if(($_SESSION['events_filter'] != $events_filter)  ){//condition 2
         $_SESSION['events_filter'] = $events_filter;$redo=true;
+    }
+	$attendee_filter = get_input('attendee','');
+    if(($_SESSION['attendee_filter'] != $attendee_filter)  ){//condition 2
+        $_SESSION['attendee_filter'] = $attendee_filter;$redo=true;
     }
     
 	if($redo){
@@ -390,10 +399,25 @@ function event_calendar_get_tickets(array $options = array(),$func='elgg_get_ent
                     }
                 }
         }
+		if($_SESSION['orderid_filter'] !=''){
+            foreach ($_SESSION['ectktsASC'] as $key=>$ticket){
+                if($ticket->guid < $_SESSION['orderid_filter']) {
+                    unset($_SESSION['ectktsASC'][$key]);
+                }
+            }
+        }
         if($_SESSION['events_filter'] !=''){
             foreach ($_SESSION['ectktsASC'] as $key=>$ticket){
                 $event = get_entity($ticket->event_guid);
-                if(strpos($event->title,$_SESSION['events_filter'])    === FALSE){
+                if(stripos($event->title,$_SESSION['events_filter'])    === FALSE){
+                    unset($_SESSION['ectktsASC'][$key]);
+                }
+            }
+        }
+		if($_SESSION['attendee_filter'] !=''){
+            foreach ($_SESSION['ectktsASC'] as $key=>$ticket){
+                $owner = get_entity($ticket->owner_guid);
+                if(stripos($owner->username,$_SESSION['attendee_filter'])    === FALSE){
                     unset($_SESSION['ectktsASC'][$key]);
                 }
             }
@@ -498,17 +522,13 @@ function on_select_events(events,e){
 			document.getElementById('btnSearch').click();
 		}
 }
-function on_select_attendee(){
-var search = document.getElementById('search_attendee').value;
+function on_select_attendee(attendee,e){
      if (typeof e == 'undefined' && window.event) { e = window.event; }
-	 if(events == search){
         if (e.keyCode == 13)
         {
-			
-			window.location =  updateQueryStringParameter(window.location.href,'events',events);
+			window.location =  updateQueryStringParameter(window.location.href,'attendee',attendee);
 			document.getElementById('btnSearch').click();
-			}
-        }
+		}
 }
 function on_select_order(order){
     window.location =  updateQueryStringParameter(window.location.href,'orderby',order);
@@ -520,7 +540,7 @@ function on_select_order(order){
     elgg_push_breadcrumb(elgg_echo('event_calendar:show_events_title'), 'event_calendar/list');
     $title = elgg_echo('event_calendar:view_all_orders' );
 
- 		$limit = get_input('limit', 50);
+ 		$limit = get_input('limit', 10);
 		$offset = get_input('offset', 0);
     
     
@@ -536,26 +556,16 @@ function on_select_order(order){
                          );
 
 
-		$orderid_arr = get_input('orderid',0);
-		if($orderid_arr!=0){
-			$options['wheres'][] = "e.guid >= $orderid_arr";
-		}
-		$events_arr = get_input('events','');
-	
-
-		
+	$orderid_arr = get_input('orderid',0);	
     $orderby = get_input('orderby', '');
-
-    $sorting = get_input('sorting','');
-
-
+	$sorting = get_input('sorting','');
+	
     elgg_extend_view('user/default','event_calendar/calendar_toggle');
     $limits = array('10','15','20','30','50','70','100');
 	$content .= elgg_echo('event_calendar:pagelimit').
                 elgg_view('input/dropdown',array( 'name' => 'limit','value'=>$limit,'options'=>array_combine($limits, $limits)  ,'onchange'=>'on_select_limit(this.value)'));
     
     $content .=  "<div style='display: table-row;clear:both;'>";
-    
     $text1 = "border:1px solid;display: table-cell;vertical-align:middle;text-align:center;'>";
     $text2 = $text1."<a href='#' onclick='on_select_order(\"";
 	$status_value = array('all','accepted','awaitingapproval','processing'); //aj1
@@ -621,6 +631,7 @@ function on_select_order(order){
 	        $orderby_path = "<img src='{$orderby_path}sort_up_green.png' height='20px' width='20px' style='opacity:$opacity;'></img>";
 		$newsorting='DESC';
 	}
+	$attendee_filter = get_input('attendee',$_SESSION['attendee_filter']);
     $content .=  "<div style='width:140px;".$text1.elgg_echo('event_calendar:attendee').
 elgg_echo('').
                 elgg_view('output/url',array('name'=> 'attendee', 'text' => $orderby_path,
@@ -630,7 +641,7 @@ elgg_echo('').
                                                       .$newsorting,
                                                       'is_action' => TRUE,
 													  )).elgg_echo('').
-                elgg_view("input/text", array('id' => 'search_attendee','name' => 'attendee','value' => '', 'onkeypress'=>'on_select_attendee()',)).
+                elgg_view("input/text", array('id' => 'search_attendee','name' => 'attendee','value' => $attendee_filter, 'onkeypress'=>'on_select_attendee(this.value,event)',)).
 	"</div>";
     
     $status_filter = get_input('status',$_SESSION['status_filter']);
