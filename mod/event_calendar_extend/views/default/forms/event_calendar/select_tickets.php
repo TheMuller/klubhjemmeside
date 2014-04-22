@@ -550,4 +550,14 @@ echo $body;
 	border: 1px solid #000000;
     vertical-align: middle;
 }
+.me_div_as_th
+{
+	background-color:gray;
+	font-size:16px;
+	font-weight:bold;
+	display:table-row;
+    //text-align:center;
+	border: 1px solid #000000;
+   // vertical-align: middle;
+}
 </style>
