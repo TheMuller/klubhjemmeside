@@ -36,7 +36,27 @@
         foreach($_SESSION['not_member'] as $Data)
 		{
 			$user = get_user_by_username($Data);
-			join_group($group_guid,$user->guid);
+			if(join_group($group_guid,$user->guid)){
+				$sugested_groupids = unserialize($user->suggestedgroupids);
+				if(!in_array($group_guid,$sugested_groupids))
+				{
+					$sugested_groupids[]=floatval($group_guid);
+				}
+				$user->suggestedgroupids = serialize($sugested_groupids);
+				$group = get_entity($group_guid);
+				if ($group->group_paid_flag == 'yes')	//:DC:
+				{
+					$last_dates = unserialize($user->last_dates);
+					if($group->group_period_type =='duration'){
+						$cmd= "+".$group->group_paid_LockedPeriod." month";
+						$last_dates[$group_guid] = date('Y-m-d H:i',strtotime($cmd,strtotime($last_dates[$group_guid])));
+					}else{
+						$last_dates[$group_guid] = $group->group_paid_MembershipEnd;
+						}
+					$user->last_dates = serialize($last_dates);
+				}
+				$user->save();
+			}			
 			//echo $Data;
 		}
 		echo "<b>".$Data."</b>"." Following Persone are Succesfully Joined The Group ";
