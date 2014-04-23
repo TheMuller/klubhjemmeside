@@ -10,8 +10,10 @@
 **/
     echo '<div class="ticket_option">';
     echo elgg_echo('event_calendar:ticket:usermaxspot');
+	$ticket_option_user_maxspots = $vars['entity']->ticket_option_user_maxspots;
+	if($ticket_option_user_maxspots == 0 )$ticket_option_user_maxspots = 10;
     echo '<input type="text" class="ticket_option_spots" name="ticket_option_user_maxspots" value="';
-    echo $vars['entity']->ticket_option_user_maxspots;
+    echo $ticket_option_user_maxspots;
     echo '" ></div>';
 if (isset($vars['class'])) {
 	$vars['class'] = "elgg-input-text {$vars['class']}";
