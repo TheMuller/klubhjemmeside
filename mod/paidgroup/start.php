@@ -313,6 +313,78 @@ function paidgroup_hook_forward_system($hook, $type, $returnvalue, $params) {
             return elgg_get_site_url() .$url ;
         }
     }
+function paidgroup_groups_handle_members_page($guid) {
+
+	elgg_set_page_owner_guid($guid);
+
+	$group = get_entity($guid);
+	if (!$group || !elgg_instanceof($group, 'group')) {
+		forward();
+	}
+
+	group_gatekeeper();
+	$active = get_input('active','yes');
+	$title = elgg_echo('groups:members:title', array($group->name));
+	if(($active == 'yes') ){	
+	echo  elgg_register_menu_item('title', array(
+								'name' => 'group:inActive',
+								'href' => 'groups/members/'.$group->guid."?active=no",
+								'text' => elgg_echo('paidgroup:inactive') ,
+								'class' => 'elgg-button elgg-button-submit',
+							));
+	}
+	else{	
+	echo  elgg_register_menu_item('title', array(
+								'name' => 'group:inActive',
+								'href' => 'groups/members/'.$group->guid."?active=yes",
+								'text' => elgg_echo('paidgroup:active') ,
+								'class' => 'elgg-button elgg-button-submit',
+							));	
+	}
+
+
+	elgg_push_breadcrumb($group->name, $group->getURL());
+	elgg_push_breadcrumb(elgg_echo('groups:members'));
+
+	$db_prefix = elgg_get_config('dbprefix');
+	$options =array(
+		'relationship' => 'member',
+		'relationship_guid' => $group->guid,
+		'inverse_relationship' => true,
+		'type' => 'user',
+		'limit' => 20,
+		'joins' => array("JOIN {$db_prefix}users_entity u ON e.guid=u.guid"),
+		'order_by' => 'u.name ASC',
+	);
+	$entities = elgg_get_entities_from_relationship($options);
+	
+	foreach($entities as $key=>$entity){
+		$entityactive = true;
+		if (!$entity->isadmin() and ($group->owner_guid !=$entity->guid) ){
+			$last_dates = unserialize($entity->last_dates);
+			$last_date = $last_dates[$group_guid];
+			if(!$last_date or $last_date ==''){
+				$entityactive = false;	
+			}
+		}
+		if(($active == 'no') and ($entityactive==true)){	
+			unset($entities[$key]);		
+		}
+		elseif(($active == 'yes') and ($entityactive==false)){	
+			unset($entities[$key]);		
+		}
+	}
+	$content = elgg_view_entity_list($entities,$options);
+
+	$params = array(
+		'content' => $content,
+		'title' => $title,
+		'filter' => '',
+	);
+	$body = elgg_view_layout('content', $params);
+
+	echo elgg_view_page($title, $body);
+}	
     function paidgroup_groups_page_handler($segments, $handle) {
         $pages_dir = dirname(__FILE__) . '/pages';
         
@@ -328,6 +400,9 @@ function paidgroup_hook_forward_system($hook, $type, $returnvalue, $params) {
                 }
                 paidgroup_groups_handle_all_page($type);
                 break;
+			case 'members':
+				paidgroup_groups_handle_members_page($segments[1]);
+			break;
             default:
                 return call_user_func("groups_page_handler", $segments, $handle);//sachin
         }

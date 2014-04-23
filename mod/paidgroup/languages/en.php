@@ -8,6 +8,8 @@
 $english = array(
 'inactive' => "inActive",
 'groups:paid' => "Paid Group",
+				 'paidgroup:inactive' => 'inActive',
+				 'paidgroup:active' => 'Active',
                  'groups:groups:access:style' => "Site Access Level",
                  'groups:groups:payment:mode' => "Payment Mode",
                  'groups_currency' => "Currency",
