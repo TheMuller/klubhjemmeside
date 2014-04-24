@@ -249,9 +249,9 @@ You can manage calendar requests for this event here:
 		
 	'event_calendar:manage_subscribers:success' => "Personal calendars updated.",
 	'event_calendar:manage_subscribers:error' => "Error: could not update personal calendars.",
-	'event_calendar:personal_manage:open' => "open",
-	'event_calendar:personal_manage:closed' => "closed",
-	'event_calendar:personal_manage:private' => "private",
+	'event_calendar:personal_manage:open' => "Open attending (everybody can attend)",
+	'event_calendar:personal_manage:closed' => "Manuel approval (administrator has to approve requests)",
+	'event_calendar:personal_manage:private' => "Private event",
 	'event_calendar:personal_manage:by_event' => "by event",
 	'event_calendar:personal_manage:label' => "Calendar permission",
 	'event_calendar:personal_manage:description' => "Determines whether people can add this event to their calendars (open), "
