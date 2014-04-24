@@ -346,6 +346,13 @@ function compare_tickets($ticketa, $ticketb){
 	$eventb = get_entity($ticketb->event_guid);
 	//echo $eventa."/".$eventb;
 	return strcmp($eventa->title,$eventb->title);
+	}elseif($orderby == 'amount'){
+		if($ticketa->total > $ticketb->total)
+			return 1;
+		elseif($ticketa->total < $ticketb->total)
+			return -1;
+		elseif($ticketa->total == $ticketb->total)
+			return 0;
 	}
 }
 function event_calendar_get_tickets(array $options = array(),$func='elgg_get_entities'){
@@ -572,8 +579,8 @@ function on_select_order(order){
 	//$amount_disp = array('>=10','>=50','>=70','>=100','>=120','>=150','>=200','>=250','>=300','>=400','>=500'); //aj1
 	$amount_value = array('0','10','50','70','100','120','150','200','250','300','400','500','1000','2000','5000'); //aj1
 	
-	
-    $content .=  "<li id='table_header' style='display:none;' class ='me_div_as_th'><div  style='width:150px;".$text1.elgg_echo('event_calendar:orderid').
+	$sorting_path = elgg_get_site_url()."mod/event_calendar_extend/graphics/";
+    $content .=  "<li id='table_header' style='display:none;' class ='me_div_as_th'><div  style='width:150px;".$text1.elgg_echo('event_calendar:orderid')."<img src='{$sorting_path}trans.png' height='20px' width='20px'> ".
 	elgg_echo('').
                 elgg_view("input/text", array('name' => 'name','value' => $orderid_arr, 'onkeypress'=>'on_select_orderid(this.value,event)',))."</div>";
 				
@@ -647,11 +654,35 @@ elgg_echo('').
     $status_filter = get_input('status',$_SESSION['status_filter']);
 	$amount_filter = get_input('amount',$_SESSION['amount_filter']);
     
+	$amount_path = elgg_get_site_url()."mod/event_calendar_extend/graphics/";
+	 if (($orderby == '') or ($orderby == 'amount')){
+		$opacity = 1;
+		if ($sorting == 'DESC'){
+			$amount_path = "<img src='{$amount_path}sort_down_green.png' height='20px' width='20px' style='opacity:$opacity;'></img>";
+			$newsorting='ASC';
+		}else{
+			$amount_path = "<img src='{$amount_path}sort_up_green.png' height='20px' 	width='20px' style='opacity:$opacity;'></img>";
+			$newsorting='DESC';
+		}
+	}else{
+		$opacity =0.3;
+	    $amount_path = "<img src='{$amount_path}sort_up_green.png' height='20px' width='20px' style='opacity:$opacity;'></img>";
+		$newsorting='DESC';
+	}
+	
     $content .=  "<div style='width:100px;".$text1.elgg_echo('event_calendar:amount').
 	elgg_echo('').
-                elgg_view('input/dropdown',array( 'name' => 'amount_value','value'=>$amount_filter,'options'=>array_combine($amount_value, $amount_value)  ,'onchange'=>'on_select_amount(this.value)',))."</div>";
+                elgg_view('output/url',array('name'=> 'amount', 'text' => $amount_path,
+				'href' => "event_calendar/view_all_orders"
+                                                      ."?orderby=amount"
+                                                      ."&sorting="
+                                                      .$newsorting,
+                                                      'is_action' => TRUE,
+													  )).elgg_echo('').
+                elgg_view('input/dropdown',array( 'name' => 'amount','style'=>'width:100px','value'=>$amount_filter,'options'=>array_combine($amount_value, $amount_value),'onchange'=>'on_select_amount(this.value)',))."</div>";
 
-    $content .=  "<div style='width:130px;".$text1.elgg_echo('event_calendar:status').
+	$sorting_path = elgg_get_site_url()."mod/event_calendar_extend/graphics/";
+    $content .=  "<div style='width:130px;".$text1.elgg_echo('event_calendar:status')."<img src='{$sorting_path}trans.png' height='20px' width='20px'>".
 	elgg_echo('').
                 elgg_view('input/dropdown',array( 'name' => 'status_value','value'=>$status_filter,'options'=>array_combine($status_value, $status_value)  ,'onchange'=>'on_select_status(this.value)',))."</div>";
     $content .=  "</li>";
