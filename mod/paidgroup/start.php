@@ -24,9 +24,9 @@ function paidgroup_init() {
     elgg_register_plugin_hook_handler('forward', 'system', 'paidgroup_hook_forward_system');
     elgg_register_page_handler('paidgroup', 'paidgroup_page_handler');
     elgg_register_page_handler('groups', 'paidgroup_groups_page_handler');
-    elgg_extend_view('user/default', 'paidgroup/userdefault', 101);
     elgg_register_simplecache_view("css/paidgroup/paidgroup");
     elgg_register_css("paidgroup.paidgroup", elgg_get_simplecache_url("css", "paidgroup/paidgroup"));
+	elgg_register_plugin_hook_handler('register', 'menu:entity', 'paidgroup_groups_entity_menu_setup');
  }
 
 
@@ -38,6 +38,37 @@ function paidgroup_init() {
      * Save categories to object upon save / edit
      *
      */
+function paidgroup_groups_entity_menu_setup($hook, $type, $return, $params) {
+	if (elgg_in_context('widgets')) {
+		return $return;
+	}
+	$entity = $params['entity'];
+	$handler = elgg_extract('handler', $params, false);
+	if ($handler != 'groups') {
+		return $return;
+	}
+	$users = $entity->getMembers();
+	if($entity->group_paid_flag =='yes'){
+		foreach($users as $key=>$user){
+		    if ($user->isadmin() or ($entity->owner_guid ==$user->guid) ) continue;
+			$last_dates = unserialize($user->last_dates);
+            $last_date = $last_dates[$entity->guid];
+            if(!$last_date or $last_date ==''){
+				unset($users[$key]);
+            }
+        } 
+    }
+	$num_members = count($users);
+	$members_string = elgg_echo('groups:member');
+	$options = array(
+		'name' => 'members',
+		'text' => $num_members . ' ' . $members_string,
+		'href' => false,
+		'priority' => 200,
+	);
+	$return[] = ElggMenuItem::factory($options);
+	return $return;
+}
     function group_save($event, $object_type, $group) {
     	if ($group instanceof ElggGroup) {
             $group->group_paid_flag=get_input('group_paid_flag','');
@@ -362,7 +393,7 @@ function paidgroup_groups_handle_members_page($guid) {
 		$entityactive = true;
 		if (!$entity->isadmin() and ($group->owner_guid !=$entity->guid) ){
 			$last_dates = unserialize($entity->last_dates);
-			$last_date = $last_dates[$group_guid];
+			$last_date = $last_dates[$group->guid];
 			if(!$last_date or $last_date ==''){
 				$entityactive = false;	
 			}
@@ -374,7 +405,7 @@ function paidgroup_groups_handle_members_page($guid) {
 			unset($entities[$key]);		
 		}
 	}
-	$content = elgg_view_entity_list($entities,$options);
+	$content .= elgg_view_entity_list($entities,$options);
 
 	$params = array(
 		'content' => $content,
