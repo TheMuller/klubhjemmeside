@@ -256,6 +256,7 @@ foreach($OrderZ as $kEO=>$vEO)
     .'</i>'
     ;
     $PrevTO='';
+	$payment='';$decline='';
     //:DC: REJECT
     if($OrderStatus[$kEO]=='awaitingapproval'
        || $OrderStatus[$kEO]=='awaitingpayment'
