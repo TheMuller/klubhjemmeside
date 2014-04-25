@@ -71,13 +71,27 @@ function paidgroup_groups_entity_menu_setup($hook, $type, $return, $params) {
 }
     function group_save($event, $object_type, $group) {
     	if ($group instanceof ElggGroup) {
-            $group->group_paid_flag=get_input('group_paid_flag','');
             $group->group_paid_price=get_input('group_paid_price','');
             $group->group_period_type =get_input('group_period_type','');
             $group->group_price_type = get_input('group_price_type','');
             //system_message("new end date is ".get_input('group_paid_MembershipEnd',''));
-            if( $group->group_paid_MembershipStart != get_input('group_paid_MembershipStart','') or
-               $group->group_paid_MembershipEnd != get_input('group_paid_MembershipEnd','')
+		if('yes'==get_input('group_paid_flag','')){
+			if($group->group_paid_flag!='yes'){
+				$members =  $group->getMembers(0,0,false);
+
+                foreach($members as $member){
+					$last_dates = unserialize($member->last_dates);
+					if($group->group_period_type =='duration'){
+						$cmd= "+".$group->group_paid_LockedPeriod." month";
+						$last_dates[$group->guid] = date('Y-m-d H:i',strtotime($cmd,strtotime($last_dates[$group->guid])));
+					}else{
+						$last_dates[$group->guid] = get_input('group_paid_MembershipEnd','');
+					}
+                    $member->last_dates = serialize($last_dates);
+                }			
+			}
+            elseif( $group->group_paid_MembershipStart != get_input('group_paid_MembershipStart','') or
+               $group->group_paid_MembershipEnd != get_input('group_paid_MembershipEnd','') 
                ){
                 $members =  $group->getMembers(0,0,false);
                 foreach($members as $member){
@@ -92,6 +106,13 @@ function paidgroup_groups_entity_menu_setup($hook, $type, $return, $params) {
                     notify_user($member->getGUID(), $group->getOwnerGUID(), elgg_echo('paidgroup:datechanged:email:subject'), elgg_echo('paidgroup:datechanged:email:body',array($member->name,$group->name,get_input('group_paid_MembershipStart',''),get_input('group_paid_MembershipEnd',''))));
                 }
             }
+		}
+		/*else{
+            if($group->group_paid_flag=='yes'){{		
+			   /// what to do??
+			   }
+		}*/
+			$group->group_paid_flag=get_input('group_paid_flag','');
             $group->group_paid_LockedPeriod=get_input('group_paid_LockedPeriod','');
             $group->group_paid_MembershipStart=get_input('group_paid_MembershipStart','');
             $group->group_paid_MembershipEnd=get_input('group_paid_MembershipEnd','');
