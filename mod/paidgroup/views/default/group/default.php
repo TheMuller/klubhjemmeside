@@ -10,11 +10,14 @@ $group = $vars['entity'];
 
 if($vars['paid_view']   == true){
     echo "<div class='group-gallery-item-header'>";
-    echo "&nbsp&nbsp";
+    $group_name = $group->name;
 	$group_path =  elgg_get_site_url()."groups/profile/".$group->getGUID()."/".$group->name;
+	echo "&nbsp&nbsp";
+	if(strlen($group_name)>=15)
+		$group_name = substr($group_name, 0, 15)."...";
 	echo elgg_view("output/url", array(
                                        "href" => $group_path,
-                                       "text" => elgg_echo($group->name),
+                                       "text" => $group_name,
                                        "style" =>"color:grey;",
                                        ));
 	
