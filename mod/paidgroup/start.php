@@ -357,7 +357,7 @@ function paidgroup_groups_handle_members_page($guid) {
 	$active = get_input('active','yes');
 	$title = elgg_echo('groups:members:title', array($group->name));
 	if(($active == 'yes') ){	
-	echo  elgg_register_menu_item('title', array(
+	  elgg_register_menu_item('title', array(
 								'name' => 'group:inActive',
 								'href' => 'groups/members/'.$group->guid."?active=no",
 								'text' => elgg_echo('paidgroup:inactive') ,
@@ -365,7 +365,7 @@ function paidgroup_groups_handle_members_page($guid) {
 							));
 	}
 	else{	
-	echo  elgg_register_menu_item('title', array(
+	  elgg_register_menu_item('title', array(
 								'name' => 'group:inActive',
 								'href' => 'groups/members/'.$group->guid."?active=yes",
 								'text' => elgg_echo('paidgroup:active') ,

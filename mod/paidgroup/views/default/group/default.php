@@ -25,13 +25,14 @@ if($vars['paid_view']   == true){
 	$showjoinbutton = true;
     if($group->isMember($user)){
 		$showjoinbutton = false;
-        if($last_dates and ($group->group_paid_flag =='yes')){
-            $last_date = $last_dates[$group->guid];
-            if(!$last_date or $last_date ==''){
-				$showjoinbutton = true;
-			}
+        if($group->group_paid_flag =='yes'   ){
+            if($last_dates and ($group->group_paid_flag =='yes')){
+                $last_date = $last_dates[$group->guid];
+                if(!$last_date or $last_date ==''){
+                    $showjoinbutton = true;
+                }
+            }
         }
-
     }
 	if($showjoinbutton == true){
 			echo elgg_view("output/url", array(
@@ -77,8 +78,9 @@ if($vars['paid_view']   == true){
         if($group->group_period_type =='duration'){
             $GRPS = $group->group_paid_price * $group->group_paid_LockedPeriod;
             if($GRPS <=0)$GRPS=0;
-            echo "<div style='clear:both;'>".$GRPS." DKK for ".$group->group_paid_LockedPeriod." month</div></div>";
+            echo "<div style='clear:both;'>".$GRPS." DKK for ".$group->group_paid_LockedPeriod." month";
             if($group->group_paid_LockedPeriod >1) echo "s";
+            echo "</div></div>";
         }else{
             if($group->group_price_type == 'fixed'){
                 $GRPS = $group->group_paid_price;
