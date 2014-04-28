@@ -55,7 +55,7 @@
 	}
 	if($view_type == 'all'){
 	echo "<div align='right' style='margin-right:1cm;'>";
-		echo elgg_view("output/url", array( "href" => '?view_type=inactive', "text" => elgg_echo('inActive'), "is_trusted" => true,"class" => "elgg-button elgg-button-submit",'alignment' =>
+		echo elgg_view("output/url", array( "href" => '?view_type=inactive', "text" => elgg_echo('paidgroup:inactive'), "is_trusted" => true,"class" => "elgg-button elgg-button-submit",'alignment' =>
 'horizontal'));echo "</div><br>";
 	
      if($my_group_guids){ //exclude groups which I already joined, (and active if paid).

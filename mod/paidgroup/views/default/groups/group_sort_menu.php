@@ -22,7 +22,7 @@ $tabs = array(
 		'priority' => 400,
 	),
 	'inactive' => array(
-		'text' => elgg_echo('inactive'),
+		'text' => elgg_echo('paidgroup:inactive'),
 		'href' => 'groups/all?filter=inactive',
 		'priority' => 500,
 	),

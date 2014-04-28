@@ -444,10 +444,10 @@ function paidgroup_groups_handle_members_page($guid) {
             case 'all':
 			$type = get_input("list_type","list");
                 if($type =="list"){
-                    elgg_register_menu_item('title', array('name' => 'toggle_view','href' => 'groups/all/?list_type=gallery','text' => elgg_echo('gallery') ,'link_class' => 'elgg-button elgg-button-action',));
+                    elgg_register_menu_item('title', array('name' => 'toggle_view','href' => 'groups/all/?list_type=gallery','text' => elgg_echo('paidgroup:gallery') ,'link_class' => 'elgg-button elgg-button-action',));
                 }
                 else {
-                    elgg_register_menu_item('title', array('name' => 'toggle_view','href' => 'groups/all','text' => elgg_echo('list') ,'link_class' => 'elgg-button elgg-button-action',));
+                    elgg_register_menu_item('title', array('name' => 'toggle_view','href' => 'groups/all','text' => elgg_echo('paidgroup:list') ,'link_class' => 'elgg-button elgg-button-action',));
                     elgg_load_css("paidgroup.paidgroup");
                 }
                 paidgroup_groups_handle_all_page($type);
@@ -547,7 +547,7 @@ $option['full_view'] = false;
 				$content = elgg_list_entities($option,'paidgroup_groups_inactive_group','elgg_view_entity_list');
 			
 				if (!$content) {
-					$content = elgg_echo('No inActive Groups');
+					$content = elgg_echo('paidgroup:no_inactive');
 				}
 			break;
 		case 'newest':

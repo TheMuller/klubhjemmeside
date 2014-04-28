@@ -7,6 +7,10 @@
 
 $danish = array(
 'groups:paid' => "Betalings Gruppe",
+				 'paidgroup:inactive' => "inaktiv",
+				 'paidgroup:gallery' => 'Galleri',
+				 'paidgroup:list' => 'Liste',		
+				 'paidgroup:no_inactive' => 'Ingen inaktive grupper',				 
                  'groups:groups:access:style' => "Side Adgangsniveau",
                  'groups_currency' => "Valuta",
                  'groups_merchant_number' => " DIBS merchant number",

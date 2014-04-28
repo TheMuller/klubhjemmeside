@@ -50,7 +50,7 @@ if($user){
 				$newsorting='DESC';
 			}
 		
-			echo "<li id='table_header' class ='me_div_as_th' style='display:none;'> <div class ='me_div_as_td' >Msg's</div><div class ='me_div_as_td' >Suggested Group</div><div class ='me_div_as_td' >Not Suggested Group</div><div class ='me_div_as_td' >Member Group</div><div class ='me_div_as_td' >Image</div><div class ='me_div_as_td' >Name"."&nbsp;&nbsp;".
+			echo "<li id='table_header' class ='me_div_as_th' style='display:none;'> <div class ='me_div_as_td' >Msg's</div><div class ='me_div_as_td' > ".elgg_echo('members:suggested_group')."</div><div class ='me_div_as_td' >".elgg_echo('members:not_suggested_group')."</div><div class ='me_div_as_td' >".elgg_echo('members:member_group')."</div><div class ='me_div_as_td' >".elgg_echo('members:image')."</div><div class ='me_div_as_td' >".elgg_echo('members:name')."&nbsp;&nbsp;".
 				elgg_echo('').
                 elgg_view('output/url',array('text' => $sorting_path,'href' => "members"
                                                       ."?orderby=username"
@@ -58,7 +58,7 @@ if($user){
                                                       .$newsorting,
                                                   //    'is_action' => TRUE,
 													  )).
-			"</div><div class ='me_div_as_td' >Event's</div>";
+			"</div><div class ='me_div_as_td' >".elgg_echo('event_calendar:paged:column:event')."</div>";
 				
 			foreach($MemberFieldLabels as $key=>$MemberFieldLabel){
 				$sorting_path = elgg_get_site_url()."mod/event_calendar_extend/graphics/";
@@ -139,12 +139,12 @@ $(document).ready(function() {
 				'selected' => $vars['selected'] == 'unvalidated',
 	),
 	'xlupload' => array(
-            'text' => elgg_echo('XL Upload'),
+            'text' => elgg_echo('members:xl_upload'),
             'href' => "members/upload",
             'priority' =>1000
     ),
 	'xldownload' => array(
-            'text' => elgg_echo('XL Download'),
+            'text' => elgg_echo('members:xl_download'),
             'href' => $myurl,
             'priority' =>1000
     ),
