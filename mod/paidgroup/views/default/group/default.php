@@ -25,18 +25,17 @@ if($vars['paid_view']   == true){
     $url = elgg_add_action_tokens_to_url($url);
 	$user = elgg_get_logged_in_user_entity();
 
+ $last_dates = unserialize($user->last_dates);
 	$showjoinbutton = true;
     if($group->isMember($user)){
 		$showjoinbutton = false;
-        if($group->group_paid_flag =='yes'   ){
             if($last_dates and ($group->group_paid_flag =='yes')){
                 $last_date = $last_dates[$group->guid];
                 if(!$last_date or $last_date ==''){
                     $showjoinbutton = true;
                 }
             }
-        }
-    }
+		}
 	if($showjoinbutton == true){
 			echo elgg_view("output/url", array(
                                        "href" => $url,
