@@ -31,17 +31,28 @@ foreach ($variables as $name => $type) {
 </div>
 <?php
 }
+    
+    $options = array(
+                     'types' => 'object',
+                     'subtypes' => 'info_page',
+                     'full_view' => false,
+                     );
+	$group = elgg_get_page_owner_entity();
+    
+	if($group instanceof ELGGGroup){
+        $options['container_guid']=$group->guid;
+    }
+    
 	$a[0] = elgg_echo('info_pages:noparent');
 	
-	$pages = elgg_get_entities_from_metadata(array(
-			'types' => 'object',
-			'subtypes' => 'info_page',
-			'full_view' => false,
-		));
+	$pages = elgg_get_entities_from_metadata($options);
 	
 	foreach($pages as $page){
 		//try to group the levels
-		
+		if(!($group instanceof ELGGGroup)){
+            $entity = get_entity($page->container_guid);
+            if($entity instanceof ELGGGroup)continue;
+        }
 			if(!isset($a[$page->guid])){
 				if($page->parent_guid){
 					$parent = get_entity($page->parent_guid);
