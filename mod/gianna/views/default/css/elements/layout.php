@@ -26,8 +26,9 @@
 }
 .elgg-page-default .elgg-page-body {
 	min-height: 500px;
-	background: #FFFFFF;
-
+}
+.elgg-page-default .elgg-page-body > .elgg-inner {
+    background: #FFFFFF;
 }
 .elgg-page-default {
 	min-width: 998px;
@@ -64,8 +65,6 @@
 /***** PAGE HEADER ******/
 .elgg-page-header {
 	position: relative;
-	border-bottom: 1px solid #999999; /* Fallback */
-	border-bottom: 1px solid rgba(0, 0, 0, 0.4);
 }
 .gianna-header > .elgg-inner,
 .elgg-page-header > .elgg-inner {
@@ -82,7 +81,7 @@
 	position: relative;
 	padding: 20px 0 0;
 	float: right;
-	width: 300px;
+	width: 200px;
 	margin: 0 0 20px 40px;
 	background: #FFFFFF;
 	border-left: 1px solid #E5E5E5; /* Fallback */
@@ -94,13 +93,19 @@
 	position: relative;
 	padding: 20px 0;
 	float: left;
-	width: 160px;
+	width: 150px;
 	margin: 0 10px 0 0;
 }
 .elgg-main {
 	position: relative;
 	min-height: 360px;
-	padding: 20px 0;
+	padding: 20px 40px 30px 40px;
+    //background-color: #FFFFFF;
+}
+.elgg-main img{
+  max-width: 100%;
+  height: auto;
+  width: auto; /* For IE8 */
 }
 .elgg-main > .elgg-head {
 	padding-bottom: 3px;

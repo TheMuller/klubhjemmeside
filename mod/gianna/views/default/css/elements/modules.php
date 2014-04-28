@@ -88,6 +88,7 @@
 .elgg-sidebar .elgg-module > .elgg-body {
 	padding: 20px;
 	border-top: 1px solid #FFF;
+    background-color: #FFFFFF; 
 }
 .elgg-sidebar .elgg-module .elgg-list {
 	margin: 0;
@@ -172,7 +173,7 @@
 	padding: 10px 20px 20px;
 	border-top: 1px solid #FFF;
 }
-.elgg-module-widget > .elgg-body {	
+.elgg-module-widget > .elgg-body {
 	overflow: hidden;
 }
 .elgg-module-widget.elgg-state-draggable .elgg-widget-handle {

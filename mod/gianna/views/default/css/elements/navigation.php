@@ -110,6 +110,7 @@
 	font-style: italic;
 	line-height: 1.2em;
 	color: #000000;
+    font-size: 11px;
 }
 .elgg-breadcrumbs > li {
 	display: inline-block;
@@ -123,6 +124,7 @@
 	font-style: normal;
 	display: inline-block;
 	color: #404040;
+    font-size: 11px;
 }
 .elgg-breadcrumbs > li > a:hover {
 	text-decoration: underline;
@@ -190,6 +192,7 @@
 	float: left;
 	position: relative;
 	top: 30px;
+    left: 15px;
 	z-index: 1;
 	background: rgba(0, 0, 0, 0.1);
 	border: 1px solid rgba(0, 0, 0, 0.2);
@@ -220,7 +223,7 @@
     text-align: left;
     top: 35px;
     left: 50%;
-    margin-left: -90px;
+    //margin-left: -90px;
     width: 180px;
 
 	-webkit-transform: translateZ(0);	

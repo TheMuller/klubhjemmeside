@@ -220,17 +220,17 @@ function gianna_pagesetup_handler() {
 			
 	// Extend footer with copyright
 	$year = date('Y');	
-	$href = "http://www.perjensen-online.dk";
+	$href = "http://www.klubhjemmeside.dk";
 	elgg_register_menu_item('footer', array(
 		'name' => 'copyright_this',
 		'href' => $href,
 		'title' => elgg_echo('gianna:tooltip'),
-		'text' => elgg_echo('gianna:copyright') . $year . elgg_echo(' Elggzone'),
+		'text' => elgg_echo('gianna:copyright') . $year . elgg_echo(' Klubhjemmeside'),
 		'priority' => 1,
 		'section' => 'alt',
 	));
 	
-	$href = "http://elgg.org";
+	$href = "http://www.klubhjemmeside.dk";
 	elgg_register_menu_item('footer', array(
 		'name' => 'elgg',
 		'href' => $href,
