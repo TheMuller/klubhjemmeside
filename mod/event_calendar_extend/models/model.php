@@ -340,7 +340,7 @@ function compare_tickets($ticketa, $ticketb){
 	if($orderby == 'attendee'){
 		$owner1 = get_entity($ticketa->owner_guid);
 	$owner2 = get_entity($ticketb->owner_guid);
-	return strcmp($owner1->username,$owner2->username);
+	return strcmp($owner1->name,$owner2->name);
 	}elseif($orderby == 'eventname'){
 		$eventa = get_entity($ticketa->event_guid);
 	$eventb = get_entity($ticketb->event_guid);
@@ -361,7 +361,7 @@ function event_calendar_get_tickets(array $options = array(),$func='elgg_get_ent
     $offsetopt = $options['offset'];
 	$orderby = get_input('orderby','');
      if(!$_SESSION['ectkts']){
-        $options['count'] = false;$options['limit'] = 0;$options['offset'] =0;
+        $options['count'] = false;$options['limit'] = 1000;$options['offset'] =0;
         $redo=true;
         $_SESSION['status_filter'] ='all';
         $_SESSION['ectkts'] = $options['func']($options);
@@ -408,7 +408,7 @@ function event_calendar_get_tickets(array $options = array(),$func='elgg_get_ent
         }
 		if($_SESSION['orderid_filter'] !=''){
             foreach ($_SESSION['ectktsASC'] as $key=>$ticket){
-                if($ticket->guid < $_SESSION['orderid_filter']) {
+                if(stripos(strval($ticket->guid),$_SESSION['orderid_filter'])  === FALSE) {
                     unset($_SESSION['ectktsASC'][$key]);
                 }
             }
@@ -424,7 +424,7 @@ function event_calendar_get_tickets(array $options = array(),$func='elgg_get_ent
 		if($_SESSION['attendee_filter'] !=''){
             foreach ($_SESSION['ectktsASC'] as $key=>$ticket){
                 $owner = get_entity($ticket->owner_guid);
-                if(stripos($owner->username,$_SESSION['attendee_filter'])    === FALSE){
+                if(stripos($owner->name,$_SESSION['attendee_filter'])    === FALSE){
                     unset($_SESSION['ectktsASC'][$key]);
                 }
             }
@@ -580,7 +580,7 @@ function on_select_order(order){
 	$amount_value = array('0','10','50','70','100','120','150','200','250','300','400','500','1000','2000','5000'); //aj1
 	
 	$sorting_path = elgg_get_site_url()."mod/event_calendar_extend/graphics/";
-    $content .=  "<li id='table_header' style='display:none;' class ='me_div_as_th'><div  style='width:150px;".$text1.elgg_echo('event_calendar:orderid')."<img src='{$sorting_path}trans.png' height='20px' width='20px'> ".
+    $content .=  "<li id='table_header' class ='me_div_as_th' style='display:table-header-group;' ><div  style='width:150px;".$text1.elgg_echo('event_calendar:orderid')."<img src='{$sorting_path}trans.png' style='height:20px; width:20px;'> ".
 	elgg_echo('').
                 elgg_view("input/text", array('name' => 'name','value' => $orderid_arr, 'onkeypress'=>'on_select_orderid(this.value,event)',))."</div>";
 				
@@ -591,18 +591,18 @@ function on_select_order(order){
 	$opacity = 1;
 		 if ($sorting == 'DESC'){
 
-        $sorting_path = "<img src='{$sorting_path}sort_down_green.png' height='20px' width='20px' style='opacity:$opacity;'></img>";
+        $sorting_path = "<img src='{$sorting_path}sort_down_green.png' style='height:20px; width:20px; opacity:$opacity;'></img>";
 		$newsorting='ASC';
 		//$orderby='event';
     }else{
 
-        $sorting_path = "<img src='{$sorting_path}sort_up_green.png' height='20px' width='20px' style='opacity:$opacity;'></img>";
+        $sorting_path = "<img src='{$sorting_path}sort_up_green.png' style='height:20px; width:20px; opacity:$opacity;'></img>";
 		$newsorting='DESC';
 
     }
 	}else{
 	$opacity =0.3;
-	        $sorting_path = "<img src='{$sorting_path}sort_up_green.png' height='20px' width='20px' style='opacity:$opacity;'></img>";
+	        $sorting_path = "<img src='{$sorting_path}sort_up_green.png' style='height:20px; width:20px; opacity:$opacity;'></img>";
 		$newsorting='DESC';
 	}
     	 
@@ -630,12 +630,12 @@ function on_select_order(order){
 		$newsorting='ASC';
 
     }else{
-        $orderby_path = "<img src='{$orderby_path}sort_up_green.png' height='20px' width='20px' style='opacity:$opacity;'></img>";
+        $orderby_path = "<img src='{$orderby_path}sort_up_green.png' style='height:20px; width:20px; opacity:$opacity;'></img>";
 		$newsorting='DESC';
 		}
 	}else{
 		$opacity =0.3;
-	        $orderby_path = "<img src='{$orderby_path}sort_up_green.png' height='20px' width='20px' style='opacity:$opacity;'></img>";
+	        $orderby_path = "<img src='{$orderby_path}sort_up_green.png' style='height:20px; width:20px; opacity:$opacity;'></img>";
 		$newsorting='DESC';
 	}
 	$attendee_filter = get_input('attendee',$_SESSION['attendee_filter']);
@@ -661,12 +661,12 @@ elgg_echo('').
 			$amount_path = "<img src='{$amount_path}sort_down_green.png' height='20px' width='20px' style='opacity:$opacity;'></img>";
 			$newsorting='ASC';
 		}else{
-			$amount_path = "<img src='{$amount_path}sort_up_green.png' height='20px' 	width='20px' style='opacity:$opacity;'></img>";
+			$amount_path = "<img src='{$amount_path}sort_up_green.png' style='height:20px; width:20px; opacity:$opacity;'></img>";
 			$newsorting='DESC';
 		}
 	}else{
 		$opacity =0.3;
-	    $amount_path = "<img src='{$amount_path}sort_up_green.png' height='20px' width='20px' style='opacity:$opacity;'></img>";
+	    $amount_path = "<img src='{$amount_path}sort_up_green.png' style='height:20px; width:20px; opacity:$opacity;'></img>";
 		$newsorting='DESC';
 	}
 	
@@ -682,7 +682,7 @@ elgg_echo('').
                 elgg_view('input/dropdown',array( 'name' => 'amount','style'=>'width:100px','value'=>$amount_filter,'options'=>array_combine($amount_value, $amount_value),'onchange'=>'on_select_amount(this.value)',))."</div>";
 
 	$sorting_path = elgg_get_site_url()."mod/event_calendar_extend/graphics/";
-    $content .=  "<div style='width:130px;".$text1.elgg_echo('event_calendar:status')."<img src='{$sorting_path}trans.png' height='20px' width='20px'>".
+    $content .=  "<div style='width:130px;".$text1.elgg_echo('event_calendar:status')."<img src='{$sorting_path}trans.png' style='height:20px; width:20px;'>".
 	elgg_echo('').
                 elgg_view('input/dropdown',array( 'name' => 'status_value','value'=>$status_filter,'options'=>array_combine($status_value, $status_value)  ,'onchange'=>'on_select_status(this.value)',))."</div>";
     $content .=  "</li>";
