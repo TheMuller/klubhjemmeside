@@ -242,7 +242,7 @@ if ($full) {
         if($ticket_spots >0){$soldouttext='';break;}
     }
     if($soldouttext !='')
-        $params['title'] = $soldouttext.$event->title;
+        $params['title'] = "<a href='".$event->getURL()."'>".$soldouttext.$event->title."</a>";
         
 	$list_body = elgg_view('object/elements/summary', $params);
 	
