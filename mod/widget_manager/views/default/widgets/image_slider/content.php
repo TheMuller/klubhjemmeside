@@ -24,8 +24,17 @@
 	$slider_type = $widget->slider_type;
 	
 	$configured_slides = array();
+	global $CONFIG;
+ 	$values = glob($CONFIG->dataroot."image_slider/*.*");
+	foreach($values as $key=>$value){
+		$value = basename($value,".*");
+		$img_array[$key] = $value;
+	} 
+	
 	for($i = 1; $i <= $max_slider_options; $i++){
-		$url = $widget->get("slider_" . $i . "_url");
+		$img_name = get_input('filename','');
+		$url = array();
+		$url = elgg_get_site_url()."slidericon/".$img_array[$i-1];
 		if(!empty($url)){
 			
 			$text = $widget->get("slider_" . $i . "_text");
@@ -46,13 +55,13 @@
 	if(empty($configured_slides)){
 		$configured_slides = array(
 			array(
-				"url" => "http://s3slider-original.googlecode.com/svn/trunk/example_images/wide/1.jpg",
+				"url" => $url,/* "http://s3slider-original.googlecode.com/svn/trunk/example_images/wide/1.jpg" */
 				"text" => "<strong>Lorem ipsum dolor</strong><br>Consectetuer adipiscing elit. Donec eu massa vitae arcu laoreet aliquet.",
 				"link" => false,
 				"direction" => "top"
-			),
+			),/* 
 			array(
-				"url" => "http://s3slider-original.googlecode.com/svn/trunk/example_images/wide/2.jpg",
+				"url" => $url/* "http://s3slider-original.googlecode.com/svn/trunk/example_images/wide/2.jpg" /,
 				"text" => "<strong>Praesent</strong><br>Maecenas est erat, aliquam a, ornare eu, pretium nec, pede.",
 				"link" => false,
 				"direction" => "top"
@@ -74,7 +83,7 @@
 				"text" => "<strong>Morbi malesuada</strong><br>Vivamus molestie leo sed justo. In rhoncus, enim non imperdiet feugiat,	felis elit ultricies tortor.",
 				"link" => false,
 				"direction" => "bottom"
-			),
+			), */
 		);
 	}
 	

@@ -50,7 +50,7 @@
 		
 		// register a widget title url handler
 		elgg_register_entity_url_handler("object", "widget", "widget_manager_widget_url_handler");
-
+		elgg_register_page_handler('slidericon', 'image_slider_icon_handler');
 		// multi dashboard support
 		add_subtype("object", MultiDashboard::SUBTYPE, "MultiDashboard");
 		
@@ -89,7 +89,14 @@
 			elgg_register_action("multi_dashboard/reorder", dirname(__FILE__) . "/actions/multi_dashboard/reorder.php");
 		}
 	}
-
+function image_slider_icon_handler($page) {
+	if (isset($page[0])) {
+		set_input('filename', $page[0]);
+	}
+	$plugin_dir = elgg_get_plugins_path();
+	include("$plugin_dir/widget_manager/slide_image.php");
+	return true;
+}
 	function widget_manager_pagesetup(){
 		$context = elgg_get_context();
 		
