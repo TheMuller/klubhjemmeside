@@ -51,6 +51,7 @@ if($vars['paid_view']   == true){
                                           'src' => $group->getIconURL('large'),
                                           'width' => "225px",
                                           'height' => "150px",
+										  'style' => "width:225px; height:150px;",
                                           ));
     echo "<p>".$group->briefdescription."</p>";
     echo "</div>";

@@ -626,7 +626,7 @@ function on_select_order(order){
 	 if (($orderby == '') or ($orderby == 'attendee')){
 	 $opacity = 1;
 	 if ($sorting == 'DESC'){
-        $orderby_path = "<img src='{$orderby_path}sort_down_green.png' height='20px' width='20px' style='opacity:$opacity;'></img>";
+        $orderby_path = "<img src='{$orderby_path}sort_down_green.png' style='height:20px; width:20px; opacity:$opacity;'></img>";
 		$newsorting='ASC';
 
     }else{
@@ -658,7 +658,7 @@ elgg_echo('').
 	 if (($orderby == '') or ($orderby == 'amount')){
 		$opacity = 1;
 		if ($sorting == 'DESC'){
-			$amount_path = "<img src='{$amount_path}sort_down_green.png' height='20px' width='20px' style='opacity:$opacity;'></img>";
+			$amount_path = "<img src='{$amount_path}sort_down_green.png' style='height:20px; width:20px; opacity:$opacity;'></img>";
 			$newsorting='ASC';
 		}else{
 			$amount_path = "<img src='{$amount_path}sort_up_green.png' style='height:20px; width:20px; opacity:$opacity;'></img>";

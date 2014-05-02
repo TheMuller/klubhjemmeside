@@ -65,7 +65,7 @@ if($user){
 				if($orderby == $MemberFields[$key]){
 				$opacity = 1;
 					if ($sorting == 'DESC'){
-						$sorting_path = "<img src='{$sorting_path}sort_down_green.png' height='20px' width='20px' style='opacity:$opacity;'></img>";
+						$sorting_path = "<img src='{$sorting_path}sort_down_green.png' style='height:20px; width:20px; opacity:$opacity;'></img>";
 						$newsorting='ASC';
 					}else{
 						$sorting_path = "<img src='{$sorting_path}sort_up_green.png' style='height:20px; width:20px; opacity:$opacity;'></img>";
