@@ -7,6 +7,10 @@
 
 $danish = array(
 'groups:paid' => "Betalings Gruppe",
+				 'paidgroup:need_approval' => 'skal godkendes',
+				 'paidgroup:approval_is_not_needed' => 'Godkendelsen er ikke nødvendigt',
+				 'paidgroup:member' => 'medlem',
+				 'paidgroup:join' => 'Deltag',
 				 'paidgroup:inactive' => "inaktiv",
 				 'paidgroup:gallery' => 'Galleri',
 				 'paidgroup:list' => 'Liste',		

@@ -13,8 +13,8 @@ if($vars['paid_view']   == true){
     $group_name = $group->name;
 	$group_path =  elgg_get_site_url()."groups/profile/".$group->getGUID()."/".$group->name;
 	echo "&nbsp&nbsp";
-	if(strlen($group_name)>=15)
-		$group_name = substr($group_name, 0, 15)."...";
+	if(strlen($group_name)>=13)
+		$group_name = substr($group_name, 0, 13)."...";
 	echo elgg_view("output/url", array(
                                        "href" => $group_path,
                                        "text" => $group_name,
@@ -39,7 +39,7 @@ if($vars['paid_view']   == true){
 	if($showjoinbutton == true){
 			echo elgg_view("output/url", array(
                                        "href" => $url,
-                                       "text" => elgg_echo('Join'),
+                                       "text" => elgg_echo('paidgroup:join'),
                                        "is_trusted" => true,
                                        "class" => "joinButton",
                                        "style" =>"float:right;height:13px;",
@@ -59,17 +59,19 @@ if($vars['paid_view']   == true){
     echo "<div class='group-gallery-item-footer'>";
 	echo "<ul class='elgg-menu elgg-menu-hz' style='line-height: fixed;'>";
     //$membercount =  $group->getMembers(0, 0, TRUE);
-    $membercount =  group_get_getActiveMembers($group)."&nbsp;member";
-    echo "&nbsp;&nbsp;&nbsp;<li class='tooltip1' data-tooltip1='".$membercount."' style='width:60px;float: right;'>";
+	$members =  group_get_getActiveMembers($group);
+	if($members>1) $membercount =  $members."&nbsp;".elgg_echo('paidgroup:member')."s";
+	else $membercount =  $members."&nbsp;".elgg_echo('paidgroup:member');
+    echo "&nbsp;&nbsp;&nbsp;<li class='tooltip1' data-tooltip1='".$membercount."' style='width:70px;float: right;'>";
     echo "<span>".$membercount."</span>";
     $membership = $group->membership;
     echo "</li >";
     if ($membership == ACCESS_PUBLIC) {
-		$accessstring =  elgg_echo("open");
-        $accesslongstring = "Aproval is not needed";
+		$accessstring =  elgg_echo('groups:topicopen');
+        $accesslongstring = elgg_echo('paidgroup:approval_is_not_needed');
 	} else {
-		 $accessstring =  elgg_echo("closed");
-        $accesslongstring = "Need Aproval";
+		 $accessstring =  elgg_echo('groups:topicclosed');
+        $accesslongstring = elgg_echo('paidgroup:need_approval');
 	}
     echo "<li class='tooltip' data-tooltip='$accesslongstring' style='float:left;width:40px;'>";
     echo "<span>".$accessstring."</span>";

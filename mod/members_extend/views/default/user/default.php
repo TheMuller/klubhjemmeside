@@ -17,12 +17,12 @@ $myurl_approve .="?user_guid=".$user->guid;
 	$myurl_delete=elgg_add_action_tokens_to_url($myurl_delete);
 $approve = elgg_view('output/url', array(
 				'href' => $myurl_approve,
-				'text' => "Approve",
+				'text' => elgg_echo('members:approve'),
 				'type' => 'button',
 			));
 	$delete = elgg_view('output/url', array(
 				'href' => $myurl_delete,
-				'text' => "Remove",
+				'text' => elgg_echo('members:remove'),
 				'type' => 'button',
 			));
 echo "<div class='me_div_as_td'>";

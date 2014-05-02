@@ -12,7 +12,10 @@ $danish = array(
 				'members:name' => "Navn",
 				'members:xl_download' => "XL Hent",
 				'members:xl_upload' => "XL Upload",
-
+				'members:wrong_group' => "forkerte gruppe : ",
+				'members:upload:note' => "Vælg XL-fil med format -> (brugernavn, groupid1, groupid2, groupid3 .... [Første række til header])",
+				'members:approve' => "Godkend",
+				'members:remove' => "Fjern",
 );
 
 add_translation("da", $danish);

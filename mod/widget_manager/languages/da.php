@@ -250,6 +250,7 @@
 		"widgets:messages:description" => "Viser dine seneste beskeder",
 		"widgets:messages:not_logged_in" => "Du skal være logget ind for at bruge denne widget",
 		"widgets:messages:settings:only_unread" => "Vis kun ulæste beskeder",
+		"widgets:messages:note:choose_image" => "<b> Bemærk: </b> Skyderen billeder kan tilføjes/fjern på ",
 	);
 	add_translation("da", $messages);
 	

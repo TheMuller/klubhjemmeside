@@ -8,6 +8,10 @@
 $english = array(
 'inactive' => "inActive",
 'groups:paid' => "Paid Group",
+				 'paidgroup:need_approval' => 'Need Approval',
+				 'paidgroup:approval_is_not_needed' => 'Approval is Not Needed',
+				 'paidgroup:member' => 'member',
+				 'paidgroup:join' => 'Join',
 				 'paidgroup:gallery' => 'Gallery',
 				 'paidgroup:list' => 'List',
 				 'paidgroup:no_inactive' => 'No inActive Groups',

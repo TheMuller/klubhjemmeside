@@ -236,7 +236,7 @@ function paidgroup_manage_unpaid_members($hook, $type, $value, $params) {
         $url = elgg_get_site_url() . "action/groups/join?group_guid={$group->getGUID()}";
         $url = elgg_add_action_tokens_to_url($url);
         $value['body'] = "<div style='height:32px;background:#F5F5F5;border: 1px solid rgba(0, 0, 0, 0.1);'><div style='float:right;'>".$warning."&nbsp&nbsp".
-                        elgg_view("output/url", array( "href" => $url, "text" => elgg_echo('Join'), "is_trusted" => true,"class" => "elgg-button elgg-button-submit"))."</div></div>".
+                        elgg_view("output/url", array( "href" => $url, "text" => elgg_echo('paidgroup:join'), "is_trusted" => true,"class" => "elgg-button elgg-button-submit"))."</div></div>".
                         elgg_view('groups/profile/summary', array("entity"=>$group,"full_view"=>true,));
         return $value;
     }

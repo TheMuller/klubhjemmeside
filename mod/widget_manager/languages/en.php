@@ -243,6 +243,7 @@
 		"widgets:messages:description" => "Shows your latest messages",
 		"widgets:messages:not_logged_in" => "You need to be logged in to use this widget",
 		"widgets:messages:settings:only_unread" => "Only show unread messages",
+		"widgets:messages:note:choose_image" => "<b>Note :</b> The slider images can be added/Remove at ",
 	);
 	add_translation("en", $messages);
 

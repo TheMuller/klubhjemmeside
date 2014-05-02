@@ -33,7 +33,7 @@ echo elgg_view('input/dropdown',
 		'style'=>'width: 150px; ',
 	)
 );
- echo "Wrong Group :";
+	echo elgg_echo('members:wrong_group');
     echo "<input type='hidden' name='wrong_group' value='0'/>";
     if($_SESSION['wrong_group'] =='1')
     echo "<input type='checkbox' name='wrong_group' value='1' checked/>";

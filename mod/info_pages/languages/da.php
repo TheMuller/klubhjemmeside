@@ -53,6 +53,7 @@ $danish = array(
 	'info_pages:sidebar:parent' => "Overliggende side",
 
 	'info_pages:newchild' => "Opret en underside",
+	'info_pages:create_page' => "Opret side",
 	'info_pages:backtoparent' => "Tilbage til '%s'",
 	
 	/**

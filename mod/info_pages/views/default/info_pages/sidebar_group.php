@@ -11,7 +11,7 @@ $body = elgg_view_menu('info_pages', array('sort_by'=> 'priority'));
 if($vars['entity']->canEdit()){
  $body .= elgg_view('output/url', array(
 	'href' => $url,
-	'text' => elgg_echo('Create Page'),
+	'text' => elgg_echo('info_pages:create_page'),
 	'is_trusted' => true,
 ));}
-echo elgg_view_module('aside', elgg_echo('Info Pages'), $body);
+echo elgg_view_module('aside', elgg_echo('info_pages'), $body);

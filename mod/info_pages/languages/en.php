@@ -53,6 +53,7 @@ $english = array(
 	'info_pages:sidebar:parent' => "Parent",
 
 	'info_pages:newchild' => "Create a sub-page",
+	'info_pages:create_page' => "Create Page",
 	'info_pages:backtoparent' => "Back to '%s'",
 	
 	/**
