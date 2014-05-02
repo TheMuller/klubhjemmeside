@@ -1,5 +1,5 @@
 <?php 
-
+	global $CONFIG;
 	$widget = $vars["entity"];
 	
 	$max_slider_options = 5;
@@ -30,14 +30,14 @@
 		"s3slider" => elgg_echo("widget_manager:widgets:image_slider:slider_type:s3slider"),
 		"flexslider" => elgg_echo("widget_manager:widgets:image_slider:slider_type:flexslider"),
 	);
-	
+	$note = "<b>Note :</b> The slider images can be added/Remove at <font style='color:blue'>''".$CONFIG->dataroot."image_slider/''</font><br><br>";
+	echo $note;
 	for($i = 1; $i <= $max_slider_options; $i++){
 			
 		$direction = $widget->get("slider_" . $i . "_direction");
 		if(empty($direction)){
 			$direction = "top";
 		}
-		global $CONFIG;
 		$values = glob($CONFIG->dataroot."image_slider/*.*");
 		foreach($values as $key=>$value){
 			$value = basename($value);
