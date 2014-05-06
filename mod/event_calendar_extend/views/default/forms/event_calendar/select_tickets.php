@@ -141,6 +141,11 @@
                 {
                     $grand_total_spot[$vTYP] += $xSPO;
                 }
+               if($xTYP and  $vEO->status =='awaitingapproval')
+                {
+                    $grand_total_w4_admin_spot[$vTYP] += $xSPO;
+                }
+   				
             }
 		//}
         
@@ -381,7 +386,7 @@ $body.="<li class='me_li_as_tr'>";
             .'<div class=me_div_as_td><b>'.$ticket_type.':</b></div><div class=me_div_as_td>'.$ticket_amount_X.'</div><div class=me_div_as_td style="color:red;">'.elgg_echo('event_calendar:ticket:soldout').'</div><div class=me_div_as_td>&nbsp;'.$ticket_max_spots.'</div>';
 			 $sold_spot = $grand_total_spot['ticket_type_' . $i];
             if(elgg_is_admin_logged_in()){
-                        $total_spot = $ticket_spots + $sold_spot;
+                        $total_spot = $ticket_spots + $sold_spot+$grand_total_w4_admin_spot['ticket_type_' . $i];
                         $body.='<div class=me_div_as_td>&nbsp;'.$total_spot.'</div>';
                     }
 			$body .= '<div class=me_div_as_td>&nbsp;'.$sold_spot.'</div><div class=me_div_as_td>&nbsp;&nbsp;'.$ticket_spots.'</div>';
@@ -410,7 +415,7 @@ $body.="<li class='me_li_as_tr'>";
                 .'</span></div><div class=me_div_as_td>&nbsp;'.$ticket_max_spots.'</div>';
                  $sold_spot = $grand_total_spot['ticket_type_' . $i];
                	 if(elgg_is_admin_logged_in()){
-                        $total_spot = $ticket_spots + $sold_spot;
+                        $total_spot = $ticket_spots + $sold_spot+$grand_total_w4_admin_spot['ticket_type_' . $i];
                         $body.='<div class=me_div_as_td>&nbsp;'.$total_spot.'</div>';
 				}
 				$body .='<div class=me_div_as_td>&nbsp;'.$sold_spot.'</div><div class=me_div_as_td>&nbsp;&nbsp;'.$ticket_spots.'</div>';
@@ -463,7 +468,7 @@ $body.="<li class='me_li_as_tr'>";
                     $body.='</div><div class=me_div_as_td>&nbsp;'.$ticket_max_spots.'</div>';
                     $sold_spot = $grand_total_spot['ticket_type_' . $i];
                     if(elgg_is_admin_logged_in()){
-                        $total_spot = $ticket_spots + $sold_spot;
+                        $total_spot = $ticket_spots + $sold_spot+$grand_total_w4_admin_spot['ticket_type_' . $i];
                         $body.='<div class=me_div_as_td>&nbsp;'.$total_spot.'</div>';
 						
                     }	
