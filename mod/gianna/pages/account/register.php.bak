@@ -46,8 +46,8 @@ $form = elgg_view_form('register', $form_params, $body_params);
 
 $module = elgg_view_module('aside', $title, $form);
 
-$content = elgg_view('help/register');
-$content .= elgg_view_module('register', '', $module);
+$content .= elgg_view('help/register');
+$content = elgg_view_module('register', '', $module);
 
 
 $body = elgg_view_layout("one_column", array('content' => $content));

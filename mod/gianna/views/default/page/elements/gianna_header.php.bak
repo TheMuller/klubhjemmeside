@@ -1,7 +1,7 @@
 <?php
 /**
  * Gianna page header
- * Display Gianna logo when needed
+ * Display Gisanna logo when needed
  */
 
 $plugin = elgg_get_plugin_from_id('gianna');

@@ -37,9 +37,6 @@ header("Content-type: text/html; charset=UTF-8");
 
 $lang = get_current_language();
 
-$selected = array('main', 'register', 'forgotpassword');
-$context = elgg_get_context();
-
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $lang; ?>" lang="<?php echo $lang; ?>">
@@ -59,7 +56,7 @@ $context = elgg_get_context();
 		</div>
 	</div>
 	<?php } ?>
-	<?php if (!elgg_is_logged_in() && in_array($context, $selected)){ ?>
+	<?php if (!elgg_is_logged_in()){ ?>
 		<div class="gianna-header">
 			<div class="elgg-inner">
 				<?php echo $gianna_header; ?>

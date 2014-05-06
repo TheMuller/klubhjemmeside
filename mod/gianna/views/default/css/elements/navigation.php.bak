@@ -191,7 +191,7 @@
 	font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
 	float: left;
 	position: relative;
-	top: 46px;
+	top: 40px;
     left: 15px;
 	z-index: 1;
 	background: rgba(0, 0, 0, 0.1);

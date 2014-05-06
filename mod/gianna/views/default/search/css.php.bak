@@ -18,7 +18,7 @@ Search plugin
 }
 .elgg-search input[type=text] {
 	width: 160px;
-	margin: 6px 0 0 20px;
+	margin: 6px 10px 0 20px;
 }
 .elgg-search input[type=submit] {
 	display: none;

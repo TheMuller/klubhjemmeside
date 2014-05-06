@@ -22,7 +22,7 @@
 	background: rgba(0, 0, 0, 0.1);
 	border: 1px solid rgba(0, 0, 0, 0.4);
 	
-	box-shadow: inset 0 0 1px rgba(255, 255, 255, 0.6);	
+	box-shadow: inset 0 0 1px rgba(255, 255, 255, 0.6);
 }
 .gianna-index .custom-index .elgg-module .elgg-head {
 	padding: 35px 40px 25px;
@@ -37,6 +37,7 @@
 	background: #FFFFFF;
 	border-top: 1px solid #FFF;
 }
+
 /*******************************
 	LOGGED IN
 ********************************/

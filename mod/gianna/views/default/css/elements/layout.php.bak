@@ -67,7 +67,7 @@
 /***** PAGE HEADER ******/
 .elgg-page-header {
 	position: relative;
-b//order-bottom: 1px solid #999999; /* Fallback */
+	//border-bottom: 1px solid #999999; /* Fallback */
 	//border-bottom: 1px solid rgba(0, 0, 0, 0.4);
 }
 .gianna-header > .elgg-inner,
@@ -104,7 +104,7 @@ b//order-bottom: 1px solid #999999; /* Fallback */
 	position: relative;
 	min-height: 360px;
 	padding: 20px 40px 30px 40px;
-    //background-color: #FFFFFF;
+    background-color: #FFFFFF;
 }
 .elgg-main img{
   	max-width: 100%;

@@ -88,7 +88,7 @@
 .elgg-sidebar .elgg-module > .elgg-body {
 	padding: 20px;
 	border-top: 1px solid #FFF;
-    background-color: #FFFFFF; 
+    background-color: #FFFFFF;    
 }
 .elgg-sidebar .elgg-module .elgg-list {
 	margin: 0;
