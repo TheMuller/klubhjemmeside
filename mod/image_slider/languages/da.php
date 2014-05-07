@@ -5,7 +5,7 @@
  */
 
 $danish = array(
-				'admin:appearance:settings' => "Billede Slider",
+				'admin:appearance:image_slider' => "Billede Slider",
 
 );
 

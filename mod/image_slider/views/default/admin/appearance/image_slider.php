@@ -16,7 +16,7 @@ setTimeout(function() { $("#testdiv").fadeOut(1500); }, 5000)
 global $CONFIG;
 echo "<div  style=' border: 1px solid #CC0;padding-top: 20px;padding-bottom: 4px;padding-left: 4px;'>
 <b><u>Upload Image:</u></b><br><br>";
-echo "<form action='".elgg_get_site_url()."admin/appearance/settings' method='post' enctype='multipart/form-data'>";
+echo "<form action='".elgg_get_site_url()."admin/appearance/image_slider' method='post' enctype='multipart/form-data'>";
 
 echo "<input type='file' name='upload'>&nbsp;&nbsp;";
 
@@ -47,13 +47,14 @@ echo "<br><hr style='width:40%;float:left;'><br> <b style='padding-left:2cm;'>Av
 $files = glob($CONFIG->dataroot."image_slider/*");
 foreach($files as $file){
 	    echo "<br>";
-		echo elgg_view('output/url', array(
+		echo elgg_view('output/confirmlink', array(
+		'class' => 'elgg-icon elgg-icon-delete-alt',	
 				'href' => elgg_add_action_tokens_to_url(elgg_get_site_url().'action/image_slider/delete?image='.basename($file)),
-				'is_trusted' => true,
-				'text' => elgg_echo('delete'),
-				'type' => 'button',				
+				//'is_trusted' => true,
+				//'text' => elgg_echo('delete'),
+							
 			));
-		echo "&nbsp;&nbsp;".basename($file);	
+		echo "&nbsp;&nbsp;".basename($file)."<br>";	
 }
 ?>
 <br>

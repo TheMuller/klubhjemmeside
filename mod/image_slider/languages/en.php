@@ -5,7 +5,7 @@
  */
 
 $english = array(
-				'admin:appearance:settings' => "Image Slider",
+				'admin:appearance:image_slider' => "Image Slider",
 );
 
 add_translation("en", $english);
