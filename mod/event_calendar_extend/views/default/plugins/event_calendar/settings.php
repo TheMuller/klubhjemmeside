@@ -2,7 +2,25 @@
 $yn_options = array(elgg_echo('event_calendar:settings:yes')=>'yes',
 	elgg_echo('event_calendar:settings:no')=>'no',
 );
-
+if (!isset($vars['entity']->groups_payment_mode)){	//:DC:
+        $vars['entity']->groups_payment_mode = 3;
+    }
+echo '<div>';
+    echo elgg_echo('groups:groups:payment:mode')."<br>";
+    $GroupsStyles=array(
+                        '1'=>'Local Test',
+                        '2'=>'DIBS Test',
+                        '3'=>'DIBS Live',
+                        );
+    
+    echo elgg_view('input/dropdown',
+                   array(
+                         'name' => 'params[ecal_payment_mode]',
+                         'options_values' => $GroupsStyles,
+                         'value' => $vars['entity']->ecal_payment_mode,
+                         )
+                   );
+    echo '</div>';
 $time_format_options = array(elgg_echo('event_calendar:time_format:12hour')=>'12',elgg_echo('event_calendar:time_format:24hour')=>'24');
 
 $membership_options = array(

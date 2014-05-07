@@ -120,7 +120,13 @@ if (elgg_instanceof($event,'object','event_calendar'))
                                        // Put an accept or return URL here. You should try to use a secure site (https).
                                        "acceptReturnUrl" => elgg_get_site_url() .'event_calendar/payment/accept',
                                        );
-                
+                $ecal_payment_mode = elgg_get_plugin_setting('ecal_payment_mode', 'event_calendar');
+                if($ecal_payment_mode == '1'){ //local test
+					$dibsPostUrl = elgg_get_site_url().'mod/event_calendar_extend/epayaccept.php';
+				}else{
+					$dibsPostUrl = 'https://sat1.dibspayment.com/dibspaymentwindow/entrypoint'; // Change this if you wan't to post to DIBS. 
+					if($ecal_payment_mode == '2') $formKeyValues['test'] ="1";   //DIBS Test
+					}
                 $query = http_build_query($formKeyValues) . "\n";
                 forward($dibsPostUrl . '?' . $query);
 
