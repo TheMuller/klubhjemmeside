@@ -199,7 +199,9 @@ else
        // echo "<div style='display: table-row;clear:both;'>";
         $text1 = "border:1px solid;display: table-cell;vertical-align:middle;text-align:center'>";
         echo "<div style='width:150px;".$text1.$title."</div>";
-        echo "<div style='width:200px;".$text1."<a href='".$the_event->getURL()."'>".$the_event->title."</a></div>";
+        if ($the_event InstanceOf ElggEntity){
+        echo "<div style='width:200px;".$text1."<a href='".$the_event->getURL()."'>".$the_event->title."</a></div>";}
+        else{echo "<div style='width:200px;".$text1."</div>";}
         echo "<div style='width:140px;".$text1.$tiny_icon.$owner->name."</div>";
         echo "<div style='width:100px;".$text1.number_format($event->total,2,',','.')."</div>";
         echo "<div style='width:130px;".$text1.elgg_echo($event->status).$menu_button1.$menu_button2."</div>";
