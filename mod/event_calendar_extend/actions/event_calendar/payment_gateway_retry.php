@@ -18,7 +18,6 @@ $ticket_order = get_entity($ticket_guid);
 				$merchantnumber = elgg_get_plugin_setting('merchantnumber', 'event_calendar');
 				$amount = $ticket_order->total*100;
 				$currency = elgg_get_plugin_setting('currency', 'event_calendar');
-				$ecal_payment_mode = elgg_get_plugin_setting('ecal_payment_mode', 'event_calendar');
 				$windowstate = 3;
 				
 				$secret = elgg_get_plugin_setting('md5secret', 'event_calendar');
@@ -48,12 +47,7 @@ $ticket_order = get_entity($ticket_guid);
 				//add_entity_relationship($user_guid, $ticket_order->getGUID(), $event_guid);
 				//forward($url . '?' . $query);
 // Put the DIBS payment window URL here or your own test URL.
-				if($ecal_payment_mode == '1'){ //local test
-					$dibsPostUrl = elgg_get_site_url().'mod/event_calendar_extend/epayaccept.php';
-				}else{
-					$dibsPostUrl = 'https://sat1.dibspayment.com/dibspaymentwindow/entrypoint'; // Change this if you wan't to post to DIBS. 
-					if($ecal_payment_mode == '2') $params['test'] ="1";   //DIBS Test
-					}
+				
                 // Build an array holding the values which should be posted.
                 $formKeyValues = array(
                                        // Put your merchant ID here.
@@ -67,7 +61,13 @@ $ticket_order = get_entity($ticket_guid);
                                        // Put an accept or return URL here. You should try to use a secure site (https).
                                        "acceptReturnUrl" => elgg_get_site_url() .'event_calendar/payment/accept',
                                        );
-                
+				$ecal_payment_mode = elgg_get_plugin_setting('ecal_payment_mode', 'event_calendar');
+                if($ecal_payment_mode == '1'){ //local test
+					$dibsPostUrl = elgg_get_site_url().'mod/event_calendar_extend/epayaccept.php';
+				}else{
+					$dibsPostUrl = 'https://sat1.dibspayment.com/dibspaymentwindow/entrypoint'; // Change this if you wan't to post to DIBS. 
+					if($ecal_payment_mode == '2') $formKeyValues['test'] ="1";   //DIBS Test
+					}
                 $query = http_build_query($formKeyValues) . "\n";
                 forward($dibsPostUrl . '?' . $query);
 

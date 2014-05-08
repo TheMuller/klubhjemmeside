@@ -2,8 +2,8 @@
 $yn_options = array(elgg_echo('event_calendar:settings:yes')=>'yes',
 	elgg_echo('event_calendar:settings:no')=>'no',
 );
-if (!isset($vars['entity']->groups_payment_mode)){	//:DC:
-        $vars['entity']->groups_payment_mode = 3;
+if (!isset($vars['entity']->ecal_payment_mode)){	//:DC:
+        $vars['entity']->ecal_payment_mode = 3;
     }
 echo '<div>';
     echo elgg_echo('groups:groups:payment:mode')."<br>";
