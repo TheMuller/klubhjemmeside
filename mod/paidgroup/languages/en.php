@@ -43,8 +43,8 @@ $english = array(
 //Email : membership will expire
                  'paidgroup:membership:will:expire:email:subject'=> "Your membership will expire soon",
                  'paidgroup:lock:membership:will:expire:email:body' => "Hi %s,
-We would like to inform you, that your membership for the group '%s'  is going to expire on %s.",
-You can expand your membership by logging in today or as soon as your membership is expired.
+We would like to inform you, that your membership for the group '%s'  is going to expire on %s.
+You can expand your membership by logging in today or as soon as your membership is expired.",
                  'paidgroup:date:membership:will:expire:email:body' => "Hi %s,
 Your membership with %s group is going to expire on %s.",
 //Email :  membership is expired
