@@ -141,7 +141,7 @@
                 {
                     $grand_total_spot[$vTYP] += $xSPO;
                 }
-               if($xTYP and  $vEO->status =='awaitingapproval')
+               if($xTYP and  $vEO->status =='processing')
                 {
                     $grand_total_w4_admin_spot[$vTYP] += $xSPO;
                 }
@@ -384,12 +384,23 @@ $body.="<li class='me_li_as_tr'>";
             $body .= elgg_view('input/hidden', array('name'=>$spots_var,'value'=>0));
             $body .= ''
             .'<div class=me_div_as_td><b>'.$ticket_type.':</b></div><div class=me_div_as_td>'.$ticket_amount_X.'</div><div class=me_div_as_td style="color:red;">'.elgg_echo('event_calendar:ticket:soldout').'</div><div class=me_div_as_td>&nbsp;'.$ticket_max_spots.'</div>';
-			 $sold_spot = $grand_total_spot['ticket_type_' . $i];
-            if(elgg_is_admin_logged_in()){
+			///////////////////////////////   Aj 09-05-14 for (if amount = 0)
+				if($ticket_amount_X == 0){
+					$sold_spot = $grand_total_spot['ticket_type_' . $i];
+					if(elgg_is_admin_logged_in()){
+						$left_spot = $ticket_spots - $sold_spot;
+						$body.='<div class=me_div_as_td>&nbsp;'.$ticket_spots.'</div>';
+						}	
+					$body.=		'<div class=me_div_as_td>&nbsp;'.$sold_spot.'</div><div class=me_div_as_td>&nbsp;&nbsp;'.$left_spot.'</div><br clear="all">';
+				}else{
+				/////////////////////
+					$sold_spot = $grand_total_spot['ticket_type_' . $i];
+					if(elgg_is_admin_logged_in()){
                         $total_spot = $ticket_spots + $sold_spot+$grand_total_w4_admin_spot['ticket_type_' . $i];
                         $body.='<div class=me_div_as_td>&nbsp;'.$total_spot.'</div>';
-                    }
-			$body .= '<div class=me_div_as_td>&nbsp;'.$sold_spot.'</div><div class=me_div_as_td>&nbsp;&nbsp;'.$ticket_spots.'</div>';
+					}
+					$body .= '<div class=me_div_as_td>&nbsp;'.$sold_spot.'</div><div class=me_div_as_td>&nbsp;&nbsp;'.$ticket_spots.'</div>';
+				}
         }//if($ticket_spots==0)
         //````````````````````````````````````````
         //	::OVER LIMIT::
@@ -413,12 +424,23 @@ $body.="<li class='me_li_as_tr'>";
                 .'<div class=me_div_as_td><span style="color:red;"> &nbsp; &nbsp; '
                 .elgg_echo('event_calendar:ticketsmax')//You have bought tickets to the Max. Limit, You cannot buy more.'
                 .'</span></div><div class=me_div_as_td>&nbsp;'.$ticket_max_spots.'</div>';
-                 $sold_spot = $grand_total_spot['ticket_type_' . $i];
-               	 if(elgg_is_admin_logged_in()){
-                        $total_spot = $ticket_spots + $sold_spot+$grand_total_w4_admin_spot['ticket_type_' . $i];
-                        $body.='<div class=me_div_as_td>&nbsp;'.$total_spot.'</div>';
-				}
-				$body .='<div class=me_div_as_td>&nbsp;'.$sold_spot.'</div><div class=me_div_as_td>&nbsp;&nbsp;'.$ticket_spots.'</div>';
+				///////////////////////////////   Aj 09-05-14 for (if amount = 0)
+						if($ticket_amount_X == 0){
+							$sold_spot = $grand_total_spot['ticket_type_' . $i];
+							if(elgg_is_admin_logged_in()){
+								$left_spot = $ticket_spots - $sold_spot;
+								$body.='<div class=me_div_as_td>&nbsp;'.$ticket_spots.'</div>';
+								}	
+							$body.=		'<div class=me_div_as_td>&nbsp;'.$sold_spot.'</div><div class=me_div_as_td>&nbsp;&nbsp;'.$left_spot.'</div><br clear="all">';
+						}else{
+						/////////////////////
+							$sold_spot = $grand_total_spot['ticket_type_' . $i];
+							if(elgg_is_admin_logged_in()){
+								$total_spot = $ticket_spots + $sold_spot+$grand_total_w4_admin_spot['ticket_type_' . $i];
+								$body.='<div class=me_div_as_td>&nbsp;'.$total_spot.'</div>';
+							}
+						$body .='<div class=me_div_as_td>&nbsp;'.$sold_spot.'</div><div class=me_div_as_td>&nbsp;&nbsp;'.$ticket_spots.'</div>';
+						}
 				//$body.='<!--div style="width:8%;float:left;text-align:left;"-->';
 				//$body.='&nbsp;<span style="color:red;">'
 				//	.$vEO_CTRS[$ticket_type]
@@ -466,6 +488,16 @@ $body.="<li class='me_li_as_tr'>";
                                );
 							   }else {$body.= $vEO_CTRS_Max;}
                     $body.='</div><div class=me_div_as_td>&nbsp;'.$ticket_max_spots.'</div>';
+					///////////////////////////////   Aj 09-05-14 for (if amount = 0)
+					if($ticket_amount_X == 0){
+						$sold_spot = $grand_total_spot['ticket_type_' . $i];
+						if(elgg_is_admin_logged_in()){
+							$left_spot = $ticket_spots - $sold_spot;
+							$body.='<div class=me_div_as_td>&nbsp;'.$ticket_spots.'</div>';
+							}	
+						$body.=		'<div class=me_div_as_td>&nbsp;'.$sold_spot.'</div><div class=me_div_as_td>&nbsp;&nbsp;'.$left_spot.'</div><br clear="all">';
+					}else{
+					/////////////////////
                     $sold_spot = $grand_total_spot['ticket_type_' . $i];
                     if(elgg_is_admin_logged_in()){
                         $total_spot = $ticket_spots + $sold_spot+$grand_total_w4_admin_spot['ticket_type_' . $i];
@@ -473,7 +505,7 @@ $body.="<li class='me_li_as_tr'>";
 						
                     }	
                     $body.=		'<div class=me_div_as_td>&nbsp;'.$sold_spot.'</div><div class=me_div_as_td>&nbsp;&nbsp;'.$ticket_spots.'</div><br clear="all">';
-                    
+                    }
                     
                     $doublecheckCTR++;
                 }//if($ticket_spots > 0)
