@@ -60,8 +60,8 @@ Now the start date is %s, and end date is %s.",
 //Email:  Payment Received
                  'paidgroup:invoice:email:subject'=> "Payment received",
                  'paidgroup:invoice:email:body' => "Hi %s,
-We have received your payment for the group: %s.
-Thank you very much. Hope you will enjoy this membership.",
+We have received a payment for %s group.
+Thank you very much, Hope you will enjoy this membership.",
                  
 );
 

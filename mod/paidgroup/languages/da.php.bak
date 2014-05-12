@@ -43,8 +43,8 @@ $danish = array(
 //Email : membership will expire
                  'paidgroup:membership:will:expire:email:subject'=> "Dit medlemsskab udløber snart",
                  'paidgroup:lock:membership:will:expire:email:body' => "Hej %s,
-Vi vil gerne gøre dig opmærksom på, at dit medlemsskab for gruppen '%s' udløber den %s.
-Du kan forlænge dit abonnement ved at logge på i dag, eller så snart dit abonnement er udløbet.",
+Vi vil gerne gøre dig opmærksom på, at dit medlemsskab for gruppen:%s udløber den %s.
+Du kan forlænge dit abonnement ved at logge på, så snart dit abonnement er udløbet.",
                  'paidgroup:date:membership:will:expire:email:body' => "Hej %s,
 Dit medlemsskab for gruppen: %s kommer til at udløbe den %s.",
 //Email :  membership is expired
