@@ -1,6 +1,6 @@
 <?php
 //system_message("hello...");
-$users=elgg_get_entities(array('types'=>'user'));
+$users=elgg_get_entities(array('types'=>'user','limit'=>0)); //issue 50
 
 global $CONFIG;
 			$xlsf_url=$CONFIG->dataroot;

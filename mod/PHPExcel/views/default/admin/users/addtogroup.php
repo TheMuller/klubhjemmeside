@@ -8,7 +8,7 @@
         echo "<form action='".elgg_get_site_url()."admin/users/addtogroup?step=2' method='post' enctype='multipart/form-data'>";
         echo "<input type='file' name='upload'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
         echo "Choose group: ";
-        $groups = elgg_get_entities(array('type'=>'group',));
+        $groups = elgg_get_entities(array('type'=>'group','limit'=>0));//issue 42
         
         foreach($groups as $group){
             $grouparr[$group->guid]=$group->name;
