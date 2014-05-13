@@ -13,7 +13,7 @@ elgg_unregister_menu_item('topbar', 'elgg_logo');
 //site menu  
 elgg_register_plugin_hook_handler('register', 'menu:site', 'menu_mgr_site_menu');
 elgg_register_plugin_hook_handler('register', 'menu:topbar', 'menu_mgr_top_menu');
-elgg_register_admin_menu_item('administer', 'settings', 'users','100');
+elgg_register_admin_menu_item('configure', 'menu_mgr', 'appearance','100');
 elgg_register_event_handler('pagesetup', 'system', 'menu_mgr_sidebar_menu');
 elgg_extend_view("css/elgg", "menu_mgr/css/topbarsubmenu");
 }

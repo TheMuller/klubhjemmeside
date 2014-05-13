@@ -46,13 +46,13 @@ $visibility=array(
 	)
 )."</td>";
 
-	$rawdata .= "<td style='width:105px;'>".elgg_view('output/url', 
+	$rawdata .= "<td style='width:105px;text-align: right;' colspan='2'>".elgg_view('output/url', 
 		array(
 			'class' => 'elgg-icon elgg-icon-delete-alt',	
 			'href' => '',
 			'onClick' => 'removeInput(this);return false;',
 			)
-	)."</td><td></td>";
+	)."</td>";
 	
 
     return $rawdata;
@@ -104,7 +104,7 @@ $visibility=array(
 	$rawdata .= "<td width='105px'>".elgg_view('output/url', 
 		array(
 			'href' => '',
-			'text' => elgg_echo('Add Sub'),
+			'text' => elgg_echo('menu_mgr:add_sub'),
 			'class' => 'elgg-button elgg-button-submit',
 			'onClick' => 'addChild(this.parentNode.parentNode);return false;',
 			'style' => 'height:30px;',
@@ -125,7 +125,7 @@ $visibility=array(
 $supplycontent .= "<table><tr bgcolor='DFDB6B' id='hiddenmaterial' style='display:none;' >".prepareTableRawData_4supply(array('type'=>'2','visibility'=>'','name'=>'Menu Name','url'=>'Url'),'JOBID')."</tr></table>";
 
 $supplycontent .= "<table style='border-bottom: 1px solid red;'><tr bgcolor='DEDDDD' id='child_hidden' style='display:none;' >".prepareTableRawData_4childmenu(array('type'=>'2','visibility'=>'','name'=>'Menu Name','url'=>'Url'),'PID','JOBID')."</tr></table>";
-$supplycontent .= "<form action='".elgg_get_site_url()."admin/users/settings' method='post' enctype='multipart/form-data'>";
+$supplycontent .= "<form action='".elgg_get_site_url()."admin/appearance/menu_mgr' method='post' enctype='multipart/form-data'>";
     $material =  $_POST['material'];
 	
 	$site = elgg_get_site_entity();
@@ -141,11 +141,11 @@ $material = unserialize($site->material);
 	$supplycontent .= "<table style='border: 2px solid black; width:90%'>
 	<tr>
 		
-		<td style='border: 2px solid black;width:150px;'>&nbsp;&nbsp;&nbsp;&nbsp;Menu Type</td>
-		<td style='border: 2px solid black;width:140px;'>Menu Access</td>
-		<td style='border: 2px solid black;width:280px;'>Menu Text</td>
-		<td style='border: 2px solid black;width:230px;'>Menu Url</td>
-		<td style='border: 2px solid black;width:130px;'>Actions</td>
+		<td style='border: 2px solid black;width:150px;'>&nbsp;&nbsp;&nbsp;&nbsp;".elgg_echo('menu_mgr:admin:header:menu_type')."</td>
+		<td style='border: 2px solid black;width:140px;'>".elgg_echo('menu_mgr:admin:header:menu_access')."</td>
+		<td style='border: 2px solid black;width:280px;'>".elgg_echo('menu_mgr:admin:header:menu_text')."</td>
+		<td style='border: 2px solid black;width:230px;'>".elgg_echo('menu_mgr:admin:header:menu_url')."</td>
+		<td style='border: 2px solid black;width:130px;'>".elgg_echo('menu_mgr:admin:header:actions')."</td>
 	</tr></table>";
 $supplycontent .= "<table><tbody id='menu_mgr_tbody'>";
 $ak=0;
@@ -157,7 +157,7 @@ $ak=0;
 		if(is_array($item[childs])){
 			$jk=0;
 			foreach($item[childs] as $itemc){
-				$supplycontent .= "<tr bgcolor='DEDDDD' style='border-bottom: 2px solid white;'>".prepareTableRawData_4childmenu($itemc,$ak,$jk)."</tr>";
+				$supplycontent .= "<tr bgcolor='DEDDDD' pid='$ak' style='border-bottom: 2px solid white;'>".prepareTableRawData_4childmenu($itemc,$ak,$jk)."</tr>";
 				$jk++;
 			}
 		}
@@ -167,11 +167,11 @@ $ak=0;
 
 $supplycontent .= "</tbody></table >\n\n";
 $supplycontent .= "<br><br><input type='submit' value='submit'>";
-$supplycontent .= elgg_view('output/url', array('href' => '','text' => elgg_echo('Add Menu'),'class' => 'elgg-button elgg-button-submit','onClick'=>'addInput();return false;'));
+$supplycontent .= elgg_view('output/url', array('href' => '','text' => elgg_echo('menu_mgr:add_menu'),'class' => 'elgg-button elgg-button-submit','onClick'=>'addInput();return false;'));
 $supplycontent .= "</form>";
 
 
-echo elgg_view_module("info", elgg_echo('Menu Manager'), $supplycontent);
+echo elgg_view_module("info", elgg_echo('admin:appearance:menu_mgr'), $supplycontent);
 
 ?>
 <script type="text/javascript">
@@ -206,11 +206,12 @@ function addChild(referenceNode){
 	      var hiddenchild = document.getElementById('child_hidden');
 		  var visibleraw = hiddenchild.cloneNode(true);
 		  visibleraw.removeAttribute("id",0);
+		  
 		  visibleraw.removeAttribute("style",0);
-		  visibleraw.setAttribute('style','right:70px;');
 		  kids = referenceNode.getAttribute("childs");
 
 		  var pid = referenceNode.getAttribute("id");
+		  visibleraw.setAttribute("pid",pid);
 		  visibleraw.innerHTML = visibleraw.innerHTML.replace(/PID/g,pid);
 		  visibleraw.innerHTML = visibleraw.innerHTML.replace(/JOBID/g,kids);		  
 		  referenceNode.parentNode.insertBefore(visibleraw, referenceNode.nextSibling);
@@ -219,9 +220,18 @@ function addChild(referenceNode){
 }
 function removeInput(referenceNode){
 	if(confirm('Are you sure')){
-		 var gfather = referenceNode.parentNode.parentNode;
-		 var grandgrandfather = gfather.parentNode
-		  grandgrandfather.removeChild(gfather);
+		 var the_tr = referenceNode.parentNode.parentNode;
+		 var the_id = the_tr.getAttribute("id");
+		 var the_tbody = the_tr.parentNode;
+		 var childs = the_tbody.getElementsByTagName('tr');
+		 if(the_id){
+			for(var kk=0;kk<childs.length;kk++){
+				if(childs[kk].getAttribute("pid") == the_id){
+					the_tbody.removeChild(childs[kk]);
+				}
+			}
+		 }
+		  the_tbody.removeChild(the_tr);
 	}	
 }
 
