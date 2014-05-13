@@ -175,19 +175,7 @@ echo elgg_view_module("info", elgg_echo('admin:appearance:menu_mgr'), $supplycon
 
 ?>
 <script type="text/javascript">
-
-var counter = 1;
-var limit = 20;
-var child_counter = 1;
-var child_limit = 10;
-
-
-
 function addInput(){
-     if (counter == limit)  {
-          alert("You have reached the limit of adding " + counter + " inputs");
-     }
-     else {          
 	      var hiddenraw = document.getElementById('hiddenmaterial');
 		  var visibleraw = hiddenraw.cloneNode(true);
 		  var menu_mgr_tbody = document.getElementById('menu_mgr_tbody');
@@ -198,36 +186,43 @@ function addInput(){
 
 		  visibleraw.innerHTML = visibleraw.innerHTML.replace(/JOBID/g,kids);		  
 		  menu_mgr_tbody.appendChild(visibleraw);
-          counter++;
-     }
 }
 function addChild(referenceNode){
-          
 	      var hiddenchild = document.getElementById('child_hidden');
 		  var visibleraw = hiddenchild.cloneNode(true);
 		  visibleraw.removeAttribute("id",0);
 		  
 		  visibleraw.removeAttribute("style",0);
 		  kids = referenceNode.getAttribute("childs");
-
+	
 		  var pid = referenceNode.getAttribute("id");
 		  visibleraw.setAttribute("pid",pid);
 		  visibleraw.innerHTML = visibleraw.innerHTML.replace(/PID/g,pid);
 		  visibleraw.innerHTML = visibleraw.innerHTML.replace(/JOBID/g,kids);		  
 		  referenceNode.parentNode.insertBefore(visibleraw, referenceNode.nextSibling);
-          child_counter++;
-
+		  referenceNode.setAttribute("childs",parseInt(kids)+1);
 }
 function removeInput(referenceNode){
 	if(confirm('Are you sure')){
 		 var the_tr = referenceNode.parentNode.parentNode;
 		 var the_id = the_tr.getAttribute("id");
 		 var the_tbody = the_tr.parentNode;
-		 var childs = the_tbody.getElementsByTagName('tr');
+		 var all_tr = the_tbody.getElementsByTagName('tr');
 		 if(the_id){
-			for(var kk=0;kk<childs.length;kk++){
-				if(childs[kk].getAttribute("pid") == the_id){
-					the_tbody.removeChild(childs[kk]);
+		 //I am parent
+			for(var kk=0;kk<all_tr.length;kk++){
+				if(all_tr[kk].getAttribute("pid") == the_id){
+					the_tbody.removeChild(all_tr[kk]);
+					kk--;
+				}
+			}
+		}else{
+		 //I am child
+		 var the_pid = the_tr.getAttribute("pid");
+		 	for(var kk=0;kk<all_tr.length;kk++){
+				if(all_tr[kk].getAttribute("id") == the_pid){
+					var childs = all_tr[kk].getAttribute("childs");
+					all_tr[kk].setAttribute("childs",parseInt(childs)-1);
 				}
 			}
 		 }
