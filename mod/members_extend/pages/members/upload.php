@@ -39,7 +39,7 @@ else
 			die('Error loading file "'.pathinfo($target,PATHINFO_BASENAME).'": '.$e->getMessage());
 		}
 
-	
+	$objPHPExcel->getActiveSheet()->removeRow(1,1);
 	$sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
 
 	//print_r($sheetData);
