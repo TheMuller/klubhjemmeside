@@ -54,14 +54,14 @@ $materials = unserialize($site->material);
 		if($material[type]=='1'){
 			if(($material[visibility]=='2') && (!elgg_is_logged_in()))		continue;
 			if(($material[visibility]=='1') && (!elgg_is_admin_logged_in())) continue;
-			$menu_options = array("name" => $material['name'],"text" => $material['name'], "href" => elgg_get_site_url().$material['url'],"id" => $material['name'],'priority'=>'900');
+			$menu_options = array("name" => $material['name'],"text" => $material['name'], "href" => elgg_get_site_url().$material['url'],"id" => $material['name'],'priority'=>$material[priority]);
 			 $values[] = ElggMenuItem::factory($menu_options);
 			 
 			 if(is_array($material[childs])){
 				foreach($material[childs] as $itemc){
 						if(($itemc[visibility]=='2') && (!elgg_is_logged_in()))		continue;
 						if(($itemc[visibility]=='1') && (!elgg_is_admin_logged_in())) continue;
-						$menu_options = array("name" => $itemc['name'],"text" => $itemc['name'], "href" => elgg_get_site_url().$itemc['url'],"id" => $itemc['name'],'priority'=>'50','parent_name' =>$material['name']);
+						$menu_options = array("name" => $itemc['name'],"text" => $itemc['name'], "href" => elgg_get_site_url().$itemc['url'],"id" => $itemc['name'],'priority'=>$itemc[priority],'parent_name' =>$material['name']);
 						$values[] = ElggMenuItem::factory($menu_options);
 				}
 			}
@@ -79,7 +79,6 @@ $site = elgg_get_site_entity();
 $materials = unserialize($site->material);
 //var_dump($materials);
 	foreach($materials as $material){
-	echo $material[priority]."/";
 		if($material[type]=='2'){
 			if(($material[visibility]=='2') && (!elgg_is_logged_in()))		continue;
 			if(($material[visibility]=='1') && (!elgg_is_admin_logged_in())) continue;
@@ -110,7 +109,7 @@ $materials = unserialize($site->material);
 		if($material[type]=='3'){
 			if(($material[visibility]=='2') && (!elgg_is_logged_in()))		continue;
 			if(($material[visibility]=='1') && (!elgg_is_admin_logged_in())) continue;
-			$menu_options = array("name" => $material['name'],"text" => $material['name'], "href" => elgg_get_site_url().$material['url'],"id" => $material['name'],'priority'=>'50');
+			$menu_options = array("name" => $material['name'],"text" => $material['name'], "href" => elgg_get_site_url().$material['url'],"id" => $material['name'],'priority'=>$material[priority]);
 			$result[] = ElggMenuItem::factory($menu_options);
 		}
 	}

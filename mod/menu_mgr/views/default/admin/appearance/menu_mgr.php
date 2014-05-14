@@ -65,7 +65,7 @@ $visibility=array(
 	'2'=>'Users logged in',
 	'3'=>'Public',
 );
-    $rawdata .= "<td style='max-width:20px; !important' clear='both'>'&nbsp;|&nbsp;</td>";
+    $rawdata .= "<td style='max-width:20px; !important' clear='both'>&nbsp;|&nbsp;</td>";
 	$rawdata .= "<td>".elgg_view('input/dropdown',
                    array(
                          'name' => 'material['.$ak.'][type]',
