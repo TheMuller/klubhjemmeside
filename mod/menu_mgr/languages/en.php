@@ -8,8 +8,10 @@
 	'menu_mgr:admin:header:menu_text' => 'Menu Text',
 	'menu_mgr:admin:header:menu_url' => 'Menu Url',
 	'menu_mgr:admin:header:actions' => 'Actions',
+	'menu_mgr:admin:header:priority' => 'Priority',
 	'menu_mgr:add_sub' => 'Add Sub',
 	'menu_mgr:add_menu' => 'Add Menu',
+	'menu_mgr:note' => '<br><br><b>Note :</b> Don&#39t use the same numbers for <b>Priority.</b>',
 	
 
 	);
