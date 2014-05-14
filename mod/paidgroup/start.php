@@ -462,8 +462,8 @@ function paidgroup_groups_handle_members_page($guid) {
         return true;
     }
 
-function paidgroup_groups_inactive_group(array $options = array(),$func='elgg_get_entities'){
-global $inactive;
+function paidgroup_groups_inactive_group(array $options = array()){
+
 	$user = elgg_get_logged_in_user_entity();
 	$options['count'] = false;$options['limit'] = 0;$options['offset'] =0; 
 	$groups = elgg_get_entities_from_relationship($options);
@@ -476,12 +476,18 @@ global $inactive;
 			}
 		}
 	}
-	$inactive = $inactivegroups;
-	return $inactive;
+	return $inactivegroups;
+
 }
-function paidgroup_groups_handle_all_page($type,array $inactivegroups =array(),$inactive){
-global $inactive;
-paidgroup_groups_inactive_group();
+function paidgroup_groups_handle_all_page($type){
+$inactive =
+    paidgroup_groups_inactive_group(array(
+                                          'type' => 'group',
+                                          'relationship' => 'member',
+                                          'relationship_guid' => elgg_get_logged_in_user_guid(),
+                                          'inverse_relationship' => false,
+
+                                          ));
 	// all groups doesn't get link to self
 	elgg_pop_breadcrumb();
 	elgg_push_breadcrumb(elgg_echo('groups'));
