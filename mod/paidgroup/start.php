@@ -377,21 +377,23 @@ function paidgroup_groups_handle_members_page($guid) {
 	group_gatekeeper();
 	$active = get_input('active','yes');
 	$title = elgg_echo('groups:members:title', array($group->name));
-	if(($active == 'yes') ){	
-	  elgg_register_menu_item('title', array(
+	if($group->group_paid_flag == 'yes'){
+		if(($active == 'yes') ){	
+		elgg_register_menu_item('title', array(
 								'name' => 'group:inActive',
 								'href' => 'groups/members/'.$group->guid."?active=no",
 								'text' => elgg_echo('paidgroup:inactive') ,
 								'class' => 'elgg-button elgg-button-submit',
 							));
-	}
-	else{	
-	  elgg_register_menu_item('title', array(
+		}
+		else{	
+		elgg_register_menu_item('title', array(
 								'name' => 'group:inActive',
 								'href' => 'groups/members/'.$group->guid."?active=yes",
 								'text' => elgg_echo('paidgroup:active') ,
 								'class' => 'elgg-button elgg-button-submit',
 							));	
+		}
 	}
 
 
@@ -409,28 +411,33 @@ function paidgroup_groups_handle_members_page($guid) {
 		'order_by' => 'u.name ASC',
         'pagination'=>true,//issue 49
 	);
-	$entities = elgg_get_entities_from_relationship($options);
 	
-	foreach($entities as $key=>$entity){
-		$entityactive = true;
-		if (!$entity->isadmin() and ($group->owner_guid !=$entity->guid) ){
-			$last_dates = unserialize($entity->last_dates);
-			$last_date = $last_dates[$group->guid];
-			if(!$last_date or $last_date ==''){
-				$entityactive = false;	
+	if($group->group_paid_flag == 'yes'){
+		$entities = elgg_get_entities_from_relationship($options);
+		foreach($entities as $key=>$entity){
+			$entityactive = true;
+			if (!$entity->isadmin() and ($group->owner_guid !=$entity->guid) ){
+				$last_dates = unserialize($entity->last_dates);
+				$last_date = $last_dates[$group->guid];
+				if(!$last_date or $last_date ==''){
+					$entityactive = false;	
+				}
+			}
+			if(($active == 'no') and ($entityactive==true)){	
+				unset($entities[$key]);		
+			}
+			elseif(($active == 'yes') and ($entityactive==false)){	
+				unset($entities[$key]);		
 			}
 		}
-		if(($active == 'no') and ($entityactive==true)){	
-			unset($entities[$key]);		
-		}
-		elseif(($active == 'yes') and ($entityactive==false)){	
-			unset($entities[$key]);		
-		}
+		$options['limit'] =10;
+		$options['offset'] =get_input('offset',0);
+		$options['count'] = count($entities);
+		$content .= elgg_view_entity_list(array_slice($entities,$options['offset'],$options['limit']),$options);
+	}else{
+		$options['limit'] =10;
+		$content .= elgg_list_entities($options);
 	}
-	$options['limit'] =10;
-	$options['offset'] =get_input('offset',0);
-	$options['count'] = count($entities);
-	$content .= elgg_view_entity_list(array_slice($entities,$options['offset'],$options['limit']),$options);
 
 	$params = array(
 		'content' => $content,
