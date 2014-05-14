@@ -404,7 +404,7 @@ function paidgroup_groups_handle_members_page($guid) {
 		'relationship_guid' => $group->guid,
 		'inverse_relationship' => true,
 		'type' => 'user',
-		'limit' => 10,
+		'limit' => 0,
 		'joins' => array("JOIN {$db_prefix}users_entity u ON e.guid=u.guid"),
 		'order_by' => 'u.name ASC',
         'pagination'=>true,//issue 49
@@ -427,7 +427,10 @@ function paidgroup_groups_handle_members_page($guid) {
 			unset($entities[$key]);		
 		}
 	}
-	$content .= elgg_view_entity_list($entities,$options);
+	$options['limit'] =10;
+	$options['offset'] =get_input('offset',0);
+	$options['count'] = count($entities);
+	$content .= elgg_view_entity_list(array_slice($entities,$options['offset'],$options['limit']),$options);
 
 	$params = array(
 		'content' => $content,
