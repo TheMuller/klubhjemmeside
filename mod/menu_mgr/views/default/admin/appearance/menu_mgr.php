@@ -24,24 +24,24 @@ $visibility=array(
 	array(
 		'name' => 'material['.$pk.'][childs]['.$ak.'][name]',
 		'value' =>$item[name],
-		'style'=>'width: 250px; height: 20px; background: transparent;',
+		'style'=>'width: 150px; height: 20px; background: transparent;',
 	)
 )."</td>";		
 	$rawdata .= "<td>".elgg_view('input/text',
 	array(
 		'name' => 'material['.$pk.'][childs]['.$ak.'][url]',
 		'value' =>$item[url],
-		'style'=>'width: 210px; height: 20px; background: transparent;',
+		'style'=>'width: 270px; height: 20px; background: transparent;',
 	)
 )."</td>";
 	$rawdata .= "<td>".elgg_view('input/text',
 	array(
 		'name' => 'material['.$pk.'][childs]['.$ak.'][priority]',
 		'value' =>$item[priority],
-		'style'=>'width: 45px; height: 20px; background: transparent;',
+		'style'=>'width: 50px; height: 20px; background: transparent;',
 	)
 )."</td>";
-	$rawdata .= "<td style='width:105px;text-align: right;' colspan='2'>".elgg_view('output/url', 
+	$rawdata .= "<td style='width:140px;text-align: right;' colspan='2'>".elgg_view('output/url', 
 		array(
 			'class' => 'elgg-icon elgg-icon-delete-alt',	
 			'href' => '',
@@ -65,7 +65,7 @@ $visibility=array(
 	'2'=>'Users logged in',
 	'3'=>'Public',
 );
-    $rawdata .= "<td style='max-width:20px; !important' clear='both'>&nbsp;|&nbsp;</td>";
+    $rawdata .= "<td style=width:20px;>&nbsp;|&nbsp;</td>";
 	$rawdata .= "<td>".elgg_view('input/dropdown',
                    array(
                          'name' => 'material['.$ak.'][type]',
@@ -86,24 +86,24 @@ $visibility=array(
 	array(
 		'name' => 'material['.$ak.'][name]',
 		'value' =>$item[name],
-		'style'=>'width: 250px; height: 20px; background: transparent;',
+		'style'=>'width: 150px; height: 20px; background: transparent;',
 	)
 )."</td>";		
 	$rawdata .= "<td>".elgg_view('input/text',
 	array(
 		'name' => 'material['.$ak.'][url]',
 		'value' =>$item[url],
-		'style'=>'width: 210px; height: 20px; background: transparent;',
+		'style'=>'width: 270px; height: 20px; background: transparent;',
 	)
 )."</td>";
 	$rawdata .= "<td>".elgg_view('input/text',
 	array(
 		'name' => 'material['.$ak.'][priority]',
 		'value' =>$item[priority],
-		'style'=>'width: 45px; height: 20px; background: transparent;',
+		'style'=>'width: 50px; height: 20px; background: transparent;',
 	)
 )."</td>";
-	$rawdata .= "<td width='98px'>".elgg_view('output/url', 
+	$rawdata .= "<td width='133px'>".elgg_view('output/url', 
 		array(
 			'href' => '',
 			'text' => elgg_echo('menu_mgr:add_sub'),
@@ -140,15 +140,15 @@ $site->material = serialize($material);
 $material = unserialize($site->material);
 }
 
-	$supplycontent .= "<font color='white'><table style='border: 2px solid black; width:95%;'>
+	$supplycontent .= "<font color='white'><table style='border: 2px solid black; width:938px;'>
 	<tr bgcolor='79757A' color='white'>
 		
 		<td style='border: 2px solid black;width:150px;'>&nbsp;&nbsp;&nbsp;&nbsp;".elgg_echo('menu_mgr:admin:header:menu_type')."</td>
 		<td style='border: 2px solid black;width:140px;'>".elgg_echo('menu_mgr:admin:header:menu_access')."</td>
-		<td style='border: 2px solid black;width:280px;'>".elgg_echo('menu_mgr:admin:header:menu_text')."</td>
-		<td style='border: 2px solid black;width:240px;'>".elgg_echo('menu_mgr:admin:header:menu_url')."</td>
+		<td style='border: 2px solid black;width:180px;'>".elgg_echo('menu_mgr:admin:header:menu_text')."</td>
+		<td style='border: 2px solid black;width:300px;'>".elgg_echo('menu_mgr:admin:header:menu_url')."</td>
 		<td style='border: 2px solid black;width:60px;'>".elgg_echo('menu_mgr:admin:header:priority')."</td>
-		<td style='border: 2px solid black;width:120px;'>".elgg_echo('menu_mgr:admin:header:actions')."</td>
+		<td style='border: 2px solid black;width:160px;'>".elgg_echo('menu_mgr:admin:header:actions')."</td>
 	</tr></table></font> ";
 $supplycontent .= "<table><tbody id='menu_mgr_tbody'>";
 $ak=0;
