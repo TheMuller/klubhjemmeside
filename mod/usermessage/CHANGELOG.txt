@@ -1,0 +1,19 @@
+plan
+Add the plugin setting to show supported object subtype and their colors.
+remove project related code.
+improve the project tiny_view. and also add donate, volunteer and like button.
+
+
+0.1
+basic locate plugin which supports the attaching location fields and a map , in add/edit/view  of any object.
+an additional view locateall is provided. which shows all the neaboring objects of a given object.
+As of now three colors are selected, Yello for User, Orrange for Group and Blue for project.
+
+
+
+
+
+
+
+
+
