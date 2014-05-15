@@ -312,7 +312,6 @@ html {
     .elgg-main {
         padding: 20px;
     }
-
 	.gianna-index > .elgg-inner {
 		padding: 20px 0 0 0;
 	}
@@ -320,7 +319,7 @@ html {
     	margin-left: 19px;
     }
     .elgg-menu-site-default {
-        left: 10px;
+        display: none;
     }
     .elgg-page-topbar > .elgg-inner {
         width: auto;
@@ -355,7 +354,7 @@ html {
     .elgg-main .elgg-output img {
         max-width: 100%;
         height: auto;
-    } 
+    }
     .file-photo .elgg-photo {
 		max-width: 94%;
     }
@@ -364,7 +363,7 @@ html {
     }
     .elgg-image-block {
         padding: 10px 0;
-    } 
+    }
     .groups-profile-icon img {
         width: 100%;
         height: auto;
@@ -383,7 +382,7 @@ html {
 		float: none;
 		background: none;
 		border: none;
-	
+
 		box-shadow: none;
     }
     .elgg-page-header > .elgg-inner > .elgg-menu-site {
@@ -405,7 +404,7 @@ html {
     }
 	#dashboard-info {
     	margin-left: 0;
-        margin-right: 0;    
+        margin-right: 0;
     }
     .profile .elgg-inner {
         margin: 0;
@@ -423,7 +422,7 @@ html {
     }
     .elgg-menu-topbar {
         display: none;
-    } 
+    }
     /***** CUSTOM INDEX ******/
     .elgg-col-1of2 {
         width: 100%;
@@ -505,7 +504,7 @@ html {
     .elgg-nav-collapse .elgg-more {
 		width: auto;
     	padding-bottom: 0 !important;
-    }	
+    }
 	.elgg-menu-site > li > ul {
 		position: static;
 		visibility: visible;
@@ -519,25 +518,25 @@ html {
 		-moz-transition: 	none;
 		-o-transition: 		none;
 		transition: 		none;
-		
-		box-shadow: none;	
+
+		box-shadow: none;
 	}
 	.elgg-menu-site > li > ul:before{
 		display: none;
-	} 
+	}
     .elgg-nav-collapse .elgg-more > a {
     	padding-bottom: 4px !important;
-    }  
+    }
     .elgg-nav-collapse .elgg-more:hover {
     	background: #333333;
-    }    
+    }
     .elgg-nav-collapse .elgg-state-selected {
         background-color: #999999;
     }
 	.elgg-menu-site-more,
     .elgg-menu-site-more > li {
 		min-width: auto;
-	}	
+	}
     .elgg-menu-site-more,
     .elgg-menu-site-more > li > a,
     .elgg-menu-site-default > li > a,
@@ -545,7 +544,7 @@ html {
 	.elgg-menu-site-default > li:hover > a {
     	color: #FFFFFF !important;
         background: none !important;
-        border: none;		
+        border: none;
         border-radius: 0;
     }
     .elgg-menu-site-more > li.elgg-state-selected > a,
@@ -558,13 +557,13 @@ html {
         padding-top: 0;
     }
     .elgg-menu-topbar > li > a {
-        margin-left: 0;        
+        margin-left: 0;
     }
     .elgg-menu-topbar > li > a:hover {
         color: #FFFFFF !important;
     }
     .elgg-menu-topbar .elgg-icon {
-		margin-right: 8px;    
+		margin-right: 8px;
     }
     /*** WALLED ***/
     .elgg-body-walledgarden {
@@ -587,7 +586,7 @@ html {
     	margin: 0;
     }
 }
-@media (max-width: 840px) {    
+@media (max-width: 840px) {
     .groups-profile-fields {
         float: left;
     }
@@ -638,13 +637,13 @@ html {
     }
     .elgg-layout-one-sidebar {
         width: 100%;
-        float: left;       
+        float: left;
     }
     .elgg-sidebar {
         width: 100%;
 		float: left;
         margin: 0 0 10px 0;
-		
+
 		-webkit-box-sizing:	border-box;
 		-moz-box-sizing: 	border-box;
 		box-sizing: 		border-box;
@@ -655,7 +654,7 @@ html {
     }
     .elgg-sidebar .elgg-module {
         width: 100%;
-        
+
 		-webkit-box-sizing:	border-box;
 		-moz-box-sizing: 	border-box;
 		box-sizing: 		border-box;
@@ -663,11 +662,11 @@ html {
     /*** SUB MENUES ***/
     .elgg-menu-entity {
     	margin-left: 0;
-        vertical-align: right;  
+        vertical-align: right;
         height: auto;
     }
     .elgg-menu-entity li {
-        vertical-align: right; 
+        vertical-align: right;
     }
     .elgg-menu-footer-alt,
     .elgg-menu-footer-default {
@@ -699,7 +698,7 @@ html {
     }
     #notificationstable td.namefield {
         width: 20%;
-    } 
+    }
     .tinymce-toggle-editor {
         display: none !important;
     }

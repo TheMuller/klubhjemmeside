@@ -187,6 +187,9 @@
 /* ***************************************
 	SITE MENU
 *************************************** */
+.gianna-header .elgg-menu-navbar > li > a.elgg-topbar-logo {
+    display: none;
+}
 .elgg-menu-site {
 	font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
 	float: left;
