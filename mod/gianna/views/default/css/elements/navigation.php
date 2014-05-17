@@ -199,7 +199,6 @@
 	z-index: 1;
 	background: rgba(0, 0, 0, 0.1);
 	border: 1px solid rgba(0, 0, 0, 0.2);
-	
 	box-shadow: inset 0 0 1px rgba(255, 255, 255, 0.6);
 }
 .elgg-menu-site > li {
@@ -225,7 +224,7 @@
 	border: 1px solid #999999;
     text-align: left;
     top: 35px;
-    left: 50%;
+    left: 5%;
     //margin-left: -90px;
     width: 180px;
 
@@ -250,8 +249,23 @@
     border-width: 10px;
     position: absolute;
     top: -16px;
-    left: 20%;
+    left: 10%;
     margin-left: -10px;
+}
+.elgg-menu-site .elgg-child-menu {
+    width: 235px;
+}
+.elgg-menu-site .elgg-child-menu a {
+    color: #666666;
+    font-weight: none;
+    padding: 8px 13px 0px 12px;
+    height: 30px;
+    white-space: nowrap;
+}
+.elgg-menu-site .elgg-child-menu a:hover {
+    text-decoration: none;
+    background: none repeat scroll 0% 0% #009900;
+    color: #FFF;
 }
 .elgg-menu-site-more li {
 	min-width: 180px;

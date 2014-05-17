@@ -119,7 +119,7 @@
 .elgg-module-index .elgg-module-aside .elgg-head,
 .elgg-module-request .elgg-module-aside .elgg-head,
 .elgg-module-register .elgg-module-aside .elgg-head {
-	background: #F5F5F5;	
+	background: #F5F5F5;
 	padding: 35px 40px 25px;
     border-bottom: 1px solid #DCDCDC;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -138,7 +138,7 @@
 	padding: 30px 40px 40px 40px;
 }
 .ez-info-module .elgg-body {
-	background: #FFFFFF;	
+	background: #FFFFFF;
 	padding: 30px 40px 40px 40px;
 }
 .elgg-button-register {
@@ -277,7 +277,7 @@ html {
 }
 .elgg-navbar .elgg-navbar-inner {
 	*min-width: 100%;
-    min-height: 40px;     
+    min-height: 40px;
 	background: #1F1F1F;
     border-bottom: 1px solid #000000;
 }
