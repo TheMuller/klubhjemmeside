@@ -319,7 +319,8 @@ html {
     	margin-left: 19px;
     }
     .elgg-menu-site-default {
-        display: none;
+        left: 10px;
+        //display: none;
     }
     .elgg-page-topbar > .elgg-inner {
         width: auto;
@@ -384,6 +385,9 @@ html {
 		border: none;
 
 		box-shadow: none;
+    }
+    .elgg-menu-site-default {
+        display: none;
     }
     .elgg-page-header > .elgg-inner > .elgg-menu-site {
     	display: none;
