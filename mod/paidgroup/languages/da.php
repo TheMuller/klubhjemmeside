@@ -8,6 +8,7 @@
 $danish = array(
 'inactive' => "InAktive",
 'groups:paid' => "Betalings Gruppe",
+				 'paidgroup:forced_gallery:header' => 'Vælg Gruppe (Premium)',
 				 'paidgroup:need_approval' => 'skal godkendes',
 				 'paidgroup:approval_is_not_needed' => 'Godkendelsen er ikke nødvendigt',
 				 'paidgroup:member' => 'medlem',

@@ -1,6 +1,6 @@
 <?php elgg_load_css("paidgroup.paidgroup"); ?>
 
-<h2>Select (Premium) Group</h2>
+<h2><?php echo elgg_echo('paidgroup:forced_gallery:header'); ?></h2>
 <div style='min-height:400px'>
 <?php
 
