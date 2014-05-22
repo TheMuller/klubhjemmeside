@@ -31,11 +31,11 @@ function create_user_message($type,$key,$params) {
 }
 
 function elgg_views_add_user_message($hook, $type, $value, $params) {
-	
+	$request_uri_path = parse_url($_SERVER['REQUEST_URI']);
 	$sessiondatalist = $_SESSION['user_message'];
-
 	if($sessiondatalist and count($sessiondatalist)) {
 		foreach($sessiondatalist as $key=>$sessiondata ) {
+			if(strpos($request_uri_path['path'],$sessiondata['where']) === false )continue;
 			if($sessiondata['when'] == 'expired')continue;
 			$msg = $sessiondata['msg'];
 			$content .="<div  class='elgg-state-notice' style='position:relative;' id='universal_user_message_".$key."'>";
