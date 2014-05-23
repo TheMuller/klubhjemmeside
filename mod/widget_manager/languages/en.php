@@ -11,6 +11,7 @@
 		'admin:widgets:manage' => "Manage",
 		'admin:widgets:manage:index' => "Manage Index",
 		'admin:statistics:widgets' => "Widget Usage",
+		'admin:widgets:upload_images' => "Upload Images",
 
 		// widget edit wrapper
 		'widget_manager:widgets:edit:custom_title' => "Custom title",

@@ -47,8 +47,7 @@
 		<span class='image_slider_settings'>
 			<label onclick='$(this).next().toggle();'><?php echo elgg_echo("widget_manager:widgets:image_slider:title"); ?> - <?php echo $i; ?></label>
 			<div>
-				<div><?php echo elgg_echo("widget_manager:widgets:image_slider:label:url"); ?></div>
-				<?php echo elgg_view("input/dropdown", array("name" => "params[slider_" . $i . "_url]", "options_values" => $img_array)); ?>
+				<div><?php echo elgg_view('output/url', array('href' => elgg_get_site_url().'admin/appearance/image_slider','text' => elgg_echo('admin:widgets:upload_images'))); ?></div>
 				
 				<div><?php echo elgg_echo("widget_manager:widgets:image_slider:label:text"); ?></div>
 				<?php echo elgg_view("input/text", array("name" => "params[slider_" . $i . "_text]", "value" => $widget->get("slider_" . $i . "_text"))); ?>

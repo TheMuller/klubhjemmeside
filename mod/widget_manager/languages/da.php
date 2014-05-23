@@ -11,6 +11,7 @@
 		'admin:widgets:manage' => "Kontrolpanel",
 		'admin:widgets:manage:index' => "Kontrolpanel forside",
 		'admin:statistics:widgets' => "Widget Brug",
+		'admin:widgets:upload_images' => "uploade billeder",
 		
 		// widget edit wrapper
 		'widget_manager:widgets:edit:custom_title' => "Brugerdefineret titel",
