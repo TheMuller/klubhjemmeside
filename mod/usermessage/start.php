@@ -35,7 +35,9 @@ function elgg_views_add_user_message($hook, $type, $value, $params) {
 	$sessiondatalist = $_SESSION['user_message'];
 	if($sessiondatalist and count($sessiondatalist)) {
 		foreach($sessiondatalist as $key=>$sessiondata ) {
+			if($sessiondata['where'] != '') {
 			if(strpos($request_uri_path['path'],$sessiondata['where']) === false )continue;
+			}
 			if($sessiondata['when'] == 'expired')continue;
 			$msg = $sessiondata['msg'];
 			$content .="<div  class='elgg-state-notice' style='position:relative;' id='universal_user_message_".$key."'>";
