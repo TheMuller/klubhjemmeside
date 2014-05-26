@@ -11,12 +11,15 @@ function usermessage_init() {
 	elgg_register_action("usermessage/response", $base_dir . 'usermessage/response.php');	
 	elgg_register_page_handler('usermessage', 'usermessage_page_handler');
 	elgg_register_event_handler('login', 'user', 'usermessage_login_redirect');
+	elgg_register_admin_menu_item('configure', 'usermessage', 'appearance','100');
  }
 function usermessage_page_handler($segments){
-	$key = get_input('key');
-unset($_SESSION['user_message'][$key]);
+    if ($segments[0] == 'remove') {
+            $key = get_input('key');
+            unset($_SESSION['user_message'][$key]);
+    }
+    return true;
 }
-
 function create_user_message($type,$key,$params) {
 
 	if($params['when']=='nextlogin'){
@@ -33,6 +36,30 @@ function create_user_message($type,$key,$params) {
 function elgg_views_add_user_message($hook, $type, $value, $params) {
 	$request_uri_path = parse_url($_SERVER['REQUEST_URI']);
 	$sessiondatalist = $_SESSION['user_message'];
+	
+	$site = elgg_get_site_entity();
+	$msg_raws = unserialize($site->msg_data);
+	foreach($msg_raws as $msg_raw){
+		if($msg_raw[active] == '1'){ // 1 = 'active' => 'yes'
+			if($sessiondata['where'] != '') {
+				if(strpos($request_uri_path['path'],$sessiondata['where']) === false )continue;
+			}
+			if($sessiondata['when'] == 'expired')continue;
+			$msg = $msg_raw['name'];
+			$content .="<div  class='elgg-state-notice' style='position:relative;' id='universal_user_message_".$key."'>";
+			$content .="<span class='elgg-icon elgg-icon-delete' style='position:absolute;right:0px;' onclick=\"closeusermessage('".$key."');\"></span>";
+			
+			if($sessiondata['is_form'] == true) {
+				$content .= "<form id='universal_user_message_form_".$key."'>".elgg_view($msg);
+				$content .="<input type='submit' value='Submit' onclick=\"submit_user_message_form('".$key."');return false;\" class='elgg-button elgg-button-submit' />";
+				$content .="</form>";
+			}else {
+				$content .= $msg;
+			}
+			$content .="<hr></div>";
+			if($sessiondata['when'] == 'thispage')$_SESSION['user_message'][$key]['when'] = 'expired';
+		}
+	}
 	if($sessiondatalist and count($sessiondatalist)) {
 		foreach($sessiondatalist as $key=>$sessiondata ) {
 			if($sessiondata['where'] != '') {
