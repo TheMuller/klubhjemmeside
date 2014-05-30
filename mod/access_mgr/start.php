@@ -34,25 +34,22 @@ $site = elgg_get_site_entity();
 						//system_message("It's the group");
 						return true;
 					}else{
-						//system_message("It's not the group");
+						//system_message('bloging denied...');
+						register_error(elgg_echo('access_mgr:error:msg'));
+						return false;
 					}
-					//system_message('bloging denied...');
-					register_error(elgg_echo('bloging denied...'));
-					return false;
 				}elseif($selected_object == 'file' AND $type =='file/upload'){
-					system_message($selected_object."".$type);
+					//system_message($selected_object."".$type);
 					$group_guid = get_input('group_guid');
 					$group_entity = get_entity($group_guid);
 					if(elgg_instanceof($group_guid, 'group')){
 						//system_message("It's the group");
 						return true;
 					}else{
-						//system_message("It's not the group");
-					}					
-		
-					//system_message('file denied...');
-					register_error(elgg_echo('file denied...'));
-					return false;
+						//system_message('file denied...');
+						register_error(elgg_echo('access_mgr:error:msg'));
+						return false;
+					}
 				}
 			}
 		}else{
@@ -61,7 +58,7 @@ $site = elgg_get_site_entity();
 			if($site->site_admin_guid != elgg_get_logged_in_user_guid()){
 				if((strpos($server_action_path['path'],'admin/plugins/deactivate') !== false) OR (strpos($server_action_path['path'],'admin/plugins/activate') !== false) OR (strpos($server_action_path['path'],'action/admin/plugins/set_priority') != false)){
 					//system_message('you are denied for action...');
-					register_error(elgg_echo('you are denied for action...'));
+					register_error(elgg_echo('access_mgr:error:msg'));
 					return false;
 				}
 			}
@@ -83,20 +80,19 @@ $server_page_path = parse_url($_SERVER['REQUEST_URI']);
 						//system_message("It's the group page");
 						return true;
 					}else{
-						//system_message("It's not the group pge");
+						//system_message('blog page denied...');
+						register_error(elgg_echo('access_mgr:error:msg'));
+						forward(REFERRER);
+						return false;
 					}					
-				//system_message('blog page denied...');
-				register_error(elgg_echo('blog page denied...'));
-				forward(REFERRER);
-				return false;
-				break;
 			}elseif($selected_object == 'file' AND strpos($server_page_path['path'],'file/add') !== false){
 				$group_entity = get_entity(end(explode("/",$server_page_path['path'])));
 					if(elgg_instanceof($group_entity, 'group')){
-						system_message("It's the group page");
+						//system_message("It's the group page");
 						return true;
 					}else{
-						system_message("It's not the group pge");
+						//system_message("It's not the group pge");
+						register_error(elgg_echo('access_mgr:error:msg'));
 						forward(REFERRER);
 						return false;
 					}
@@ -110,7 +106,7 @@ $server_page_path = parse_url($_SERVER['REQUEST_URI']);
 		$site = elgg_get_site_entity();
 		if(($site->site_admin_guid != elgg_get_logged_in_user_guid()) AND ($super_admin_guid != elgg_get_logged_in_user_guid())){
 			forward(REFERRER);
-			register_error(elgg_echo('Denied For this page...'));
+			register_error(elgg_echo('access_mgr:error:msg'));
 			//system_message('Denied For this page...');
 			return false;
 		}
