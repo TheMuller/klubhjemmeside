@@ -73,19 +73,30 @@ $server_page_path = parse_url($_SERVER['REQUEST_URI']);
 		$selected_objects_str = $plugin->getSetting('selected_objects');
 		$selected_objects = unserialize($selected_objects_str);
 		foreach($selected_objects as $selected_object){
-			//system_message($selected_object." And ".$type);
+			system_message($selected_object." And ".$type);
 			if($selected_object == 'blog' AND strpos($server_page_path['path'],'blog/add') !== false){
 					$group_entity = get_entity(end(explode("/",$server_page_path['path'])));
 					if(elgg_instanceof($group_entity, 'group')){
 						//system_message("It's the group page");
 						return true;
 					}else{
-						//system_message('blog page denied...');
+						system_message('blog page denied...');
+						//register_error(elgg_echo('access_mgr:error:msg'));
+						forward(REFERRER);
+						//return false;
+					}					
+			}elseif($selected_object == 'file' AND strpos($server_page_path['path'],'file/add') !== false){
+				$group_entity = get_entity(end(explode("/",$server_page_path['path'])));
+					if(elgg_instanceof($group_entity, 'group')){
+						//system_message("It's the group page");
+						return true;
+					}else{
+						//system_message("It's not the group pge");
 						register_error(elgg_echo('access_mgr:error:msg'));
 						forward(REFERRER);
 						return false;
-					}					
-			}elseif($selected_object == 'file' AND strpos($server_page_path['path'],'file/add') !== false){
+					}
+			}elseif($selected_object == 'bookmarks' AND strpos($server_page_path['path'],'bookmarks/add') !== false){
 				$group_entity = get_entity(end(explode("/",$server_page_path['path'])));
 					if(elgg_instanceof($group_entity, 'group')){
 						//system_message("It's the group page");

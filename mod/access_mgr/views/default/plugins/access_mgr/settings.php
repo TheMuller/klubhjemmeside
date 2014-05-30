@@ -28,7 +28,7 @@ echo "<br><br><b>".elgg_echo('access_mgr:settings:super_admin')."</b>".
 
 echo "<b>".elgg_echo('access_mgr:settings:blocked_objects')."</b><br><br><div style='margin-left: 2cm;'>".
 		elgg_view('input/checkboxes', array(
-            'options' =>array('blog','file'),   
+            'options' =>array('blog','file','bookmarks'),   
             'align' => 'horizontal',
 			'value' => $selected_objects,   
 			'name' => 'selected_objects',
