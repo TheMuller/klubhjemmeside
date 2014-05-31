@@ -17,6 +17,8 @@ function event_calendar_extend_init() {
 	elgg_unregister_plugin_hook_handler('register', 'menu:entity', 'event_calendar_entity_menu_setup');
 	elgg_register_plugin_hook_handler  ('register', 'menu:entity', 'event_calendar_extend_entity_menu_setup');
 
+    elgg_extend_view("css/elgg", "event_calendar_extend/css");
+
 	// register actions
 //	$action_path = elgg_get_plugins_path().'event_calendar       /actions/event_calendar';	//checked!!		
 	$action_path = elgg_get_plugins_path().'event_calendar_extend/actions/event_calendar';

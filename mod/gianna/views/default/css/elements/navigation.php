@@ -356,6 +356,8 @@
 .elgg-menu-page a {
     display: block;
     padding: 5px 0;
+	border-bottom: 1px dotted #DCDCDC; /* Fallback */
+	border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
 }
 .elgg-menu-page li.elgg-state-selected > a {
 	color: #555555;
@@ -373,7 +375,7 @@
 }
 .elgg-menu-page .elgg-menu-opened:before {
 	content: "\002D";
-}
+} 
 /* ***************************************
 	HOVER MENU
 *************************************** */

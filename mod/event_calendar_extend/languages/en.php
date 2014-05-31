@@ -72,9 +72,9 @@
 	'event_calendar:ticket:menu:sold_tickets' => 'Sold',
 	'event_calendar:ticket:menu:total_tickets' => 'Total <br>tickets',
 	
-    'event_calendar:ticket:usertotalspot' =>'Tickets - you already bought:',
+    'event_calendar:ticket:usertotalspot' =>'No. of tickets you have bought:',
     'event_calendar:ticket:usermaxspot' =>'Max. Limit per member:',
-    'event_calendar:ticket:usertotalleft' =>' Max. Limit you can buy in total:',
+    'event_calendar:ticket:usertotalleft' =>'Tickets you still can buy:',
     'event_calendar:ticket:usertotalconsumed' =>'You can not buy more',
 	'event_calendar:ticket:type' => 'Ticket:',
 	'event_calendar:ticket:amount' => 'Cost (DKK):',

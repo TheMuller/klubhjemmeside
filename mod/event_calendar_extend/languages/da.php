@@ -71,9 +71,9 @@
 	'event_calendar:ticket:menu:sold_tickets' => 'Solgt',
 	'event_calendar:ticket:menu:total_tickets' => 'Total <br>antal',
 	
-    'event_calendar:ticket:usertotalspot' =>'Billetter - du har allerede købt:',
-    'event_calendar:ticket:usermaxspot' =>'Max. Antal pr. medlem:',
-    'event_calendar:ticket:usertotalleft' =>'Maks. Antal du kan købe i total:',
+    'event_calendar:ticket:usertotalspot' =>'Antal billetter du har købt:',
+    'event_calendar:ticket:usermaxspot' =>'Maks. pr. medlem:',
+    'event_calendar:ticket:usertotalleft' =>'Billetter du stadig kan købe:',
      'event_calendar:ticket:usertotalconsumed' =>'Du kan ikke købe flere',
 	'event_calendar:ticket:type' => 'Billet:',
 	'event_calendar:ticket:amount' => 'Pris (DKK):',
