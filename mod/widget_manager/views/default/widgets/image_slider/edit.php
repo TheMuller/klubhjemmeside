@@ -30,9 +30,8 @@
 		"s3slider" => elgg_echo("widget_manager:widgets:image_slider:slider_type:s3slider"),
 		"flexslider" => elgg_echo("widget_manager:widgets:image_slider:slider_type:flexslider"),
 	);
-	$note = elgg_echo('widgets:messages:note:choose_image')."<font style='color:blue'>''".$CONFIG->dataroot."image_slider/''</font><br><br>";
-	echo $note;
-	for($i = 1; $i <= $max_slider_options; $i++){
+	echo elgg_view('output/url', array('href' => elgg_get_site_url().'admin/appearance/image_slider','text' => elgg_echo('admin:widgets:upload_images')))."<br><br>";
+		for($i = 1; $i <= $max_slider_options; $i++){
 			
 		$direction = $widget->get("slider_" . $i . "_direction");
 		if(empty($direction)){
@@ -47,7 +46,6 @@
 		<span class='image_slider_settings'>
 			<label onclick='$(this).next().toggle();'><?php echo elgg_echo("widget_manager:widgets:image_slider:title"); ?> - <?php echo $i; ?></label>
 			<div>
-				<div><?php echo elgg_view('output/url', array('href' => elgg_get_site_url().'admin/appearance/image_slider','text' => elgg_echo('admin:widgets:upload_images'))); ?></div>
 				
 				<div><?php echo elgg_echo("widget_manager:widgets:image_slider:label:text"); ?></div>
 				<?php echo elgg_view("input/text", array("name" => "params[slider_" . $i . "_text]", "value" => $widget->get("slider_" . $i . "_text"))); ?>

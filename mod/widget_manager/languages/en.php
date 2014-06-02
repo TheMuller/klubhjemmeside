@@ -11,7 +11,7 @@
 		'admin:widgets:manage' => "Manage",
 		'admin:widgets:manage:index' => "Manage Index",
 		'admin:statistics:widgets' => "Widget Usage",
-		'admin:widgets:upload_images' => "Upload Images",
+		'admin:widgets:upload_images' => "Upload Images From here",
 
 		// widget edit wrapper
 		'widget_manager:widgets:edit:custom_title' => "Custom title",
@@ -244,7 +244,6 @@
 		"widgets:messages:description" => "Shows your latest messages",
 		"widgets:messages:not_logged_in" => "You need to be logged in to use this widget",
 		"widgets:messages:settings:only_unread" => "Only show unread messages",
-		"widgets:messages:note:choose_image" => "<b>Note :</b> The slider images can be added/Remove at ",
 	);
 	add_translation("en", $messages);
 
