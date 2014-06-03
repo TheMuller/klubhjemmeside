@@ -17,6 +17,7 @@ elgg_register_plugin_hook_handler('prepare', 'menu:site', 'menu_mgr_menu_priorit
 elgg_register_plugin_hook_handler('register', 'menu:topbar', 'menu_mgr_top_menu');
 
 elgg_register_admin_menu_item('configure', 'menu_mgr', 'appearance','100');
+elgg_unregister_menu_item("page", "appearance:menu_items");
 elgg_register_event_handler('pagesetup', 'system', 'menu_mgr_sidebar_menu');
 elgg_extend_view("css/elgg", "menu_mgr/css/topbarsubmenu");
 }
