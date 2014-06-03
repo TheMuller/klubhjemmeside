@@ -32,14 +32,14 @@ foreach($users as $user){
         $users2[]=$user;
         continue;
     }
-    
-    $last_dates = unserialize($user->last_dates);
-    
-    $last_date = $last_dates[$group->guid];
-    if(!$last_date or $last_date ==''){
-        continue;
-    }
-    $users2[]=$user;
+    if($group->group_paid_flag =='yes'){
+		$last_dates = unserialize($user->last_dates);
+		$last_date = $last_dates[$group->guid];
+		if(!$last_date or $last_date ==''){
+			continue;
+		}
+	}
+	$users2[]=$user;	
 }
 $body =  elgg_view_entity_list($users2,$options);
 $body .= "<div class='center mts'>$all_link</div>";
