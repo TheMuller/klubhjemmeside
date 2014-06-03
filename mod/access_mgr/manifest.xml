@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
-	<name>Access Manager </name>
+	<name>Access Manager</name>
 	<author>Sachin Sharma</author>
-	<version>0.1</version>
+	<version>4.0 (1.8)</version>
 	<description>All Access except Admin</description>
 	<website>http://enraiser.com/</website>
 	<copyright>(C) enraiser.com  2013</copyright>
