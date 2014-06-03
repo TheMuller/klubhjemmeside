@@ -234,16 +234,17 @@ if ($full) {
 		'subtitle' => $info,
 		'tags' => $tags,
 	);
-    $soldouttext = elgg_echo('event_calendar:ticket:soldout')."&nbsp;";
-    for($i = 1; $i <=5; $i++)				//:DC:
-    {
-        $spots_var = 'ticket_option_spots_' . $i;
-        $ticket_spots = $event->$spots_var;
-        if($ticket_spots >0){$soldouttext='';break;}
-    }
+	if(($event->personal_manage!='closedfuture_keep_list') AND ($event->personal_manage!='closedfuture_no_list')){
+		$soldouttext = elgg_echo('event_calendar:ticket:soldout')."&nbsp;";
+		for($i = 1; $i <=5; $i++)				//:DC:
+		{
+			$spots_var = 'ticket_option_spots_' . $i;
+			$ticket_spots = $event->$spots_var;
+			if($ticket_spots >0){$soldouttext='';break;}
+		}
+	}
     if($soldouttext !='')
         $params['title'] = "<a href='".$event->getURL()."'>".$soldouttext.$event->title."</a>";
-        
 	$list_body = elgg_view('object/elements/summary', $params);
 	
 	echo elgg_view_image_block($icon, $list_body);
