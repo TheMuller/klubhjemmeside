@@ -87,6 +87,23 @@
 					break;
 				case "add":
 				case "edit":
+                    $plugin = elgg_get_plugin_from_id('access_mgr');
+                    $server_page_path = parse_url($_SERVER['REQUEST_URI']);
+                    
+                    if(!isadminloggedin()){
+                        $selected_objects_str = $plugin->getSetting('selected_objects');
+                        $selected_objects = unserialize($selected_objects_str);
+                        if($selected_objects[0] =='blog'){
+                            $group_entity = get_entity(end(explode("/",$server_page_path['path'])));
+                            if(elgg_instanceof($group_entity, 'group')){
+                                return ;
+                            }else{
+                                register_error(elgg_echo('access_mgr:error:msg'));
+                                forward(REFERRER);
+                                return false;
+                            }
+                        }
+                    }
 					$result = false;
 					// push all blogs breadcrumb
 					elgg_push_breadcrumb(elgg_echo("blog:blogs"), "blog/all");
