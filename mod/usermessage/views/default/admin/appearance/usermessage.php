@@ -17,15 +17,15 @@ $active = array(
 
 	$rawdata .= "<td>".elgg_view('input/text',
 	array(
-		'name' => 'msg_data['.$ak.'][name]',
-		'value' =>$item[name],
+		'name' => 'msg_data['.$ak.'][msg]',
+		'value' =>$item[msg],
 		'style'=>'width: 410px; height: 20px; background: transparent;',
 	)
 )."</td>";	
 	$rawdata .= "<td>".elgg_view('input/text',
 	array(
-		'name' => 'msg_data['.$ak.'][url]',
-		'value' =>$item[url],
+		'name' => 'msg_data['.$ak.'][where]',
+		'value' =>$item[where],
 		'style'=>'width: 320px; height: 20px; background: transparent;',
 	)
 )."</td>";
@@ -57,13 +57,13 @@ $active = array(
     return $rawdata;
 }
 
-$supplycontent .= "<table><tr bgcolor='ADA0B1' id='hiddenmaterial' style='display:none;' >".prepareTableRawData_4message(array('type'=>'2','visibility'=>'','name'=>'Msg Here','url'=>'Url','priority'=>'50'),'JOBID')."</tr></table>";
+$supplycontent .= "<table><tr bgcolor='ADA0B1' id='hiddenmaterial' style='display:none;' >".prepareTableRawData_4message(array('type'=>'2','visibility'=>'','name'=>'Msg Here','where'=>'Url','priority'=>'50'),'JOBID')."</tr></table>";
 
 $supplycontent .= "<form action='".elgg_get_site_url()."admin/appearance/usermessage' method='post' enctype='multipart/form-data'>";
     $msg_data =  $_POST['msg_data'];
 	$site = elgg_get_site_entity();
 	if($msg_data){
-		$site->msg_data = serialize(msg_data);
+		$site->msg_data = serialize($msg_data);
 	}else{
 		$msg_data = unserialize($site->msg_data);
 	}
@@ -80,7 +80,7 @@ $supplycontent .= "<form action='".elgg_get_site_url()."admin/appearance/usermes
 $supplycontent .= "<table><tbody id='user_message_tbody'>";
 $ak=0;
 	foreach($msg_data as $item){
-		if($item[name]){
+		if($item[msg]){
 			$child_count = count($item[childs]);
 		 $supplycontent .= "<tr bgcolor='#C4BEC4' id='$ak' childs='$child_count' style='border-bottom: 2px solid white;'>".prepareTableRawData_4message($item,$ak)."</tr>";
 		} 

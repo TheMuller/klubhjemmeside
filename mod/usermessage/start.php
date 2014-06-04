@@ -39,25 +39,14 @@ function elgg_views_add_user_message($hook, $type, $value, $params) {
 	
 	$site = elgg_get_site_entity();
 	$msg_raws = unserialize($site->msg_data);
-	foreach($msg_raws as $msg_raw){
+	foreach($msg_raws as $key=>$msg_raw){
 		if($msg_raw[active] == '1'){ // 1 = 'active' => 'yes'
-			if($sessiondata['where'] != '') {
-				if(strpos($request_uri_path['path'],$sessiondata['where']) === false )continue;
-			}
-			if($sessiondata['when'] == 'expired')continue;
-			$msg = $msg_raw['name'];
+			if(strpos($request_uri_path['path'],$msg_raw['where']) === false )continue;
+			$msg = $msg_raw['msg'];
 			$content .="<div  class='elgg-state-notice' style='position:relative;' id='universal_user_message_".$key."'>";
 			$content .="<span class='elgg-icon elgg-icon-delete' style='position:absolute;right:0px;' onclick=\"closeusermessage('".$key."');\"></span>";
-			
-			if($sessiondata['is_form'] == true) {
-				$content .= "<form id='universal_user_message_form_".$key."'>".elgg_view($msg);
-				$content .="<input type='submit' value='Submit' onclick=\"submit_user_message_form('".$key."');return false;\" class='elgg-button elgg-button-submit' />";
-				$content .="</form>";
-			}else {
-				$content .= $msg;
-			}
+			$content .= $msg;
 			$content .="<hr></div>";
-			if($sessiondata['when'] == 'thispage')$_SESSION['user_message'][$key]['when'] = 'expired';
 		}
 	}
 	if($sessiondatalist and count($sessiondatalist)) {
@@ -80,7 +69,8 @@ function elgg_views_add_user_message($hook, $type, $value, $params) {
 			$content .="<hr></div>";
 			if($sessiondata['when'] == 'thispage')$_SESSION['user_message'][$key]['when'] = 'expired';
 		}
-		
+	}
+	if($content){
 	$body = <<<___HTML
 		<script type="text/javascript">
 		function closeusermessage(key){
@@ -103,8 +93,8 @@ function elgg_views_add_user_message($hook, $type, $value, $params) {
 		$content
 ___HTML;
 	$value['body'] = $body . $value['body'];
+	}
 	return $value;
-	}	
 }
 
 function usermessage_login_redirect($event, $type, $user) {
