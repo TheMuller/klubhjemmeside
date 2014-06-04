@@ -543,7 +543,7 @@ $inactive =
 			break;
 		case 'inactive':
 				$user = elgg_get_logged_in_user_entity();	
-				$options = array(
+				$option = array(
 							'type' => 'group',
 							'relationship' => 'member',
 							'relationship_guid' => $user->guid,
