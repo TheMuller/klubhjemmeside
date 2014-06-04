@@ -5,10 +5,11 @@
  */
 
 $danish = array(
-	'access_mgr:error:msg' => 'Permission Denied1',
-	'access_mgr:settings:super_admin' => '<br><br><b>Super Admin1 : </b>',
-	'access_mgr:settings:blocked_objects' => '<b>Blocked Objects1 :</b>',
-	'access_mgr:settings:note' => '<b>Note :</b> To <b>Activate/Deactivate</b> and <b>Change Priority</b> Of Plugins Contact Site Admin ',
+	'access_mgr:error:msg' => 'tilladelse nægtet',
+	'access_mgr:settings:super_admin' => 'Super Admin : ',
+	'access_mgr:settings:blocked_objects' => 'blokerede objekter :',
+	'access_mgr:settings:note' => '<b>Bemærk :</b> til <b>Aktivere / deaktivere</b> 
+og <b>Skift prioritet</b> Plugins Kontakt Site Admin ',
 	
 
 );
