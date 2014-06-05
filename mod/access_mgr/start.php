@@ -34,7 +34,7 @@ $site = elgg_get_site_entity();
 		if(!isadminloggedin()){
 			//foreach($selected_objects as $selected_object){
 				//system_message($selected_objects);
-				if($type =='blog/save' AND $selected_objects[0] == 'blog'){
+				if($type =='blog/save' AND in_array('blog',$selected_objects)){
 					$group_guid = get_input('container_guid');
 					$group_entity = get_entity($group_guid);
 					if(elgg_instanceof($group_entity, 'group')){
@@ -48,7 +48,7 @@ $site = elgg_get_site_entity();
 						register_error(elgg_echo('access_mgr:error:msg'));
 						return false;
 					}
-				}elseif($type =='file/upload' AND $selected_objects[1] == 'file'){
+				}elseif($type =='file/upload' AND in_array('file',$selected_objects)){
 					//system_message($selected_objects[1]."__".$type);
 					$group_guid = get_input('container_guid');
 					$group_entity = get_entity($group_guid);
@@ -63,8 +63,8 @@ $site = elgg_get_site_entity();
 						register_error(elgg_echo('access_mgr:error:msg'));
 						return false;
 					}
-				}elseif($type =='bookmarks/add' AND $selected_objects[2] == 'bookmarks'){
-					//system_message($selected_objects."".$type);
+				}elseif($type =='bookmarks/save' AND in_array('bookmarks',$selected_objects)){
+					//system_message($selected_objects[2]."__".$type);
 					$group_guid = get_input('container_guid');
 					$group_entity = get_entity($group_guid);
 					if(elgg_instanceof($group_entity, 'group')){
@@ -74,7 +74,7 @@ $site = elgg_get_site_entity();
 						}else{register_error(elgg_echo('access_mgr:error:msg'));
 								return false;}
 					}else{
-						//system_message('file denied...');
+						//system_message('bookmarks denied...');
 						register_error(elgg_echo('access_mgr:error:msg'));
 						return false;
 					}
@@ -102,7 +102,7 @@ $server_page_path = parse_url($_SERVER['REQUEST_URI']);
 		$selected_objects = unserialize($selected_objects_str);
 		//foreach($selected_objects as $selected_object){
 			
-			if((strpos($server_page_path['path'],'blog/add') !== false) AND $selected_objects[0] == 'blog'){
+			if((strpos($server_page_path['path'],'blog/add') !== false) AND in_array('blog',$selected_objects)){
 			//system_message($selected_objects[0]." And ".$server_page_path['path']);
 					$group_entity = get_entity(end(explode("/",$server_page_path['path'])));
 					if(elgg_instanceof($group_entity, 'group')){
@@ -121,7 +121,7 @@ $server_page_path = parse_url($_SERVER['REQUEST_URI']);
 						forward(REFERRER);
 						return ;
 					}					
-			}if(strpos($server_page_path['path'],'file/add') !== false AND $selected_objects[1] == 'file'){
+			}if(strpos($server_page_path['path'],'file/add') !== false AND in_array('file',$selected_objects)){
 				$group_entity = get_entity(end(explode("/",$server_page_path['path'])));
 					if(elgg_instanceof($group_entity, 'group')){
 						if(($group_entity->member_allow == 'yes') OR ($group_entity->owner_guid == elgg_get_logged_in_user_guid())){
@@ -139,7 +139,7 @@ $server_page_path = parse_url($_SERVER['REQUEST_URI']);
 						forward(REFERRER);
 						return ;
 					}
-			}elseif(strpos($server_page_path['path'],'bookmarks/add') !== false AND $selected_objects[2] == 'bookmarks'){
+			}elseif(strpos($server_page_path['path'],'bookmarks/add') !== false AND in_array('bookmarks',$selected_objects)){
 				$group_entity = get_entity(end(explode("/",$server_page_path['path'])));
 					if(elgg_instanceof($group_entity, 'group')){
 						if(($group_entity->member_allow == 'yes') OR ($group_entity->owner_guid == elgg_get_logged_in_user_guid())){
