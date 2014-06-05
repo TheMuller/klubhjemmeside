@@ -66,7 +66,8 @@
 		}else{
 			document.getElementById("confirm_order").innerHTML += '' +	//:DC:
 				'<br><b>Nothing to Pay !</b><br><br>';
-			$("#submitConfirm").show();
+				if(totalspot > 0){$("#submitConfirm").show();}
+				else{$("#submitConfirm").hide();}
 		}
 	}
 	function formSubmit()
