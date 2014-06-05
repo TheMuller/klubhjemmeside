@@ -71,11 +71,11 @@ $supplycontent .= "<form action='".elgg_get_site_url()."admin/appearance/usermes
 	$supplycontent .= "<font color='white'><table style='border: 2px solid black; width:938px;'>
 	<tr bgcolor='79757A' color='white'>
 		
-		<td style='border: 2px solid black;width:300px;'>&nbsp;&nbsp;&nbsp;&nbsp;".elgg_echo('Message')."</td>
-		<td style='border: 2px solid black;width:240px;'>".elgg_echo('Where')."</td>
+		<td style='border: 2px solid black;width:300px;'>&nbsp;&nbsp;&nbsp;&nbsp;".elgg_echo('usermessage:appearance:message')."</td>
+		<td style='border: 2px solid black;width:240px;'>".elgg_echo('usermessage:appearance:where')."</td>
 		<!--<td style='border: 2px solid black;width:115px;'>".elgg_echo('When')."</td>--!>
-		<td style='border: 2px solid black;width:80px;'>".elgg_echo('Active')."</td>
-		<td style='border: 2px solid black;width:50px;'>".elgg_echo('Action')."</td>
+		<td style='border: 2px solid black;width:80px;'>".elgg_echo('usermessage:appearance:active')."</td>
+		<td style='border: 2px solid black;width:50px;'>".elgg_echo('usermessage:appearance:action')."</td>
 	</tr></table></font> ";
 $supplycontent .= "<table><tbody id='user_message_tbody'>";
 $ak=0;
@@ -90,7 +90,7 @@ $ak=0;
 
 $supplycontent .= "</tbody></table >\n\n";
 $supplycontent .= "<br><br><input type='submit' value='submit'>&nbsp;";
-echo "<div style='position:absolute; right:0px;margin-right:70px;'>".elgg_view('output/url', array('href' => '','text' => elgg_echo('Add New Message'),'class' => 'elgg-button elgg-button-submit','onClick'=>'addInput();return false;'))."</div>";
+echo "<div style='position:absolute; right:0px;margin-right:70px;'>".elgg_view('output/url', array('href' => '','text' => elgg_echo('usermessage:appearance:new_message'),'class' => 'elgg-button elgg-button-submit','onClick'=>'addInput();return false;'))."</div>";
 $supplycontent .= "</form>";
 
 
