@@ -9,6 +9,7 @@
 
 /* ***************************************
 	Typography
+org a #009900
 *************************************** */
 body {
 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
@@ -18,12 +19,12 @@ body {
 	color: #404040;
 }
 a {
-	color: #009900;
+	color: #3FB1DB;
 }
 
 a:hover,
 a.selected { <?php //@todo remove .selected ?>
-	color: #555555;
+	color: #333C45;
 	text-decoration: underline;
 }
 
