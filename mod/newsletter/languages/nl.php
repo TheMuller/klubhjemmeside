@@ -1,5 +1,10 @@
 <?php
 $language = array (
+  'newsletter:widget:subscribe:description' => 'Toon een widget om je snel aan te kunnen melden voor de nieuwsbrief',
+  'newsletter:csv:no_email' => 'Er kon geen e-mail kolom worden gevonden in de eerste 2 regels van het CSV-bestand',
+  'newsletter:csv:added' => '%s e-mail adressen toegevoegd vanuit het CSV-bestand',
+  'newsletter:recipients:csv' => 'Upload een CSV-bestand met e-mail adressen van ontvangers',
+  'newsletter:recipients:csv:description' => 'Je kunt een CSV-bestand uploaden welke e-mail adressen van ontvangers bevat. Het tekst scheidingsteken moet een " (dubbel quote) zijn en het kolom scheidingsteken moet een ; (puntkomma) zijn. Het systeem zoekt zelf naar de kolom met e-mail adressen door de eerste 2 regels te doorzoeken.',
   'item:object:newsletter' => 'Nieuwsbrief',
   'item:object:newsletter_template' => 'Nieuwsbrief template',
   'item:object:newsletter_subscription' => 'Nieuwsbrief inschrijving',
@@ -106,6 +111,7 @@ $language = array (
 
 controleer de twee instellingen hieronder en klik op uitschrijven om het het proces af te ronden.',
   'newsletter:unsubscribe:email' => 'Je e-mail adres %s zal worden uitgeschreven als je op de onderstaande knop klik.',
+  'newsletter:unsubscribe:email:empty' => 'Voer het emailadres in wat u wilt uitschrijven.',
   'newsletter:unsubscribe:entity' => 'Ik wil de \'%s\' nieuwsbrief niet langen ontvangen',
   'newsletter:unsubscribe:all' => 'Ik wil geen enkele nieuwsbrief van de %s community ontvangen',
   'newsletter:sidebar:subscribe:title' => 'Nieuwsbrief abonnementen',

@@ -159,10 +159,8 @@ function newsletter_process($entity_guid) {
 				"users" => array(),
 				"emails" => array()
 			);
-			$recipients = $entity->recipients;
-			if (!empty($recipients)) {
-				$recipients = json_decode($recipients, true);
-			} else {
+			$recipients = $entity->getRecipients();
+			if (empty($recipients)) {
 				// no recipients so report error
 				$entity->status = "sent";
 				
@@ -867,19 +865,22 @@ function newsletter_is_email_address($address) {
 function newsletter_generate_unsubscribe_link(ElggEntity $container, $recipient) {
 	$result = false;
 	
-	if (!empty($container) && (elgg_instanceof($container, "site") || elgg_instanceof($container, "group")) && !empty($recipient)) {
-		$code = newsletter_generate_unsubscribe_code($container, $recipient);
+	if (!empty($container) && (elgg_instanceof($container, "site") || elgg_instanceof($container, "group"))) {
+		$result = "newsletter/unsubscribe/" . $container->getGUID();
 		
-		if (is_numeric($recipient)) {
-			// recipient is an user_guid
-			$result = "newsletter/unsubscribe/" . $container->getGUID() . "?u=" . $recipient . "&c=" . $code;
-		} elseif (newsletter_is_email_address($recipient)) {
-			// recipient is an email address
-			$result = "newsletter/unsubscribe/" . $container->getGUID() . "?e=" . $recipient . "&c=" . $code;
+		if (!empty($recipient)) {
+			$code = newsletter_generate_unsubscribe_code($container, $recipient);
+			
+			if (is_numeric($recipient)) {
+				// recipient is an user_guid
+				$result .= "?u=" . $recipient . "&c=" . $code;
+			} elseif (newsletter_is_email_address($recipient)) {
+				// recipient is an email address
+				$result .= "?e=" . $recipient . "&c=" . $code;
+			}
 		}
-		if ($result) {
-			$result = elgg_normalize_url($result);
-		}
+		
+		$result = elgg_normalize_url($result);
 	}
 	
 	return $result;
@@ -1068,7 +1069,7 @@ function newsletter_convert_subscription_to_user_setting(NewsletterSubscription 
 		$site = elgg_get_site_entity();
 		if (check_entity_relationship($subscription->getGUID(), NewsletterSubscription::GENERAL_BLACKLIST, $site->getGUID())) {
 			// copy the block all
-			$result = (bool) add_entity_relationship($user->getGUID(), NewsletterSubscription::GENERAL_BLACKLIST, $site->getGUID());
+			add_entity_relationship($user->getGUID(), NewsletterSubscription::GENERAL_BLACKLIST, $site->getGUID());
 		} else {
 			// check for subscriptions
 			$subscriptions = $subscription->getEntitiesFromRelationship(NewsletterSubscription::SUBSCRIPTION, false, false);
@@ -1207,4 +1208,167 @@ function newsletter_include_existing_users() {
 	}
 	
 	return $result;
+}
+
+/**
+ * Returns all the available templates, these include those provided by themes
+ * and the saved templates
+ *
+ * Other plugins/themes can provide their own template if the create a view
+ * newsletter/templates/<some name>/{body|css}
+ *
+ * @param int $container_guid The container of the current newsletter
+ * @return array The available templates
+ */
+function newsletter_get_available_templates($container_guid) {
+	$result = array();
+	
+	// detect templates provided by themes/plugins
+	$views = elgg_get_config("views");
+	$locations = $views->locations["default"];
+	$keys = array_keys($locations);
+	
+	$pattern = '/^newsletter\/templates\/(?P<name>\w+)\/(body|css)$/';
+	
+	foreach ($keys as $view) {
+		$matches = array();
+		$res = preg_match($pattern, $view, $matches);
+		
+		if ($res) {
+			$name = elgg_extract("name", $matches);
+			$lan_key = "newsletter:edit:template:select:" . $name;
+			$title = elgg_echo($lan_key);
+			
+			if ($title == $lan_key) {
+				$title = $name;
+			}
+			
+			$result[$name] = $title;
+		}
+	}
+	
+	// get saved templates
+	if (!empty($container_guid)) {
+		$options = array(
+			"type" => "object",
+			"subtype" => NEWSLETTER_TEMPLATE,
+			"container_guid" => $container_guid,
+			"limit" => false
+		);
+		
+		$templates = elgg_get_entities($options);
+		if (!empty($templates)) {
+			foreach ($templates as $template) {
+				$result[$template->getGUID()] = $template->title;
+			}
+		}
+	}
+	
+	// the custom selection option
+	unset($result["custom"]); // make sure custom is last in the list (shouldn't be provided by a plugin/theme)
+	$result["custom"] = elgg_echo("newsletter:edit:template:select:custom");
+	
+	return $result;
+}
+
+/**
+ * Process an uploaded CSV file to find new recipients.
+ *
+ * @param array $recipients previous recipients, to prevent duplicates
+ * Contains:
+ *
+ * user_guids => array() existing users
+ * emails => array() extra email addresses
+ *
+ * @return array
+ */
+function newsletter_process_csv_upload(array $recipients) {
+	
+	// is a file uploaded
+	if (get_uploaded_file("csv")) {
+		// open the file as CSV
+		$fh = fopen($_FILES["csv"]["tmp_name"], "r");
+		
+		if (!empty($fh)) {
+			$email_column = false;
+			
+			// try to find an email column (in the first 2 rows)
+			for ($i = 0; $i < 2; $i++) {
+				$row = fgetcsv($fh, null, ";", "\"");
+				if ($row) {
+					foreach ($row as $index => $field) {
+						if (newsletter_is_email_address($field)) {
+							$email_column = $index;
+							break;
+						}
+					}
+				}
+			}
+			
+			// found an email column
+			if ($email_column !== false) {
+				$counter = 0;
+				
+				// start at the beginning
+				if (rewind($fh)) {
+					$row = fgetcsv($fh, null, ";", "\"");
+					while ($row !== false) {
+						// get the email address
+						$email = @$row[$email_column];
+						
+						// make sure it's a valid email address
+						if (newsletter_is_email_address($email)) {
+							$counter++;
+							$exists = false;
+							
+							// is this email address already in the recipients list
+							if (in_array($email, $recipients["emails"])) {
+								$exists = true;
+							} else {
+								// check for an existing user
+								$ia = elgg_set_ignore_access(true);
+								
+								$users = get_user_by_email($email);
+								if (!empty($users)) {
+									foreach ($users as $user) {
+										if (in_array($user->getGUID(), $recipients["user_guids"])) {
+											$exists = true;
+										}
+									}
+								}
+								
+								elgg_set_ignore_access($ia);
+							}
+							
+							if ($exists === false) {
+								// email address wasn't added yet
+								// so add to the list
+								$ia = elgg_set_ignore_access(true);
+								
+								$users = get_user_by_email($email);
+								if (!empty($users)) {
+									$recipients["user_guids"][] = $users[0]->getGUID();
+								} else {
+									$recipients["emails"][] = $email;
+								}
+								
+								elgg_set_ignore_access($ia);
+							}
+						}
+						
+						// go to the next row
+						$row = fgetcsv($fh, null, ";", "\"");
+					}
+					
+					// done, report the added emails
+					system_message(elgg_echo("newsletter:csv:added", array($counter)));
+				}
+			} else {
+				// no email column found, report this
+				system_message(elgg_echo("newsletter:csv:no_email"));
+			}
+		}
+	}
+	
+	return $recipients;
 }

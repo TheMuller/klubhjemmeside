@@ -23,6 +23,11 @@ if (!isset($content)) {
 	if ($template == "custom") {
 		$content = $entity->html;
 	} else {
+		if (!elgg_view_exists("newsletter/templates/" . $template . "/body")) {
+			// something wrong, reset to default
+			$template = "default";
+		}
+		
 		$content = elgg_view("newsletter/templates/" . $template . "/body");
 	}
 }
@@ -59,6 +64,8 @@ if (PHP_SAPI !== "cli") {
 		if ($email) {
 			$replacements["{newsletter_url}"] = $replacements["{newsletter_url}"] . "?e=" . $email;
 			$replacements["{unsublink}"] = newsletter_generate_unsubscribe_link($entity->getContainerEntity(), $email);
+		} else {
+			$replacements["{unsublink}"] = newsletter_generate_unsubscribe_link($entity->getContainerEntity(), "");
 		}
 	}
 }

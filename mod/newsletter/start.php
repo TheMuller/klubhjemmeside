@@ -24,6 +24,9 @@ function newsletter_init() {
 	// register page handler
 	elgg_register_page_handler("newsletter", "newsletter_page_handler");
 	
+	// Register entity_type for search
+	elgg_register_entity_type("object", "newsletter");
+	
 	// CSS & JS
 	elgg_extend_view("css/elgg", "css/newsletter/site");
 	elgg_extend_view("js/elgg", "js/newsletter/site");
@@ -42,6 +45,9 @@ function newsletter_init() {
 		add_group_tool_option("newsletter", elgg_echo("newsletter:group:tool_option"), true);
 	}
 	
+	// widget
+	elgg_register_widget_type("newsletter_subscribe", elgg_echo("newsletter:sidebar:subscribe:title"), elgg_echo("newsletter:widget:subscribe:description"), "index,groups");
+	
 	// register plugin hooks
 	elgg_register_plugin_hook_handler("cron", "hourly", "newsletter_cron_handler");
 	elgg_register_plugin_hook_handler("access:collections:write", "user", "newsletter_write_access_handler");
@@ -54,10 +60,11 @@ function newsletter_init() {
 	elgg_register_plugin_hook_handler("register", "menu:longtext", "newsletter_register_longtext_menu_handler");
 	elgg_register_plugin_hook_handler("register", "menu:newsletter_buttons", "newsletter_register_buttons_menu_handler");
 	elgg_register_plugin_hook_handler("register", "menu:longtext", "newsletter_register_longtext_menu_handler");
+	
 	elgg_register_plugin_hook_handler("usersettings:save", "user", "newsletter_usersettings_save_handler");
 	elgg_register_plugin_hook_handler("register", "user", "newsletter_register_user_handler");
-	elgg_register_plugin_hook_handler("usersettings:save", "user", "newsletter_usersettings_save_handler");
 	elgg_register_plugin_hook_handler("entity:icon:url", "object", "newsletter_icon_hook");
+	elgg_register_plugin_hook_handler("widget_url", "widget_manager", "newsletter_widget_url_handler");
 	
 	// extend public pages
 	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'newsletter_public_pages');

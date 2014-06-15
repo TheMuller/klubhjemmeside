@@ -3,9 +3,8 @@
 $entity = elgg_extract("entity", $vars);
 $container = $entity->getContainerEntity();
 
-$recipients = $entity->recipients;
+$recipients = $entity->getRecipients();
 if (!empty($recipients)) {
-	$recipients = json_decode($recipients, true);
 	
 	$user_guids = elgg_get_sticky_value("newsletter_recipients", "user_guids", elgg_extract("user_guids", $recipients));
 	$group_guids = elgg_get_sticky_value("newsletter_recipients", "group_guids", elgg_extract("group_guids", $recipients));
@@ -27,6 +26,12 @@ elgg_load_js('newsletter.recipients');
 
 echo "<div>";
 echo elgg_view("output/longtext", array("value" => elgg_echo("newsletter:recipients:description")));
+echo "</div>";
+
+echo "<div>";
+echo "<label for='newsletter-recipients-csv'>" . elgg_echo("newsletter:recipients:csv") . "</label>";
+echo elgg_view("input/file", array("name" => "csv", "id" => "newsletter-recipients-csv"));
+echo "<div class='elgg-subtext'>" . elgg_echo("newsletter:recipients:csv:description") . "</div>";
 echo "</div>";
 
 echo "<div>";

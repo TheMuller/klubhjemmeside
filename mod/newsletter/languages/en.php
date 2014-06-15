@@ -15,6 +15,10 @@
 		'newsletter:status:scheduled' => "Scheduled",
 		'newsletter:status:sent' => "Sent",
 		
+		// CSV upload
+		'newsletter:csv:no_email' => "No e-mail column could be found in the first 2 rows of the CSV-file",
+		'newsletter:csv:added' => "Added %s e-mail addresses from the CSV-file",
+		
 		// menu's
 		'newsletter:menu:site' => "Newsletters",
 		
@@ -107,6 +111,8 @@
 		// recipients
 		'newsletter:recipients:title' => "Select recipients",
 		'newsletter:recipients:description' => "Below you can configure who you want to receive the newsletter.",
+		'newsletter:recipients:csv' => "Upload a CSV-file with recipient e-mail addresses",
+		'newsletter:recipients:csv:description' => "You can upload a CSV file that contains the e-mail addresses for recipients. The text delimiter for the file needs to be \" (double quote) and the column delimiter needs to be a ; (semicolon). The system will auto-detect the e-mail column by searching the first 2 rows.",
 		'newsletter:recipients:recipient' => "Search a recipient",
 		'newsletter:recipients:recipient:description' => "You can search on name, email and username. Please select one from the dropdown to add the recipient.",
 		'newsletter:recipients' => "Recipients",
@@ -147,6 +153,7 @@
 
 Check the two settings below and click unsubscribe in order to complete the proccess.",
 		'newsletter:unsubscribe:email' => "Your email address %s will be unsubscribed if you click the button below.",
+		'newsletter:unsubscribe:email:empty' => "Enter your email address and click the button below to unsubscribe.",
 		'newsletter:unsubscribe:entity' => "I no longer wish to receive the '%s' newsletter",
 		'newsletter:unsubscribe:all' => "I don't want to receive any newsletters from the %s community",
 		
@@ -205,6 +212,9 @@ To view the newsletter click here:
 		'newsletter:group:tool_option' => "Enable group newsletters",
 		'newsletter:group:error:not_enabled' => "Newsletters aren't enabled for this group",
 		'newsletter:group:title' => "%s's newsletters",
+		
+		// widget
+		'newsletter:widget:subscribe:description' => "Show a quick widget to subscribe to the newsletter",
 		
 		// actions
 		// edit

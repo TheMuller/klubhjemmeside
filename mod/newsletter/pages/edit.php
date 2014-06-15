@@ -52,6 +52,9 @@ $vars = array(
 );
 
 if ($subpage) {
+	$form_vars = array(
+		"id" => "newsletter-form-" . $subpage
+	);
 	
 	if ($subpage == "content" || $subpage == "template") {
 		if ($entity->content) {
@@ -60,15 +63,12 @@ if ($subpage) {
 					"name" => "preview",
 					"text" => elgg_echo("preview"),
 					"href" => "newsletter/preview/" . $guid,
-					"link_class" => "elgg-button elgg-button-action",
-					"target" => "_blank"
+					"link_class" => "elgg-button elgg-button-action"
 			)));
 		}
+	} elseif ($subpage == "recipients") {
+		$form_vars["enctype"] = "multipart/form-data";
 	}
-	
-	$form_vars = array(
-		"id" => "newsletter-form-" . $subpage
-	);
 	
 	$content = elgg_view_form("newsletter/edit/" . $subpage, $form_vars, $vars);
 } else {
