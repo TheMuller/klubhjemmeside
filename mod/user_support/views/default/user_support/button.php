@@ -10,10 +10,13 @@ if (!elgg_in_context("admin")) {
 		$faq_options = array(
 			"type" => "object",
 			"subtype" => UserSupportFAQ::SUBTYPE,
-			"site_guids" => false,
 			"count" => true,
 			"metadata_name_value_pairs" => array("help_context" => $help_context)
 		);
+		
+		if (elgg_get_plugin_setting("ignore_site_guid", "user_support") !== "no") {
+			$faq_options["site_guids"] = false;
+		}
 		
 		$link_text = "";
 	 	foreach (str_split(strtoupper(elgg_echo("user_support:button:text"))) as $char) {
@@ -26,7 +29,7 @@ if (!elgg_in_context("admin")) {
 			"class" => array("user-support-button-help-center")
 		);
 		
-		if ((!empty($contextual_help_object) && (elgg_get_plugin_setting("help_enabled", "user_support") != "no")) || elgg_get_entities_from_metadata($faq_options)) {
+		if ((!empty($contextual_help_object) && (elgg_get_plugin_setting("help_enabled", "user_support") != "no")) || ($help_context !== false && elgg_get_entities_from_metadata($faq_options))) {
 			$link_options["class"][] = "elgg-state-active";
 		}
 		
@@ -39,8 +42,12 @@ if (!elgg_in_context("admin")) {
 		// position settings
 		$horizontal = "left";
 		$vertical = "top";
-		$offset = sanitise_int(elgg_get_plugin_setting("float_button_offset", "user_support")!=  "0");
-
+		$offset = elgg_get_plugin_setting("float_button_offset", "user_support");
+		if (is_null($offset) || $offset === false) {
+			$offset = 150;
+		}
+		$offset = sanitise_int($offset);
+		
 		if ($show_floating_button) {
 			list($horizontal, $vertical) = explode("|", $show_floating_button);
 		}

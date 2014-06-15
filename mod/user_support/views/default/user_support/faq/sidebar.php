@@ -14,11 +14,14 @@ if (!empty($filter) || !empty($faq_query)) {
 	$guid_options = array(
 		"type" => "object",
 		"subtype" => UserSupportFAQ::SUBTYPE,
-		"site_guids" => false,
 		"limit" => false,
 		"metadata_name_value_pairs" => array(),
-		"callback" => create_function('$row', 'return (int) $row->guid;')
+		"callback" => "user_support_row_to_guid"
 	);
+	
+	if (elgg_get_plugin_setting("ignore_site_guid", "user_support") !== "no") {
+		$guid_options["site_guids"] = false;
+	}
 	
 	foreach ($filter as $index => $tag) {
 		if ($index > 2) {
@@ -30,6 +33,8 @@ if (!empty($filter) || !empty($faq_query)) {
 	
 	// text search
 	if (!empty($faq_query)) {
+		$faq_query = sanitise_string($faq_query);
+		
 		$guid_options["joins"] = array("JOIN " . elgg_get_config("dbprefix") . "objects_entity oe ON e.guid = oe.guid");
 		$guid_options["wheres"] = array("(oe.title LIKE '%$faq_query%' OR oe.description LIKE '%$faq_query%')");
 	}
@@ -68,6 +73,10 @@ if (($guids == null || (count($guids) > 1)) && (count($filter) < 3)) {
 		"tag_names" => array("tags"),
 		"wheres" => array()
 	);
+	
+	if (elgg_get_plugin_setting("ignore_site_guid", "user_support") !== "no") {
+		$tag_options["site_guids"] = false;
+	}
 	
 	if (!empty($filter)) {
 		$tag_options["wheres"][] = "(msv.string NOT IN ('" . implode("', '", $filter) . "'))";

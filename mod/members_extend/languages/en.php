@@ -1,8 +1,7 @@
 <?php
 /**
- * PaidGroup languages
+ * Member Extends languages
  *
- * @package ElggPaidGroup
  */
 
 $english = array(
