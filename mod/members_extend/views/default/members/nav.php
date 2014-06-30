@@ -4,7 +4,7 @@
  */
  	$myurl= elgg_get_site_url()."action/member/download";
 	$myurl = elgg_add_action_tokens_to_url($myurl);
-
+	$created_time = elgg_get_plugin_setting('created_time');
 $tabs = array(
 	'newest' => array(
 		'text' => elgg_echo('members:label:newest'),
@@ -50,7 +50,9 @@ if($user){
 				$newsorting='DESC';
 			}
 		
-			echo "<li id='table_header' class ='me_div_as_th' style='display:none;'> <div class ='me_div_as_td' >Msg's</div><div class ='me_div_as_td' > ".elgg_echo('members:suggested_group')."</div><div class ='me_div_as_td' >".elgg_echo('members:not_suggested_group')."</div><div class ='me_div_as_td' >".elgg_echo('members:member_group')."</div><div class ='me_div_as_td' >".elgg_echo('members:image')."</div><div class ='me_div_as_td' >".elgg_echo('members:name')."&nbsp;&nbsp;".
+			echo "<li id='table_header' class ='me_div_as_th' style='display:none;'> <div class ='me_div_as_td' >Msg's</div><div class ='me_div_as_td' > ".elgg_echo('members:suggested_group')."</div><div class ='me_div_as_td' >".elgg_echo('members:not_suggested_group')."</div><div class ='me_div_as_td' >".elgg_echo('members:member_group')."</div><div class ='me_div_as_td' >".elgg_echo('members:image')."</div>";
+			if($created_time == '1'){echo "<div class ='me_div_as_td' >".elgg_echo('members:join_date')."</div>";}
+			echo "<div class ='me_div_as_td' >".elgg_echo('members:name')."&nbsp;&nbsp;".
 				elgg_echo('').
                 elgg_view('output/url',array('text' => $sorting_path,'href' => "members"
                                                       ."?orderby=username"

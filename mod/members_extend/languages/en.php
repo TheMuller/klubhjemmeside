@@ -5,6 +5,7 @@
  */
 
 $english = array(
+				'members:join_date' => "Join Date : ",
 				'members:suggested_group' => "Suggested Group",
 				'members:not_suggested_group' => "Not Suggested Group",
 				'members:member_group' => "Member Group",

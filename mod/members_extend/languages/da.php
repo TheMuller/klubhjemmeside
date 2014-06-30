@@ -5,6 +5,7 @@
  */
 
 $danish = array(
+				'members:join_date' => "Tilmeldings dato : ",
 				'members:suggested_group' => "foreslået Group",
 				'members:not_suggested_group' => "Ikke foreslået Group",
 				'members:member_group' => "Medlem Group",

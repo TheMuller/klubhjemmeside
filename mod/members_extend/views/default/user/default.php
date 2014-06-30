@@ -106,9 +106,12 @@ echo "</div><div class='me_div_as_td' style='vertical-align:top;'>";
 			}
 			echo "</div>";
 
-echo "<div class='me_div_as_td'>";
-echo elgg_view_entity_icon($user,'tiny')."&nbsp;</div><div class='me_div_as_td'>";
-    echo $user->name;echo "</div>";
+echo "<div class='me_div_as_td'>";$created_time = elgg_get_plugin_setting('created_time');
+echo elgg_view_entity_icon($user,'tiny')."&nbsp;</div>";
+	if($created_time == '1'){
+		echo"<div class='me_div_as_td'>".date('d M Y', $user->time_created)."</div>";
+	}
+    echo "<div class='me_div_as_td'>".$user->name;echo "</div>";
 	echo "<div class='me_div_as_td'>";
     $start_ts = time();
     $day = 60*60*24;
