@@ -3,6 +3,7 @@
  * Gianna page header
  * Display Gianna logo when needed
  */
+echo elgg_view('core/account/login_dropdown'); 
 
 echo elgg_view_menu('navbar', array('sort_by' => 'priority'));
 ?>
@@ -22,6 +23,7 @@ echo elgg_view_menu('navbar', array('sort_by' => 'priority'));
 </div><!-- /.elgg-navbar -->
 
 <?php
+
 
 $plugin = elgg_get_plugin_from_id('gianna');
 

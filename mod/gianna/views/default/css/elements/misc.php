@@ -3,8 +3,8 @@
 *************************************** */
 #login-dropdown {
 	position: absolute;
-	top:10px;
-	right:0;
+	top:5px;
+	right:50px;
 	z-index: 100;
 }
 

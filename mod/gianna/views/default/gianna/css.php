@@ -315,6 +315,12 @@ html {
 	.gianna-index > .elgg-inner {
 		padding: 20px 0 0 0;
 	}
+    #login-dropdown {
+	position: absolute;
+	top:3px;
+	right:3px;
+	z-index: 100;
+    }
     .elgg-menu-navbar {
     	margin-left: 19px;
     }

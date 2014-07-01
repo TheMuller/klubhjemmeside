@@ -11,6 +11,7 @@
 	Form Elements
 *************************************** */
 fieldset > div {
+    padding: 5px;
 	margin-bottom: 15px;
 }
 fieldset > div:last-child {

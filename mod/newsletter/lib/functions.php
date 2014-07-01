@@ -36,7 +36,7 @@ function newsletter_start_commandline_sending(Newsletter $entity) {
 		if (PHP_OS === "WINNT") {
 			pclose(popen("start /B php " . $script_location . " " . $query_string, "r"));
 		} else {
-			exec("php " . $script_location . " " . $query_string . " > /dev/null &");
+			exec("/bin:/usr/bin/php " . $script_location . " " . $query_string . " > /dev/null &");
 		}
 	}
 }

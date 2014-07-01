@@ -3,9 +3,10 @@
 *************************************** */
 .elgg-module {
 	margin-bottom: 20px;
+    background-color: #FFFFFF;
 }
 .elgg-module .elgg-head {
-	padding: 7px 0;
+	padding: 10px;
 	margin-bottom: 10px;
 }
 .elgg-module > .elgg-head * {
