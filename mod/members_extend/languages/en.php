@@ -14,7 +14,7 @@ $english = array(
 				'members:xl_download' => "XL Download",
 				'members:xl_upload' => "XL Upload",
 				'members:wrong_group' => "Wrong Group : ",
-				'members:upload:note' => "Select XL File with format ->  (username,groupid1,groupid2,groupid3.... [First row for header])",
+				'members:upload:note' => "Select XL File with format ->  (username,name,email,join date,groupid1,groupid2,groupid3.... [First row for header])",
 				'members:approve' => "Approve",
 				'members:remove' => "Remove",
 

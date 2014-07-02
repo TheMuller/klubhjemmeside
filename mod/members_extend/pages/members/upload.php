@@ -49,7 +49,7 @@ $suggestedgroupids = unserialize($site->suggestedgroupids);
 
 		$user = get_user_by_username($data[A]);
 		unset($sugested_groupids);
-		for($i='B';$i<='Z';$i++)
+		for($i='E';$i<='Z';$i++)
 		{
 
 			if($data[$i]!='')

@@ -21,7 +21,10 @@ $headers = "Suggested Group's";
 $objPHPExcel = new PHPExcel();
 $sheet = $objPHPExcel->getActiveSheet();
 $sheet->SetCellValue('A1', 'Username');
-$sheet->SetCellValue('B1', $headers);
+$sheet->SetCellValue('B1', 'Name');
+$sheet->SetCellValue('C1', 'E-mail');
+$sheet->SetCellValue('D1', 'Join Date');
+$sheet->SetCellValue('E1', $headers);
 
 $i = 1;
 foreach ($users as $user)
@@ -29,8 +32,15 @@ foreach ($users as $user)
 	$i++;
 	$objPHPExcel->setActiveSheetIndex(0);
 	$sheet->SetCellValue('A'.$i, $user->username);
+	$sheet->getColumnDimension('A')->setAutoSize(true);
+	$sheet->SetCellValue('B'.$i, $user->name);
+	$sheet->getColumnDimension('B')->setAutoSize(true);
+	$sheet->SetCellValue('C'.$i, $user->email);
+	$sheet->getColumnDimension('C')->setAutoSize(true);
+	$sheet->SetCellValue('D'.$i, date('d M Y', $user->time_created));
+	$sheet->getColumnDimension('D')->setAutoSize(true);
 	$sugested_groupids = unserialize($user->suggestedgroupids);
-	$j='B';
+	$j='E';
 	
 	foreach($sugested_groupids as $suggested_groupid)
 	{
