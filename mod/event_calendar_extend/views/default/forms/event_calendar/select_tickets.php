@@ -507,7 +507,7 @@ $body.="</ul>";
     
 
 $body.='<div style="clear:both;">';
-if($tktleft >0){
+if($tktleft >0 AND $event->personal_manage != 'closedfuture_keep_list' AND $event->personal_manage != 'closedfuture_no_list'){// issue #77 for close purchase
 $body .= elgg_view('input/hidden', array('name'=>'guid', 'value'=>$event->getGUID()));
 
 $doublecheck = '<div id="confirm_order"></div>';
