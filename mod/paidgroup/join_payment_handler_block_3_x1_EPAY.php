@@ -57,7 +57,7 @@ if($last_orders[$group_guid] ==$order_id){
          if(elgg_is_logged_in ())forward(elgg_get_site_url().'groups/profile/'.$group->guid);
     }else{
         $join = false;
-        if ($group->isPublicMembership() || $group->canEdit($CurrUser->guid)) {
+        if ($group->isPublicMembership()) {
             // anyone can join public groups and admins can join any group
             $join = true;
         } else {
