@@ -53,7 +53,7 @@ if($last_orders[$group_guid] ==$order_id){
     $CurrUser->save();
     
     notify_user($CurrUser->getGUID(), $group->getOwnerGUID(),elgg_echo('paidgroup:invoice:email:subject'), elgg_echo('paidgroup:invoice:email:body',array($CurrUser->name,$group->name)));                  
-    if($group->isMember($user)){
+    if($group->isMember($CurrUser)){
          if(elgg_is_logged_in ())forward(elgg_get_site_url().'groups/profile/'.$group->guid);
     }else{
         $join = false;
@@ -73,10 +73,26 @@ if($last_orders[$group_guid] ==$order_id){
             } else {
                 register_error(elgg_echo("groups:cantjoin"));
             }
-        } else {
+		} else {
             add_entity_relationship($CurrUser->guid, 'membership_request', $group->guid);
-            system_message(elgg_echo("groups:joinrequestmade"));
-        }
+            $url = "{$CONFIG->url}groups/requests/$group->guid";
+			$subject = elgg_echo('groups:request:subject', array(
+				$CurrUser->name,
+				$group->name,
+			));
+			$body = elgg_echo('groups:request:body', array(
+				$group->getOwnerEntity()->name,
+				$CurrUser->name,
+				$group->name,
+				$CurrUser->getURL(),
+				$url,
+			));
+			if (notify_user($group->owner_guid, $CurrUser->guid, $subject, $body)) {
+					system_message(elgg_echo("groups:joinrequestmade"));
+			}else{
+					register_error(elgg_echo("groups:joinrequestnotmade"));
+				}
+			}
         if(elgg_is_logged_in ())forward($group->getURL());
     }
     $CurrUser->last_orders = serialize($last_orders);
