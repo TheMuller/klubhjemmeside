@@ -9,7 +9,8 @@
 	INDEX
 *****************************************/
 .ez-info-module {
-	color: #000000;
+    float: left;
+    color: #000000;
 	overflow: hidden;
 	width: auto !important;
 }
@@ -85,9 +86,10 @@
 .elgg-module-index,
 .elgg-module-request,
 .elgg-module-register {
-	width: 460px;
+    width: 100%;
 	padding: 15px;
 	margin-bottom: 0;
+    margin-right:  0;
 	background: rgba(0, 0, 0, 0.1);
 	border: 1px solid rgba(0, 0, 0, 0.4);
 	
