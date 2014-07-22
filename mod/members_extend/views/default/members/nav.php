@@ -50,8 +50,7 @@ if($user){
 				$newsorting='DESC';
 			}
 		
-			echo "<li id='table_header' class ='me_div_as_th' style='display:none;'> <div class ='me_div_as_td' >Msg's</div><div class ='me_div_as_td' > ".elgg_echo('members:suggested_group')."</div><div class ='me_div_as_td' >".elgg_echo('members:not_suggested_group')."</div><div class ='me_div_as_td' >".elgg_echo('members:member_group')."</div><div class ='me_div_as_td' >".elgg_echo('members:image')."</div>";
-			if($created_time == '1'){echo "<div class ='me_div_as_td' >".elgg_echo('members:join_date')."</div>";}
+			echo "<li id='table_header' class ='me_div_as_th' style='display:none;'> <div class ='me_div_as_td' >".elgg_echo('members:image')."</div>";
 			echo "<div class ='me_div_as_td' >".elgg_echo('members:name')."&nbsp;&nbsp;".
 				elgg_echo('').
                 elgg_view('output/url',array('text' => $sorting_path,'href' => "members"
@@ -60,7 +59,10 @@ if($user){
                                                       .$newsorting,
                                                   //    'is_action' => TRUE,
 													  )).
-			"</div><div class ='me_div_as_td' >".elgg_echo('event_calendar:paged:column:event')."</div>";
+			"</div>";
+			echo "<div class ='me_div_as_td' > ".elgg_echo('members:groups_membership')."</div><div class ='me_div_as_td' >".elgg_echo('members:group:status')."</div><div class ='me_div_as_td' >".elgg_echo('members:membership_started')."</div><div class ='me_div_as_td' >".elgg_echo('members:membership_end')."</div><div class ='me_div_as_td' >".elgg_echo('members:joined_group')."</div>";
+			if($created_time == '1'){echo "<div class ='me_div_as_td' >".elgg_echo('members:joined_site')."</div>";}
+			echo "<div class ='me_div_as_td' >".elgg_echo('event_calendar:paged:column:event')."</div>";
 				
 			foreach($MemberFieldLabels as $key=>$MemberFieldLabel){
 				$sorting_path = elgg_get_site_url()."mod/event_calendar_extend/graphics/";
@@ -88,7 +90,7 @@ if($user){
                                                    //   'is_action' => TRUE,
 													  ))."</div>";
 			}
-			echo "</li>";
+			echo "<div class ='me_div_as_td' >Msg's</div></li>";
 		}
 ?>
 <script type="text/javascript">

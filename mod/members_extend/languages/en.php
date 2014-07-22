@@ -6,9 +6,12 @@
 
 $english = array(
 				'members:join_date' => "Join Date : ",
-				'members:suggested_group' => "Suggested Group",
-				'members:not_suggested_group' => "Not Suggested Group",
-				'members:member_group' => "Member Group",
+				'members:groups_membership' => "Groups Membership",
+				'members:group:status' => "Status",
+				'members:membership_started' => "Membership Started",
+				'members:membership_end' => "Membership Ends",
+				'members:joined_group' => "Joined Group",
+				'members:joined_site' => "Joined Site",
 				'members:image' => "Image",
 				'members:name' => "Name",
 				'members:xl_download' => "XL Download",
@@ -17,6 +20,10 @@ $english = array(
 				'members:upload:note' => "Select XL File with format ->  (username,name,email,join date,groupid1,groupid2,groupid3.... [First row for header])",
 				'members:approve' => "Approve",
 				'members:remove' => "Remove",
+				'members:memberships:status:active' => "Active",
+				'members:memberships:status:wrong' => "Wrong ",
+				'members:memberships:status:expired' => "Expired",
+				'members:memberships:status:pending' => "Pending",
 
 );
 

@@ -11,28 +11,11 @@ $myurl_delete= elgg_get_site_url()."action/member/delete";
  
 if($vars['admin_view']   == true){
 $user = $vars['entity'];
-$myurl_approve .="?user_guid=".$user->guid;
-	$myurl_approve=elgg_add_action_tokens_to_url($myurl_approve);
-	$myurl_delete .="?user_guid=".$user->guid;
-	$myurl_delete=elgg_add_action_tokens_to_url($myurl_delete);
-$approve = elgg_view('output/url', array(
-				'href' => $myurl_approve,
-				'text' => elgg_echo('members:approve'),
-				'type' => 'button',
-			));
-	$delete = elgg_view('output/url', array(
-				'href' => $myurl_delete,
-				'text' => elgg_echo('members:remove'),
-				'type' => 'button',
-			));
-echo "<div class='me_div_as_td'>";
- echo   elgg_view('output/url', array(
-                                  'text' => "",
-                                  'title' => elgg_echo('mail'),
-                                  'href' => elgg_get_site_url()."messages/compose?send_to=".$user->guid,
-                                  'class' => "elgg-icon elgg-icon-mail-alt",
-                                  ));
-echo "</div><div class='me_div_as_td' style='vertical-align:top;'>";
+$created_time = elgg_get_plugin_setting('created_time');
+
+echo "<div class='me_div_as_td' style='vertical-align:middle;'>";
+echo elgg_view_entity_icon($user,'tiny')."&nbsp;</div>";
+echo "<div class='me_div_as_td'>".$user->name;echo "</div><div class='me_div_as_td' style='width:90px;'>";
 	$sugested_groupids = unserialize($user->suggestedgroupids);
     $options = array(
                     'type' => 'group',
@@ -42,76 +25,129 @@ echo "</div><div class='me_div_as_td' style='vertical-align:top;'>";
                     );
     $groups = elgg_get_entities_from_relationship($options);
     $last_dates = unserialize($user->last_dates);
-    foreach($groups as $group)
+
+    foreach($groups as $grp)
     {
-        if($last_dates and ($group->group_paid_flag =='yes')){
-            $last_date = $last_dates[$group->guid];
-            if(!$last_date or $last_date ==''){
-                $inactivegroupids[]=$group->guid;
-				continue;
-            }
-        }
-
-        if(in_array($group->guid,$sugested_groupids))
+		  if(in_array($grp->guid,$sugested_groupids))
         {
-            $greengroupids[]=$group->guid;
+            $greengroupids[]=$grp->guid;
         }
-        else {
-            $redgroupids[]=$group->guid;
-        }
-    }
-   
-    $yellowgroupids = array_diff($sugested_groupids, $greengroupids);
+	}
+	
+$yellowgroupids = array_diff($sugested_groupids, $greengroupids);
+foreach($yellowgroupids as $groupid){
+	$groups[] = get_entity($groupid);
+}
 
-			foreach($yellowgroupids as $yellowgroupid)
-			{
-				if(in_array($yellowgroupid,$inactivegroupids))
-				{
-					$addcolor = "tcell_blue";
-				}
-				$group= get_entity($yellowgroupid);
-				echo "<div class='me_div_as_td tcell_icon $addcolor'>";
+	
+    foreach($groups as $key=>$group)
+    {	
+		
+		if ( end(array_keys($groups) ) == $key ) {
+			$border = 'border-bottom:0px solid;';
+		} else {
+			$border = 'border-bottom:1px solid;';
+		}
+		echo "<div style='height:40px;$border border-collapse:collapse;border-spacing: 0;'>";
+				echo "<div class='tcell_icon $addcolor' style='width: inherit;'>";
 				$icon_yellow = elgg_view_entity_icon($group, 'tiny', array(
 				'img_class' => 'elgg-index-photo',
-				));
-				echo $icon_yellow;echo "</div>";
-			}
-			if(count($yellowgroupids))
-				echo "<br><br>".$approve;
-				echo "</div>";
-			
-			echo "<div class='me_div_as_td' style='vertical-align:top;'>";
-			foreach($redgroupids as $redgroupid)
-			{
-				$group= get_entity($redgroupid);
-				echo "<div class='me_div_as_td tcell_icon'>";
-				$icon_red = elgg_view_entity_icon($group, 'tiny', array(
-				'img_class' => 'elgg-index-photo',
-				));
-				echo $icon_red;echo "</div>";
-			}
-			if(count($redgroupids))
-				echo "<br><br>".$delete;
-				echo "</div>";
+				));echo "</div>";
+				echo $icon_yellow."</div>";
+	}
+	
 
-			echo "<div class='me_div_as_td' style='vertical-align:top;'>";
-			foreach($greengroupids as $greengroupid)
-			{
-			$group= get_entity($greengroupid);
-				echo "<div class='me_div_as_td tcell_icon'>";
-				$icon_green = elgg_view_entity_icon($group, 'tiny', array(
-				'img_class' => 'elgg-index-photo',
-				));
-				echo $icon_green;echo "</div>";
+			echo "</div>"; 
+			echo "<div class='me_div_as_td' style='vertical-align: middle;;width:70px;'>";
+
+			foreach($groups as $key=>$group){
+				if ( end(array_keys($groups) ) == $key ) {
+					$border = 'border-bottom:0px solid;';
+				} else {
+					$border = 'border-bottom:1px solid;';
+				}
+				if(!$group->isMember($user)){
+					$status = 'pending';
+				}elseif(in_array($group->guid,$sugested_groupids)){
+						$status = "active";
+							if($last_dates and ($group->group_paid_flag =='yes')){
+								$last_date = $last_dates[$group->guid];
+								if(!$last_date or $last_date ==''){
+									$status  = "expired";
+									//continue;
+								}
+							}
+					}else{
+						$status = "wrong";
+					}
+				
+					echo "<div style='height:40px;$border border-collapse: collapse;border-spacing: 0;'>";
+					if($status == 'wrong'){
+						$myurl_delete .="?user_guid=".$user->guid."&group_guid=".$group->guid;
+						$myurl_delete=elgg_add_action_tokens_to_url($myurl_delete);
+						$delete = elgg_view('output/url', array(
+											'href' => $myurl_delete,
+											'text' => '',
+											//'type' => 'button',
+											'class' => 'elgg-icon elgg-icon-delete-alt',
+									));					
+						echo elgg_echo('members:memberships:status:'.$status).$delete;
+					}elseif($status == 'pending'){
+						$myurl_approve .="?user_guid=".$user->guid."&group_guid=".$group->guid;
+						$myurl_approve=elgg_add_action_tokens_to_url($myurl_approve);
+						$approve = elgg_view('output/url', array(
+									'href' => $myurl_approve,
+									'text' => '',
+									//'type' => 'button',
+									'class' => 'elgg-icon elgg-icon-checkmark',
+								));
+						echo elgg_echo('members:memberships:status:'.$status).$approve;
+					}else{
+						echo elgg_echo('members:memberships:status:'.$status);
+					}
+					
+				
+					echo "</div>";
+			}
+			echo "</div>"; 
+
+			echo "<div class='me_div_as_td' style='vertical-align: middle;'>";
+			foreach($groups as $key=>$group){
+				if ( end(array_keys($groups) ) == $key ) {
+					$border = 'border-bottom:0px solid;';
+				} else {
+					$border = 'border-bottom:1px solid;';
+				}
+				echo "<div style='vertical-align: middle;text-align:center;height:40px; $border border-collapse: collapse;border-spacing: 0;'>".date('d M y', $group->time_created)."</div>";
 			}
 			echo "</div>";
 
-echo "<div class='me_div_as_td'>";$created_time = elgg_get_plugin_setting('created_time');
-echo elgg_view_entity_icon($user,'tiny')."&nbsp;</div>";
+			echo"<div class='me_div_as_td' style='width:70px;'>";
+			foreach($groups as $key=>$group){
+				if ( end(array_keys($groups) ) == $key ) {
+					$border = 'border-bottom:0px solid;';
+				} else {
+					$border = 'border-bottom:1px solid;';
+				}
+				echo "<div style='vertical-align: middle;height:40px;$border border-collapse: collapse;border-spacing: 0;'>".date('d M y', $group->last_dates)."</div>";
+			}
+			echo "</div>";
+			
+			echo"<div class='me_div_as_td'>";
+			foreach($groups as $key=>$group){
+				if ( end(array_keys($groups) ) == $key ) {
+					$border = 'border-bottom:0px solid;';
+				} else {
+					$border = 'border-bottom:1px solid;';
+				}			
+				echo "<div style='vertical-align: middle;height:40px;$border border-collapse: collapse;border-spacing:0px;'>".date('d M y', $group->time_created)."</div>";
+			}
+			echo "</div>";
+			
 	if($created_time == '1'){
-		echo"<div class='me_div_as_td'>".date('d M Y', $user->time_created)."</div>";
+		echo"<div class='me_div_as_td' style='width:70px;'>".date('d M y', $user->time_created)."</div>";
 	}
-    echo "<div class='me_div_as_td'>".$user->name;echo "</div>";
+    
 	echo "<div class='me_div_as_td'>";
     $start_ts = time();
     $day = 60*60*24;
@@ -127,7 +163,13 @@ echo elgg_view_entity_icon($user,'tiny')."&nbsp;</div>";
     foreach($MemberFields as $MemberField){
         echo "<div class ='me_div_as_td' >".$user->$MemberField."</div>";
     }			
-			
+	echo "<div class='me_div_as_td'>";
+	echo   elgg_view('output/url', array(
+                                  'text' => "",
+                                  'title' => elgg_echo('mail'),
+                                  'href' => elgg_get_site_url()."messages/compose?send_to=".$user->guid,
+                                  'class' => "elgg-icon elgg-icon-mail-alt",
+                                  ))."</div>";		
 }else{
     include elgg_get_root_path() ."views/default/user/default.php";
 }
