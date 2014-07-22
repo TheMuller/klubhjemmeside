@@ -21,7 +21,7 @@ $english = array(
 				'members:approve' => "Approve",
 				'members:remove' => "Remove",
 				'members:memberships:status:active' => "Active",
-				'members:memberships:status:wrong' => "Wrong ",
+				'members:memberships:status:wrong' => "Wrong",
 				'members:memberships:status:expired' => "Expired",
 				'members:memberships:status:pending' => "Pending",
 
