@@ -47,37 +47,32 @@ function member_extend_get_users(array $options = array(),$func='elgg_get_entiti
                 }
            }
        }
-	   if($_SESSION['wrong_group']){
-		
+	   if($_SESSION['member_extend_group_status']){
 			foreach($_SESSION[$options['sobj']."ASC"] as $key=>$user){
-
 				$sugested_groupids = unserialize($user->suggestedgroupids);
-				$myoptions = array(
-                    'type' => 'group',
-                    'relationship' => 'member',
-                    'relationship_guid' => $user->guid,
-                    'inverse_relationship' => false,
-                    );
 				unset($groups);
-				$groups = elgg_get_entities_from_relationship($myoptions);
-				$last_dates = unserialize($user->last_dates);
-				$hasred = false;
+				$all_na = true;
+				if($_SESSION['member_extend_group_status'] =='pending'){
+				   foreach($sugested_groupids as $sugested_groupid){
+				     $group = get_entity($sugested_groupid);
+				     if(!$group->isMember($user))$all_na = false;
+				   }
+				}else{
+				    $myoptions = array('type' => 'group',
+                                       'relationship' => 'member',
+                                       'relationship_guid' => $user->guid,
+                                       'inverse_relationship' => false,
+                                       );
 				
-				foreach($groups as $group)
-				{
-					if($last_dates and ($group->group_paid_flag =='yes')){
-						$last_date = $last_dates[$group->guid];
-						if(!$last_date or $last_date ==''){
-							$inactivegroupids[]=$group->guid;
-							continue;
-						}
-					}
-					if(!in_array($group->guid,$sugested_groupids)){
-						$hasred = true;
-						break;
-					}
+				     $groups = elgg_get_entities_from_relationship($myoptions);
+					 foreach($groups as $group){
+					    if($group instanceof Elgggroup){
+				  	       $status = member_extend_get_group_status($group,$user,$sugested_groupids);
+				           if($status != 'n/a')$all_na = false;
+					    }
+				     }
 				}
-				if(!$hasred){
+				if($all_na){
 					unset($_SESSION[$options['sobj']."ASC"][$key]);
 				}
 			}

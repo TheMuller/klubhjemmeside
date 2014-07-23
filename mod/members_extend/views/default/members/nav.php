@@ -1,3 +1,8 @@
+<script>
+function on_select_status(status){
+    window.location =  elgg.security.addToken("action/members/selected_groups?status="+status); //aj1
+}
+</script>
 <?php
 /**
  * Members navigation
@@ -24,6 +29,7 @@ $tabs = array(
 	
 
 );
+$status_options = array(''=>'All','wrong'=>'Wrong','active'=>'Active','expired'=>'Expired','pending'=>'Pending');
 $user= get_entity($_SESSION['user']->guid);
 if($user){
 	if($user->isAdmin() ){
@@ -60,7 +66,18 @@ if($user){
                                                   //    'is_action' => TRUE,
 													  )).
 			"</div>";
-			echo "<div class ='me_div_as_td' > ".elgg_echo('members:groups_membership')."</div><div class ='me_div_as_td' >".elgg_echo('members:group:status')."</div><div class ='me_div_as_td' >".elgg_echo('members:membership_started')."</div><div class ='me_div_as_td' >".elgg_echo('members:membership_end')."</div><div class ='me_div_as_td' >".elgg_echo('members:joined_group')."</div>";
+			echo "<div class ='me_div_as_td' > ".elgg_echo('members:groups_membership')."</div><div class ='me_div_as_td' >".elgg_echo('members:group:status').
+			elgg_view('input/dropdown',array(
+										'name' => 'status',
+										'options_values' => $status_options,
+										'value' => $_SESSION['member_extend_group_status'],
+										'style'=>'width: 115px;',
+										'onChange'=>'on_select_status(this.value)',
+										//'href' => "members"."?orderby=".$status_options,
+									))."</div>";
+			/* echo "<div class ='me_div_as_td' >".elgg_echo('members:membership_started')."</div>";*/
+			echo "<div class ='me_div_as_td' >".elgg_echo('members:membership_end')."</div>"; 
+			echo "<div class ='me_div_as_td' >".elgg_echo('members:joined_group')."</div>";
 			if($created_time == '1'){echo "<div class ='me_div_as_td' >".elgg_echo('members:joined_site')."</div>";}
 			echo "<div class ='me_div_as_td' >".elgg_echo('event_calendar:paged:column:event')."</div>";
 				

@@ -82,3 +82,28 @@ include elgg_get_plugins_path().members_extend/actions/member_extend/download.ph
        }
         return true;
     } 
+function member_extend_get_group_status($group,$user,$sugested_groupids){
+	$last_dates = unserialize($user->last_dates);
+	if(!($group instanceof Elgggroup)){
+			return 'n/a';
+	}
+	if(!$group->isMember($user)){
+		$status = 'pending';
+	}elseif(in_array($group->guid,$sugested_groupids)){
+		$status = "active";
+		if($last_dates and ($group->group_paid_flag =='yes')){
+			$last_date = $last_dates[$group->guid];
+			if(!$last_date or $last_date ==''){
+				$status  = "expired";
+				//continue;
+			}
+		}
+	}else{
+		$status = "wrong";
+	}
+	if(!$_SESSION['member_extend_group_status'])return $status;
+	elseif (empty($_SESSION['member_extend_group_status']))return $status;
+	elseif($_SESSION['member_extend_group_status'] != $status)return 'n/a';
+	else return $status;
+	
+}
