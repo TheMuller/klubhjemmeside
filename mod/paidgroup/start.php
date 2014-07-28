@@ -450,7 +450,6 @@ function paidgroup_groups_handle_members_page($guid) {
 }	
     function paidgroup_groups_page_handler($segments, $handle) {
         $pages_dir = dirname(__FILE__) . '/pages';
-        
         switch ($segments[0]) {
             case 'all':
 			$type = get_input("list_type","list");
@@ -506,7 +505,16 @@ $inactive =
 		elgg_register_title_button();
 	}
     if(count($inactive)){$selected_tab = get_input('filter', 'inactive');}
-	else{$selected_tab = get_input('filter', 'newest');}
+	else{
+	    $selected_tab = get_input('filter', '');
+		if(empty($selected_tab) && ($default_filter = elgg_get_plugin_setting("group_listing", "group_tools"))){
+						$selected_tab = $default_filter;
+						//set_input("filter", $default_filter);
+			} elseif(empty($selected_tab)) {
+						$selected_tab = "newest";
+						//set_input("filter", $filter);
+			}
+	}
 	switch ($selected_tab) {
 		case 'popular':
 		$option = array('type' => 'group',

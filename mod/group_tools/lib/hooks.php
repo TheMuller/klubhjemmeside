@@ -32,7 +32,17 @@
 			
 			switch($page[0]){
 				case "all":
-					$filter = get_input("filter");
+					$type = get_input("list_type","list");
+					if($type =="list"){
+						elgg_register_menu_item('title', array('name' => 'toggle_view','href' => 'groups/all/?list_type=gallery','text' => elgg_echo('paidgroup:gallery') ,'link_class' => 'elgg-button elgg-button-action',));
+					}else {
+						elgg_register_menu_item('title', array('name' => 'toggle_view','href' => 'groups/all','text' =>elgg_echo('paidgroup:list') ,'link_class' => 'elgg-button elgg-button-action',));
+						elgg_load_css("paidgroup.paidgroup");
+					}
+					paidgroup_groups_handle_all_page($type);
+					$plugin = elgg_get_plugin_from_id('group_tools');
+					if($plugin->enabled) $result = false;
+					/* $filter = get_input("filter",'');
 					
 					if(empty($filter) && ($default_filter = elgg_get_plugin_setting("group_listing", "group_tools"))){
 						$filter = $default_filter;
@@ -48,7 +58,7 @@
 						
 						include(dirname(dirname(__FILE__)) . "/pages/groups/all.php");
 					}
-					
+					 */
 					break;
 				case "suggested":
 					$result = false;
