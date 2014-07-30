@@ -10,6 +10,9 @@ function on_select_status(status){
  	$myurl= elgg_get_site_url()."action/member/download";
 	$myurl = elgg_add_action_tokens_to_url($myurl);
 	$created_time = elgg_get_plugin_setting('created_time');
+	$event_calendar_extend_plugin = elgg_get_plugin_from_id('event_calendar_extend');
+	$event_calendar_plugin = elgg_get_plugin_from_id('event_calendar');
+	
 $tabs = array(
 	'newest' => array(
 		'text' => elgg_echo('members:label:newest'),
@@ -79,7 +82,8 @@ if($user){
 			echo "<div class ='me_div_as_td' >".elgg_echo('members:membership_end')."</div>"; 
 			echo "<div class ='me_div_as_td' >".elgg_echo('members:joined_group')."</div>";
 			if($created_time == '1'){echo "<div class ='me_div_as_td' >".elgg_echo('members:joined_site')."</div>";}
-			echo "<div class ='me_div_as_td' >".elgg_echo('event_calendar:paged:column:event')."</div>";
+			if($event_calendar_extend_plugin->IsActive() AND $event_calendar_plugin->IsActive()){
+			echo "<div class ='me_div_as_td' >".elgg_echo('event_calendar:paged:column:event')."</div>";}
 				
 			foreach($MemberFieldLabels as $key=>$MemberFieldLabel){
 				$sorting_path = elgg_get_site_url()."mod/event_calendar_extend/graphics/";

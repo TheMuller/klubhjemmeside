@@ -157,18 +157,20 @@ echo "<div class='me_div_as_td'>".$user->name;echo "</div><div class='me_div_as_
 	if($created_time == '1'){
 		echo"<div class='me_div_as_td' style='width:100px'>".date('d M y', $user->time_created)."</div>";
 	}
-    
+    $event_calendar_extend_plugin = elgg_get_plugin_from_id('event_calendar_extend');
+	$event_calendar_plugin = elgg_get_plugin_from_id('event_calendar');
+	if($event_calendar_extend_plugin->IsActive() AND $event_calendar_plugin->IsActive()){
 	echo "<div class='me_div_as_td'>";
     $start_ts = time();
     $day = 60*60*24;
     $week = 7*$day;
     $month = 31*$day;
     $end_ts = $start_ts+6*$month;
-    elgg_load_library('elgg:event_calendar');
-    $count = event_calendar_get_events_for_user_between2($start_ts,$end_ts,true,0,0,$user->guid);
+	elgg_load_library('elgg:event_calendar');
+	$count = event_calendar_get_events_for_user_between2($start_ts,$end_ts,true,0,0,$user->guid);
     echo $count;
     echo "</div>";
-	    
+	}    
     $MemberFields       = explode(",",elgg_get_plugin_setting('MemberField', 'members_extend'));
     foreach($MemberFields as $MemberField){
         echo "<div class ='me_div_as_td' >".$user->$MemberField."</div>";
