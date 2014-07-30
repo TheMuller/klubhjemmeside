@@ -11,13 +11,13 @@ window.onload = function() {
 
 <div>
 <label>
-<?php echo elgg_echo('groups:visibility'); ?><br />
-<?php echo elgg_view('input/access', array(
+<?php /* echo elgg_echo('groups:visibility'); */ ?><br />
+<?php /* echo elgg_view('input/access', array(
                                            'name' => 'vis',
                                            'value' =>  $access,
                                            'options_values' => $access_options,
                                            ));
-    ?>
+     */?>
 </label>
 </div>
 
