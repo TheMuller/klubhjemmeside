@@ -9,7 +9,7 @@ $groups = elgg_get_entities($options);
 foreach($groups as $group){
 	$myarr[$group->name] = $group->guid;
 }
-echo "<div style='padding: 5px;overflow: scroll;overflow-x: scroll;overflow-y: hidden;width: 960px;max-height: 30px;white-space: nowrap;'>";
+echo "<div style='padding: 5px;overflow: scroll;overflow-x: scroll;overflow-y: hidden;width: 900px;max-height: 30px;white-space: nowrap;'>";
 echo elgg_view('input/checkboxes', array(
             'options' =>$myarr,   
             'align' => 'horizontal',

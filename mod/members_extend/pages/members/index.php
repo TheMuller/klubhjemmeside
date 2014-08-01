@@ -189,11 +189,13 @@ echo elgg_view_page($title, $body);
 <style type="text/css">
 
 .me_ul_as_table {
-display:table;
+	//display:table;
     border-collapse: collapse;
     border-spacing: 0;
-width:100%;
-margin:0px;padding:0px;
+	width:auto;
+	margin:0px;
+	padding:0px;
+	overflow-x: scroll !important;
 }
 
 .me_li_as_tr {
