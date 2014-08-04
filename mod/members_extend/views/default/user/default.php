@@ -94,21 +94,7 @@ echo "<div class='me_div_as_td'>".$user->name;echo "</div><div class='me_div_as_
 			}
 			echo "</div>"; 
 
-/* 			echo "<div class='me_div_as_td' style='vertical-align: middle;'>";
-			foreach($groups as $key=>$group){
-				$status = member_extend_get_group_status($group,$user,$sugested_groupids);
-				if($status == 'n/a')continue;
-				if ( end(array_keys($groups) ) == $key ) {
-					$border = 'border-bottom:0px solid;';
-				} else {
-					$border = 'border-bottom:1px solid;';
-				}
-
-				echo "<div style='vertical-align: middle;text-align:center;height:40px; $border border-collapse: collapse;border-spacing: 0;'>".date('d M y', $group->time_created)."</div>";
-			}
-			echo "</div>"; */
-
-			echo"<div class='me_div_as_td' style='width:70px;'>";
+			echo"<div class='me_div_as_td' style='min-width:100px;''>";
 			foreach($groups as $key=>$group){
 				$status = member_extend_get_group_status($group,$user,$sugested_groupids);
 				if($status == 'n/a')continue;
@@ -133,7 +119,7 @@ echo "<div class='me_div_as_td'>".$user->name;echo "</div><div class='me_div_as_
 			}
 			echo "</div>";
 			
-			echo"<div class='me_div_as_td'>";
+			echo"<div class='me_div_as_td'  style='min-width:100px;'>";
 			foreach($groups as $key=>$group){
 				$status = member_extend_get_group_status($group,$user,$sugested_groupids);
 				if($status == 'n/a')continue;

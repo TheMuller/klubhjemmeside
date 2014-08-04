@@ -2,6 +2,15 @@
 function on_select_status(status){
     window.location =  elgg.security.addToken("action/members/selected_groups?status="+status); //aj1
 }
+//upper both scrll
+/* $(function(){
+  $(".me_div_as_th").scroll(function(){
+    $(".me_div_as_ul").scrollLeft($(".me_div_as_th").scrollLeft());
+  });
+  $(".me_div_as_ul").scroll(function(){
+    $(".me_div_as_th").scrollLeft($(".me_div_as_ul").scrollLeft());
+  });
+}); */
 </script>
 <?php
 /**
@@ -79,9 +88,31 @@ if($user){
 										//'href' => "members"."?orderby=".$status_options,
 									))."</div>";
 			/* echo "<div class ='me_div_as_td' >".elgg_echo('members:membership_started')."</div>";*/
-			echo "<div class ='me_div_as_td' >".elgg_echo('members:membership_end')."</div>"; 
-			echo "<div class ='me_div_as_td' >".elgg_echo('members:joined_group')."</div>";
-			if($created_time == '1'){echo "<div class ='me_div_as_td' >".elgg_echo('members:joined_site')."</div>";}
+			echo "<div class ='me_div_as_td'>".elgg_echo('members:membership_end')."</div>"; 
+			echo "<div class ='me_div_as_td'>".elgg_echo('members:joined_group')."</div>";
+			$sorting_path = elgg_get_site_url()."mod/event_calendar_extend/graphics/";	
+			if($orderby == 'joined_site'){
+				$opacity = 1;
+				if ($sorting == 'DESC'){
+					$sorting_path = "<img src='{$sorting_path}sort_down_green.png' style='height:20px; width:20px; opacity:$opacity;'></img>";
+					$newsorting='ASC';
+				}else{
+					$sorting_path = "<img src='{$sorting_path}sort_up_green.png' style='height:20px; width:20px; opacity:$opacity;'></img>";
+					$newsorting='DESC';
+				}
+			}else{
+				$opacity =0.3;
+				$sorting_path = "<img src='{$sorting_path}sort_up_green.png' style='height:20px; width:20px; opacity:$opacity;'></img>";
+				$newsorting='DESC';
+			}
+			
+			if($created_time == '1'){echo "<div class ='me_div_as_td'>".elgg_echo('members:joined_site').
+                elgg_view('output/url',array('text' => $sorting_path,'href' => "members"
+                                                      ."?orderby=joined_site"
+                                                      ."&sorting="
+                                                      .$newsorting,
+                                                  //    'is_action' => TRUE,
+													  ))."</div>";}
 			if($event_calendar_extend_plugin->IsActive() AND $event_calendar_plugin->IsActive()){
 			echo "<div class ='me_div_as_td' >".elgg_echo('event_calendar:paged:column:event')."</div>";}
 				
