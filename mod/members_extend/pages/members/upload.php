@@ -16,7 +16,7 @@ if(empty($_FILES['upload']))
                                            'enctype' => 'multipart/form-data',
                                            'action' => 'members/upload'
                                            ));
-    $title = "Upload XL";
+    $title = elgg_echo("members:xl_upload");
 }
 else if($_FILES['upload']['error']>0)
 {
@@ -76,17 +76,18 @@ $suggestedgroupids = unserialize($site->suggestedgroupids);
 	}
 	$site->suggestedgroupids = serialize($sitesuggestedgroupids);
 	
-	$content .="Success...";
+	$content .=elgg_echo('members:success');
 	if(count($wrong_group))
 	{
-	$content .= "<br><hr width='35%' align='left'><font style='padding-left:5%'>Following Group Id's Does Not Exists</font><hr width='35%' align='left'>";
+	$content .= "<br><hr width='35%' align='left'><font style='padding-left:5%'>".elgg_echo('members:upload:group_id_not_exist')."</font><hr width='35%' align='left'>";
 	}
 	foreach($wrong_group as $wrong_groups){
 		$content .= $wrong_groups."<br>";
 	}
+	
 	if(count($sitesuggestedgroupids))
 	{
-	$content .= "<hr width='80%' align='left'><font style='padding-left:5%'>Following User's Does Not Exists (When they will Ragistered in future We will Show their Suggested Group's)<font><hr width='80%' align='left'>";
+	$content .= "<hr width='80%' align='left'><font style='padding-left:5%'>".elgg_echo('members:upload:users_not_exist')."<font><hr width='80%' align='left'>";
 	}
 	foreach($sitesuggestedgroupids as $key=>$sitesuggestedgroupid){
 		$content .= $key."<br>";
