@@ -48,8 +48,8 @@ echo "<div class='me_div_as_td'>".$user->name;echo "</div><div class='me_div_as_
 		} else {
 			$border = 'border-bottom:1px solid;';
 		}
-		echo "<div style='height:40px;$border border-collapse:collapse;border-spacing: 0;'>";
-				echo "<div class='tcell_icon $addcolor' style='width: inherit;'>";
+		echo "<div title='$group->name' style='height:40px;$border border-collapse:collapse;border-spacing: 0;'>";
+				echo "<div class='tcell_icon $addcolor' style='width: inherit;' >";
 				$icon_yellow = elgg_view_entity_icon($group, 'tiny', array(
 				'img_class' => 'elgg-index-photo',
 				));echo "</div>";
