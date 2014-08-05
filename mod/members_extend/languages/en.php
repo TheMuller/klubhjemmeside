@@ -24,6 +24,9 @@ $english = array(
 				'members:memberships:status:wrong' => "Wrong",
 				'members:memberships:status:expired' => "Expired",
 				'members:memberships:status:pending' => "Pending",
+				'members:success' => "Success...",
+				'members:upload:group_id_not_exist' => "Following Group Id's Does Not Exists",
+				'members:upload:users_not_exist' => "Following User's Does Not Exists (When they will Ragistered in future We will Show their Suggested Group's)",
 
 );
 
