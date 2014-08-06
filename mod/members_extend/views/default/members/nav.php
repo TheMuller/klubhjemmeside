@@ -1,6 +1,7 @@
 <script>
 function on_select_status(status){
-    window.location =  elgg.security.addToken("action/members/selected_groups?status="+status); //aj1
+    window.location =  elgg.security.addToken("<?php echo elgg_get_site_url(); ?>action/members/selected_status?status="+status); //aj1
+
 }
 //upper both scrll
 /* $(function(){
@@ -85,7 +86,8 @@ if($user){
 										'value' => $_SESSION['member_extend_group_status'],
 										'style'=>'width: 115px;',
 										'onChange'=>'on_select_status(this.value)',
-										//'href' => "members"."?orderby=".$status_options,
+										//'href' => "members?status=".$_SESSION['member_extend_group_status'],
+										
 									))."</div>";
 			/* echo "<div class ='me_div_as_td' >".elgg_echo('members:membership_started')."</div>";*/
 			echo "<div class ='me_div_as_td'>".elgg_echo('members:membership_end')."</div>"; 
@@ -169,7 +171,10 @@ $(document).ready(function() {
     if($(".me_ul_as_table").length){
         $(".me_ul_as_table").prepend($("#table_header"));
         $('#table_header').show();
-    }
+    }else{
+		node.parentNode.appendChild(node);
+		 $('#table_header').show();
+	}
 });
 </script>
 <?php

@@ -21,7 +21,7 @@ echo elgg_view('input/text',
 	array(
 		'name'=> 'searchquery',
 		'value' =>$_SESSION['searchquery'],
-		'style'=>'width: 150px; float:left;',
+		'style'=>'width: 150px;',
 		
 	)
 );
@@ -30,7 +30,7 @@ echo elgg_view('input/dropdown',
 		'name' => 'searchfield',
 		'options_values' => $search_fields,
 		'value' => $_SESSION['searchfield'],
-		'style'=>'width: 150px; ',
+		'style'=>'width: 150px;height:33px;float:left;',
 	)
 );
 echo elgg_view('input/submit', array('name'=>'submit','value'=>elgg_echo('event_calendar:submit')));

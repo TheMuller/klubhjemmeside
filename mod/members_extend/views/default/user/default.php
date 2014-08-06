@@ -39,6 +39,13 @@ echo "<div class='me_div_as_td'>".$user->name;echo "</div><div class='me_div_as_
 		foreach($yellowgroupids as $groupid){
 			$groups[] = get_entity($groupid);
 		}
+		if(!empty($_SESSION['member_extend_selected_groups'])){
+			foreach($groups as $key =>$group){
+				if(!in_array($group->guid,$_SESSION['member_extend_selected_groups'])){
+					unset($groups[$key]);
+				}
+			}
+		}
     foreach($groups as $key=>$group)
     {	
 		$status = member_extend_get_group_status($group,$user,$sugested_groupids);

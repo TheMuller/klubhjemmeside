@@ -17,6 +17,7 @@ function members_extend_init() {
 	elgg_register_action("member/approve", "$action_path/approve.php");
 	elgg_register_action("member/delete", "$action_path/delete.php");
 	elgg_register_action("members/selected_groups", "$action_path/selected_groups.php");
+	elgg_register_action("members/selected_status", "$action_path/selected_status.php");
     elgg_register_event_handler('login','user','check_first_login');
 }
 
