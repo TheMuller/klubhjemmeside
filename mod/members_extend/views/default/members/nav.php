@@ -42,7 +42,15 @@ $tabs = array(
 	
 
 );
-$status_options = array(''=>'All','wrong'=>'Wrong','active'=>'Active','expired'=>'Expired','pending'=>'Pending');
+$status_options = array(
+						''=>elgg_echo('members:memberships:status:all'),
+						'wrong'=>elgg_echo('members:memberships:status:wrong'),
+						'active'=>elgg_echo('members:memberships:status:active'),
+						'expired'=>elgg_echo('members:memberships:status:expired'),
+						'w2_join'=>elgg_echo('members:memberships:status:w2_join'),
+						'w4_approval'=>elgg_echo('members:memberships:status:w4_approval'),
+						'w4_payment'=>elgg_echo('members:memberships:status:w4_payment')
+					);
 $user= get_entity($_SESSION['user']->guid);
 if($user){
 	if($user->isAdmin() ){

@@ -33,6 +33,6 @@ echo elgg_view('input/dropdown',
 		'style'=>'width: 150px;height:33px;float:left;',
 	)
 );
-echo elgg_view('input/submit', array('name'=>'submit','value'=>elgg_echo('event_calendar:submit')));
+echo elgg_view('input/submit', array('name'=>'submit','value'=>elgg_echo('search')));
 echo $_GET['search'];
 

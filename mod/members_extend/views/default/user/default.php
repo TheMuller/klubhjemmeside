@@ -85,7 +85,7 @@ echo "<div class='me_div_as_td'>".$user->name;echo "</div><div class='me_div_as_
 											'class' => 'elgg-icon elgg-icon-delete-alt',
 									));					
 						echo elgg_echo('members:memberships:status:'.$status).$delete;
-					}elseif($status == 'pending'){
+					}elseif($status == 'w4_approval'){
 						$myurl_approve .="?user_guid=".$user->guid."&group_guid=".$group->guid;
 						$myurl_approve=elgg_add_action_tokens_to_url($myurl_approve);
 						$approve = elgg_view('output/url', array(

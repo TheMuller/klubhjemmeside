@@ -89,7 +89,11 @@ function member_extend_get_group_status($group,$user,$sugested_groupids){
 			return 'n/a';
 	}
 	if(!$group->isMember($user)){
-		$status = 'pending';
+		 if(check_entity_relationship($user->guid, 'membership_request', $group->guid)){
+			$status = 'w4_approval';
+		 }elseif($group->group_paid_flag == 'yes'){
+				$status = "w4_payment";
+		 }else{$status = 'w2_join';}
 	}elseif(in_array($group->guid,$sugested_groupids)){
 		$status = "active";
 		if($last_dates and ($group->group_paid_flag =='yes')){

@@ -52,10 +52,20 @@ function member_extend_get_users(array $options = array(),$func='elgg_get_entiti
 				$sugested_groupids = unserialize($user->suggestedgroupids);
 				unset($groups);
 				$all_na = true;
-				if($_SESSION['member_extend_group_status'] =='pending'){
+				if($_SESSION['member_extend_group_status'] =='w2_join'){
 				   foreach($sugested_groupids as $sugested_groupid){
-				     $group = get_entity($sugested_groupid);
-				     if(!$group->isMember($user))$all_na = false;
+						$group = get_entity($sugested_groupid);
+						if(!$group->isMember($user) AND $group->group_paid_flag != 'yes')$all_na = false;
+				   }
+				}elseif($_SESSION['member_extend_group_status'] =='w4_payment'){
+					foreach($sugested_groupids as $sugested_groupid){
+						$group = get_entity($sugested_groupid);
+						if(!$group->isMember($user) AND $group->group_paid_flag == 'yes')$all_na = false;
+				   }
+				}elseif($_SESSION['member_extend_group_status'] =='w4_approval'){
+					foreach($sugested_groupids as $sugested_groupid){
+						$group = get_entity($sugested_groupid);
+						if(!$group->isMember($user) AND check_entity_relationship($user->guid, 'membership_request', $group->guid))$all_na = false;
 				   }
 				}else{
 				    $myoptions = array('type' => 'group',
