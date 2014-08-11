@@ -13,6 +13,7 @@ if($vars['admin_view']   == true){
 $user = $vars['entity'];
 $last_dates = unserialize($user->last_dates);
 $created_time = elgg_get_plugin_setting('created_time');
+$luser = elgg_get_logged_in_user_entity();
 
 echo "<div class='me_div_as_td' style='vertical-align:middle;'>";
 echo elgg_view_entity_icon($user,'tiny')."&nbsp;</div>";
@@ -25,8 +26,13 @@ echo "<div class='me_div_as_td'>".$user->name;echo "</div><div class='me_div_as_
                     'relationship_guid' => $user->guid,
                     'inverse_relationship' => false,
                     );
+	$luser = elgg_get_logged_in_user_entity();
+			
+		if(!$luser->isAdmin()){
+			$options['owner_guid'] = $luser->guid;
+		}
 		$groups = elgg_get_entities_from_relationship($options);
-
+	if($luser->isAdmin()){
 		foreach($groups as $grp)
 		{
 			if(in_array($grp->guid,$sugested_groupids))
@@ -39,16 +45,42 @@ echo "<div class='me_div_as_td'>".$user->name;echo "</div><div class='me_div_as_
 		foreach($yellowgroupids as $groupid){
 			$groups[] = get_entity($groupid);
 		}
-		if(!empty($_SESSION['member_extend_selected_groups'])){
+	}else{
+		$ioptions = array(
+				'type' => 'group',
+				'relationship' => 'invited',
+				'relationship_guid' => $user->guid,
+				'inverse_relationship' => true,
+				'owner_guid' =>$luser->guid,
+				);
+		$igroups = elgg_get_entities_from_relationship($ioptions);
+		foreach($igroups as $group){	
+			//echo $group->guid."olll";
+			$groups[] = $group;
+			
+		}
+		$roptions = array(
+				'type' => 'group',
+				'relationship' => 'membership_request',
+				'relationship_guid' => $user->guid,
+				'inverse_relationship' => false,
+				'owner_guid' => $luser->guid,
+				);
+		$rgroups = elgg_get_entities_from_relationship($roptions);
+		foreach($rgroups as $group){	
+			$groups[] = $group;
+			
+		}
+	}
+		/* if(!empty($_SESSION['member_extend_selected_groups'])){
 			foreach($groups as $key =>$group){
 				if(!in_array($group->guid,$_SESSION['member_extend_selected_groups'])){
 					unset($groups[$key]);
 				}
-			}
-		}
+			}//TBD : what is this ???
+		} */
     foreach($groups as $key=>$group)
-    {	
-		$status = member_extend_get_group_status($group,$user,$sugested_groupids);
+    {	$status = member_extend_get_group_status($group,$user,$sugested_groupids);
 		if($status == 'n/a')continue;
 		if ( end(array_keys($groups) ) == $key ) {
 			$border = 'border-bottom:0px solid;';
@@ -60,6 +92,7 @@ echo "<div class='me_div_as_td'>".$user->name;echo "</div><div class='me_div_as_
 				$icon_yellow = elgg_view_entity_icon($group, 'tiny', array(
 				'img_class' => 'elgg-index-photo',
 				));echo "</div>";
+				echo $group->owner_guid;
 				echo $icon_yellow."</div>";
 	}
 	echo "</div>"; 

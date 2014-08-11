@@ -9,7 +9,25 @@ function compare_users($usera, $userb)
     $orderby = get_input('orderby','name');
     return strcmp($usera->$orderby,$userb->$orderby);
 }
-    
+	$luser = elgg_get_logged_in_user_entity();
+	$_SESSION['member_exten_owner'] = false;
+	$options = array(
+				'type' => 'group',
+				'relationship' => 'membership_request',
+				'relationship_guid' => $luser->guid,
+				'inverse_relationship' => false,
+				);
+	if(!$luser->isAdmin()){
+		$options['owner_guid'] = $luser->guid;
+		$status_options = $gowner_status_options;
+	}else{
+		$status_options = array_merge($gowner_status_options,$admin_status_options);
+	}
+	
+	$rgroups = elgg_get_entities($options);
+	foreach($rgroups as $group){
+		if($luser->guid == $group->owner_guid){$_SESSION['member_exten_owner'] = true;break;}
+	}   
 function member_extend_get_users(array $options = array(),$func='elgg_get_entities'){
     $countopt = $options['count'];
     $limitopt = $options['limit'];
@@ -21,24 +39,63 @@ function member_extend_get_users(array $options = array(),$func='elgg_get_entiti
     if($_SESSION['member_extend_selected_groups_changed'] or empty($_SESSION[$options['sobj']."ASC"])){
         $_SESSION['member_extend_selected_groups_changed'] = false;
         unset($_SESSION[$options['sobj']."ASC"]);
-        if(empty($_SESSION['member_extend_selected_groups'])){
-            $_SESSION[$options['sobj']."ASC"] = $_SESSION[$options['sobj']];
-        }else{
-            foreach($_SESSION[$options['sobj']] as $key=>$user){
-                $found = false;
-                foreach($_SESSION['member_extend_selected_groups'] as $group_guid){
-                    $group = get_entity($group_guid);
-                    if(($group instanceof Elgggroup) and $group->isMember($user)){
-                        if($last_dates and ($group->group_paid_flag =='yes')){
-                            $last_date = $last_dates[$group->guid];
-                            if(!$last_date or $last_date =='')continue;
-                        }
-                        $found = true;break;
-                    }
-                }
-                if($found)$_SESSION[$options['sobj']."ASC"][]=$user;
-            }
-       }
+		$all_grp = $_SESSION['member_extend_selected_groups']; 
+		$luser = elgg_get_logged_in_user_entity();
+		echo "to".$_SESSION['member_exten_owner'];
+		if(!$luser->isAdmin() AND $_SESSION['member_exten_owner'] != true AND empty($all_grp)){
+		echo "general";
+			$_SESSION[$options['sobj']."ASC"] = $_SESSION[$options['sobj']];
+		}else{
+			if(empty($all_grp)){
+				$all_grp = array();
+				$goptions = array('type' => 'group',);
+				if(!$luser->isAdmin() ){
+				   $goptions['owner_guid'] = $luser->guid;
+				}
+				$groups = elgg_get_entities($goptions);
+				
+				foreach($groups as $grp){
+				   $all_grp[] = $grp->guid;
+				}
+				//var_dump($all_grp);
+			   // $_SESSION[$options['sobj']."ASC"] = $_SESSION[$options['sobj']];
+			}
+			echo "<br>".$_SESSION['member_extend_group_status']."<br>";
+			foreach($_SESSION[$options['sobj']] as $key=>$user){
+				echo $user->name."/";
+					$found = false;
+					foreach($all_grp as $group_guid){
+						$group = get_entity($group_guid);
+						if(($group instanceof Elgggroup) and $group->isMember($user)){
+							if($last_dates and ($group->group_paid_flag =='yes')){
+								$last_date = $last_dates[$group->guid];
+								if(!$last_date or $last_date =='')continue;// TBD:remove line
+							}
+							$found = true;break;
+						}
+						if(!$luser->isAdmin()){//TBD: this is to decide user
+							$ia = elgg_set_ignore_access(true);
+							if($_SESSION['member_extend_group_status'] == 'invited' OR $_SESSION['member_extend_group_status'] == ''){echo "-in-invited";
+								if(check_entity_relationship($group->guid, 'invited', $user->guid)){
+									echo "forund";
+									$found = true;break;
+									
+								}
+							}
+							if($_SESSION['member_extend_group_status'] == 'w4_approval' OR $_SESSION['member_extend_group_status'] == ''){echo "-in-w4 app";
+								if(check_entity_relationship($user->guid, 'membership_request', $group->guid)){echo "found";
+									$found = true;break;
+								}
+							}
+							elgg_set_ignore_access($ia);
+						}
+					}
+
+					if($found){
+						$_SESSION[$options['sobj']."ASC"][]=$user;
+					}
+			}
+		}
        if(!empty($_SESSION['searchquery'])){
            foreach($_SESSION[$options['sobj']."ASC"] as $key=>$user){
 
@@ -63,10 +120,45 @@ function member_extend_get_users(array $options = array(),$func='elgg_get_entiti
 						if(!$group->isMember($user) AND $group->group_paid_flag == 'yes')$all_na = false;
 				   }
 				}elseif($_SESSION['member_extend_group_status'] =='w4_approval'){
-					foreach($sugested_groupids as $sugested_groupid){
+							$roptions = array(
+							'type' => 'group',
+							'relationship' => 'membership_request',
+							'relationship_guid' => $user->guid,
+							'inverse_relationship' => false,
+							
+							);
+							if(!$luser->isAdmin() ){
+				   $roptions['owner_guid'] = $luser->guid;
+				}
+					$rgroups = elgg_get_entities_from_relationship($roptions);
+					if(count($rgroups)){
+						$all_na = false;
+					}
+					/* foreach($sugested_groupids as $sugested_groupid){
 						$group = get_entity($sugested_groupid);
 						if(!$group->isMember($user) AND check_entity_relationship($user->guid, 'membership_request', $group->guid))$all_na = false;
-				   }
+				   } */
+				}elseif($_SESSION['member_extend_group_status'] =='invited'){
+						$ioptions = array(
+				'type' => 'group',
+				'relationship' => 'invited',
+				'relationship_guid' => $user->guid,
+				'inverse_relationship' => true,
+				
+				);
+					if(!$luser->isAdmin() ){
+				   $ioptions['owner_guid'] = $luser->guid;
+				}
+					$igroups = elgg_get_entities_from_relationship($ioptions);
+					if(count($igroups)){
+						$all_na = false;
+					}
+		
+		
+					/* foreach($sugested_groupids as $sugested_groupid){
+						$group = get_entity($sugested_groupid);
+						if(!$group->isMember($user) AND check_entity_relationship($group->guid, 'invited',$user->guid ))$all_na = false;
+				   } */
 				}else{
 				    $myoptions = array('type' => 'group',
                                        'relationship' => 'member',
@@ -130,8 +222,11 @@ $options['joins'][]  = "JOIN {$dbprefix}metadata $orderby ON e.guid = {$orderby}
 
 $sorting = get_input('sorting','');
 $options["order_by"] .= $sorting;
+	
 
-if(elgg_is_admin_logged_in())$options['admin_view'] = true;
+if(elgg_is_admin_logged_in() OR $_SESSION['member_exten_owner'] == true)$options['admin_view'] = true;
+//$options['admin_view'] = true;
+
 switch ($vars['page']) {
 	case 'popular':
 		$options['relationship'] = 'friend';
@@ -174,10 +269,9 @@ switch ($vars['page']) {
 		$content = elgg_list_entities($options,'member_extend_get_users','elgg_view_entity_list');
 		break;
 }
-
-	
+		
 	if(elgg_is_admin_logged_in() and 
-	(($vars['page'] == 'newest') or ($vars['page'] == 'popular') or ($vars['page'] == 'online')))
+	(($vars['page'] == 'newest') or ($vars['page'] == 'popular') or ($vars['page'] == 'online')) OR $_SESSION['member_exten_owner'] == true)
 		{
 	$group_list .= elgg_view_form('members/selected_groups',array());
 	}
@@ -187,7 +281,7 @@ switch ($vars['page']) {
 	'title' => $title . " ($num_members)",
 	'filter_override' => false,
 );
-if(elgg_is_admin_logged_in())
+if(elgg_is_admin_logged_in() OR $_SESSION['member_exten_owner'] == true)
 $body = elgg_view_layout('one_column', $params);
 else
 $body = elgg_view_layout('content', $params);
@@ -206,6 +300,7 @@ echo elgg_view_page($title, $body);
 	margin:0px;
 	padding:0px;
 	overflow-x: scroll !important;
+	//overflow-y: hidden !important;
 }
 
 .me_li_as_tr {

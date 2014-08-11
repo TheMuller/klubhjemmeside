@@ -88,13 +88,17 @@ function member_extend_get_group_status($group,$user,$sugested_groupids){
 	if(!($group instanceof Elgggroup)){
 			return 'n/a';
 	}
+	$luser = elgg_get_logged_in_user_entity();
 	if(!$group->isMember($user)){
 		 if(check_entity_relationship($user->guid, 'membership_request', $group->guid)){
 			$status = 'w4_approval';
+		 }elseif(check_entity_relationship($group->guid, 'invited', $user->guid)){
+				$status = "invited";
 		 }elseif($group->group_paid_flag == 'yes'){
 				$status = "w4_payment";
 		 }else{$status = 'w2_join';}
-	}elseif(in_array($group->guid,$sugested_groupids)){
+		 
+	}elseif(!$luser->isAdmin() OR in_array($group->guid,$sugested_groupids)){
 		$status = "active";
 		if($last_dates and ($group->group_paid_flag =='yes')){
 			$last_date = $last_dates[$group->guid];
@@ -106,6 +110,7 @@ function member_extend_get_group_status($group,$user,$sugested_groupids){
 	}else{
 		$status = "wrong";
 	}
+	
 	if(!$_SESSION['member_extend_group_status'])return $status;
 	elseif (empty($_SESSION['member_extend_group_status']))return $status;
 	elseif($_SESSION['member_extend_group_status'] != $status)return 'n/a';

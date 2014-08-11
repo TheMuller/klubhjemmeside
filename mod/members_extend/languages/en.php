@@ -23,6 +23,7 @@ $english = array(
 				'members:memberships:status:active' => "Active",
 				'members:memberships:status:wrong' => "Wrong",
 				'members:memberships:status:expired' => "Expired",
+				'members:memberships:status:invited' => "Invited",
 				'members:memberships:status:w2_join' => "W 2 Join",
 				'members:memberships:status:w4_approval' => "W 4 Approval",
 				'members:memberships:status:w4_payment' => "W 4 Payment",

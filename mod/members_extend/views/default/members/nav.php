@@ -42,18 +42,40 @@ $tabs = array(
 	
 
 );
-$status_options = array(
-						''=>elgg_echo('members:memberships:status:all'),
-						'wrong'=>elgg_echo('members:memberships:status:wrong'),
-						'active'=>elgg_echo('members:memberships:status:active'),
-						'expired'=>elgg_echo('members:memberships:status:expired'),
-						'w2_join'=>elgg_echo('members:memberships:status:w2_join'),
-						'w4_approval'=>elgg_echo('members:memberships:status:w4_approval'),
-						'w4_payment'=>elgg_echo('members:memberships:status:w4_payment')
-					);
+$gowner_status_options = array(
+							''=>elgg_echo('members:memberships:status:all'),
+							'active'=>elgg_echo('members:memberships:status:active'),
+							'expired'=>elgg_echo('members:memberships:status:expired'),
+							'invited'=>elgg_echo('members:memberships:status:invited'),
+							'w4_approval'=>elgg_echo('members:memberships:status:w4_approval'),
+						);
+$admin_status_options = array(
+							'wrong'=>elgg_echo('members:memberships:status:wrong'),
+							'w2_join'=>elgg_echo('members:memberships:status:w2_join'),
+							'w4_payment'=>elgg_echo('members:memberships:status:w4_payment'),
+						);
+$luser = elgg_get_logged_in_user_entity();
 $user= get_entity($_SESSION['user']->guid);
 if($user){
-	if($user->isAdmin() ){
+$owner = false;
+	$options = array(
+				'type' => 'group',
+				'relationship' => 'membership_request',
+				'relationship_guid' => $user->guid,
+				'inverse_relationship' => false,
+				);
+	if(!$luser->isAdmin()){
+		$options['owner_guid'] = $luser->guid;
+		$status_options = $gowner_status_options;
+	}else{
+		$status_options = array_merge($gowner_status_options,$admin_status_options);
+	}
+	
+	$rgroups = elgg_get_entities($options);
+	foreach($rgroups as $group){
+		if($luser->guid == $group->owner_guid){$owner = true;break;}
+	}
+	if($user->isAdmin() OR $owner == true){
         if(($vars['selected'] == 'newest') or ($vars['selected'] == 'popular') or ($vars['selected'] == 'online'))
 		{
 		    $MemberFieldLabels  = explode(",",elgg_get_plugin_setting('MemberFieldLabel', 'members_extend'));

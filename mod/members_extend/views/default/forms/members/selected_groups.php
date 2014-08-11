@@ -4,14 +4,19 @@ $options = array('type' => 'group',);
 $MemberFieldLabels  = explode(",",elgg_get_plugin_setting('MemberFieldLabel', 'members_extend'));
 $MemberFields  = explode(",",elgg_get_plugin_setting('MemberField', 'members_extend'));
 $search_fields = array_merge(array("name"=>"Name"),array_combine($MemberFields,$MemberFieldLabels));
-    
-$groups = elgg_get_entities($options);
-foreach($groups as $group){
-	$myarr[$group->name] = $group->guid;
-}
+$user = elgg_get_logged_in_user_entity();    
+
+			
+	if(!$user->isAdmin()){
+		$options['owner_guid'] = $user->guid;
+	}
+	$groups = elgg_get_entities($options);
+	foreach($groups as $group){
+		$my_groups[$group->name] = $group->guid;
+	}
 echo "<div style='padding: 5px;overflow: scroll;overflow-x: scroll;overflow-y: hidden;width: 900px;max-height: 30px;white-space: nowrap;'>";
 echo elgg_view('input/checkboxes', array(
-            'options' =>$myarr,   
+            'options' =>$my_groups,   
             'align' => 'horizontal',
 			'value' => $_SESSION['member_extend_selected_groups'],
 			'name' => 'selected_groups',
