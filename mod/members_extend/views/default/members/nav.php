@@ -253,6 +253,9 @@ $(document).ready(function() {
 		}else{
 			$tabs = array_merge($tab1,$tab3);
 		}
+		if(!$user->isAdmin()){
+			$tabs = $tab1;
+		}
 
 	}
 }

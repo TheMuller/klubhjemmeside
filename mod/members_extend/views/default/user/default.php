@@ -19,57 +19,65 @@ echo "<div class='me_div_as_td' style='vertical-align:middle;'>";
 echo elgg_view_entity_icon($user,'tiny')."&nbsp;</div>";
 echo "<div class='me_div_as_td'>".$user->name;echo "</div><div class='me_div_as_td' style='width:90px;'>";
 	$sugested_groupids = unserialize($user->suggestedgroupids);
-	$greengroupids = array();
-	$options = array(
-                    'type' => 'group',
-                    'relationship' => 'member',
-                    'relationship_guid' => $user->guid,
-                    'inverse_relationship' => false,
-                    );
-	$luser = elgg_get_logged_in_user_entity();
-			
-		if(!$luser->isAdmin()){
-			$options['owner_guid'] = $luser->guid;
-		}
-		$groups = elgg_get_entities_from_relationship($options);
-	if($luser->isAdmin()){
-		foreach($groups as $grp)
-		{
-			if(in_array($grp->guid,$sugested_groupids))
-			{
-				$greengroupids[]=$grp->guid;
-			}
-		}
-
-		$yellowgroupids = array_diff($sugested_groupids, $greengroupids);
-		foreach($yellowgroupids as $groupid){
+	if($_SESSION['member_extend_selected_groups']){
+		
+		$groupids = $_SESSION['member_extend_selected_groups'];
+		foreach($groupids as $groupid){
 			$groups[] = get_entity($groupid);
 		}
 	}else{
-		$ioptions = array(
-				'type' => 'group',
-				'relationship' => 'invited',
-				'relationship_guid' => $user->guid,
-				'inverse_relationship' => true,
-				'owner_guid' =>$luser->guid,
-				);
-		$igroups = elgg_get_entities_from_relationship($ioptions);
-		foreach($igroups as $group){	
-			//echo $group->guid."olll";
-			$groups[] = $group;
-			
-		}
-		$roptions = array(
-				'type' => 'group',
-				'relationship' => 'membership_request',
-				'relationship_guid' => $user->guid,
-				'inverse_relationship' => false,
-				'owner_guid' => $luser->guid,
-				);
-		$rgroups = elgg_get_entities_from_relationship($roptions);
-		foreach($rgroups as $group){	
-			$groups[] = $group;
-			
+		$greengroupids = array();
+		$options = array(
+						'type' => 'group',
+						'relationship' => 'member',
+						'relationship_guid' => $user->guid,
+						'inverse_relationship' => false,
+						);
+		$luser = elgg_get_logged_in_user_entity();
+				
+			if(!$luser->isAdmin()){
+				$options['owner_guid'] = $luser->guid;
+			}
+			$groups = elgg_get_entities_from_relationship($options);
+		if($luser->isAdmin()){
+			foreach($groups as $grp)
+			{
+				if(in_array($grp->guid,$sugested_groupids))
+				{
+					$greengroupids[]=$grp->guid;
+				}
+			}
+
+			$yellowgroupids = array_diff($sugested_groupids, $greengroupids);
+			foreach($yellowgroupids as $groupid){
+				$groups[] = get_entity($groupid);
+			}
+		}else{
+			$ioptions = array(
+					'type' => 'group',
+					'relationship' => 'invited',
+					'relationship_guid' => $user->guid,
+					'inverse_relationship' => true,
+					'owner_guid' =>$luser->guid,
+					);
+			$igroups = elgg_get_entities_from_relationship($ioptions);
+			foreach($igroups as $group){	
+				//echo $group->guid."olll";
+				$groups[] = $group;
+				
+			}
+			$roptions = array(
+					'type' => 'group',
+					'relationship' => 'membership_request',
+					'relationship_guid' => $user->guid,
+					'inverse_relationship' => false,
+					'owner_guid' => $luser->guid,
+					);
+			$rgroups = elgg_get_entities_from_relationship($roptions);
+			foreach($rgroups as $group){	
+				$groups[] = $group;
+				
+			}
 		}
 	}
 		/* if(!empty($_SESSION['member_extend_selected_groups'])){
@@ -92,7 +100,7 @@ echo "<div class='me_div_as_td'>".$user->name;echo "</div><div class='me_div_as_
 				$icon_yellow = elgg_view_entity_icon($group, 'tiny', array(
 				'img_class' => 'elgg-index-photo',
 				));echo "</div>";
-				echo $group->owner_guid;
+				//echo $group->owner_guid;
 				echo $icon_yellow."</div>";
 	}
 	echo "</div>"; 

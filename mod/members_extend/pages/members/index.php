@@ -41,9 +41,9 @@ function member_extend_get_users(array $options = array(),$func='elgg_get_entiti
         unset($_SESSION[$options['sobj']."ASC"]);
 		$all_grp = $_SESSION['member_extend_selected_groups']; 
 		$luser = elgg_get_logged_in_user_entity();
-		echo "to".$_SESSION['member_exten_owner'];
+		//echo "to".$_SESSION['member_exten_owner'];
 		if(!$luser->isAdmin() AND $_SESSION['member_exten_owner'] != true AND empty($all_grp)){
-		echo "general";
+		//echo "general";
 			$_SESSION[$options['sobj']."ASC"] = $_SESSION[$options['sobj']];
 		}else{
 			if(empty($all_grp)){
@@ -60,9 +60,9 @@ function member_extend_get_users(array $options = array(),$func='elgg_get_entiti
 				//var_dump($all_grp);
 			   // $_SESSION[$options['sobj']."ASC"] = $_SESSION[$options['sobj']];
 			}
-			echo "<br>".$_SESSION['member_extend_group_status']."<br>";
+			//echo "<br>".$_SESSION['member_extend_group_status']."<br>";
 			foreach($_SESSION[$options['sobj']] as $key=>$user){
-				echo $user->name."/";
+				//echo $user->name."/";
 					$found = false;
 					foreach($all_grp as $group_guid){
 						$group = get_entity($group_guid);
@@ -75,15 +75,15 @@ function member_extend_get_users(array $options = array(),$func='elgg_get_entiti
 						}
 						if(!$luser->isAdmin()){//TBD: this is to decide user
 							$ia = elgg_set_ignore_access(true);
-							if($_SESSION['member_extend_group_status'] == 'invited' OR $_SESSION['member_extend_group_status'] == ''){echo "-in-invited";
+							if($_SESSION['member_extend_group_status'] == 'invited' OR $_SESSION['member_extend_group_status'] == ''){//echo "-in-invited";
 								if(check_entity_relationship($group->guid, 'invited', $user->guid)){
-									echo "forund";
+									//echo "forund";
 									$found = true;break;
 									
 								}
 							}
-							if($_SESSION['member_extend_group_status'] == 'w4_approval' OR $_SESSION['member_extend_group_status'] == ''){echo "-in-w4 app";
-								if(check_entity_relationship($user->guid, 'membership_request', $group->guid)){echo "found";
+							if($_SESSION['member_extend_group_status'] == 'w4_approval' OR $_SESSION['member_extend_group_status'] == ''){//echo "-in-w4 app";
+								if(check_entity_relationship($user->guid, 'membership_request', $group->guid)){//echo "found";
 									$found = true;break;
 								}
 							}
@@ -300,7 +300,7 @@ echo elgg_view_page($title, $body);
 	margin:0px;
 	padding:0px;
 	overflow-x: scroll !important;
-	//overflow-y: hidden !important;
+	overflow-y: hidden !important;
 }
 
 .me_li_as_tr {
