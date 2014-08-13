@@ -53,6 +53,7 @@ $danish = array(
 	'gianna:label:favicon' 		=> 'Display Favicon',
 	'gianna:label:index'		=> 'Select preferred Front Page',
 	'gianna:label:logo' 		=> 'Display Custom Logo',
+	'gianna:friends:none' 		=> 'Inviter dine venner, din venneliste er tom lige nu..',
 	'gianna:label:show_custom'	=> 'Custom Content?',
 	'gianna:label:show_friends'	=> 'Friends',
 	'gianna:label:show_latest_groups' 	=> 'Latest Groups',
