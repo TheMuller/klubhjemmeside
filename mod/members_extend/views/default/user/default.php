@@ -13,35 +13,82 @@ if($vars['admin_view']   == true){
 $user = $vars['entity'];
 $last_dates = unserialize($user->last_dates);
 $created_time = elgg_get_plugin_setting('created_time');
+$luser = elgg_get_logged_in_user_entity();
 
 echo "<div class='me_div_as_td' style='vertical-align:middle;'>";
 echo elgg_view_entity_icon($user,'tiny')."&nbsp;</div>";
 echo "<div class='me_div_as_td'>".$user->name;echo "</div><div class='me_div_as_td' style='width:90px;'>";
 	$sugested_groupids = unserialize($user->suggestedgroupids);
-	$greengroupids = array();
-	$options = array(
-                    'type' => 'group',
-                    'relationship' => 'member',
-                    'relationship_guid' => $user->guid,
-                    'inverse_relationship' => false,
-                    );
-		$groups = elgg_get_entities_from_relationship($options);
-
-		foreach($groups as $grp)
-		{
-			if(in_array($grp->guid,$sugested_groupids))
-			{
-				$greengroupids[]=$grp->guid;
-			}
-		}
-
-		$yellowgroupids = array_diff($sugested_groupids, $greengroupids);
-		foreach($yellowgroupids as $groupid){
+	if($_SESSION['member_extend_selected_groups']){
+		
+		$groupids = $_SESSION['member_extend_selected_groups'];
+		foreach($groupids as $groupid){
 			$groups[] = get_entity($groupid);
 		}
+	}else{
+		$greengroupids = array();
+		$options = array(
+						'type' => 'group',
+						'relationship' => 'member',
+						'relationship_guid' => $user->guid,
+						'inverse_relationship' => false,
+						);
+		$luser = elgg_get_logged_in_user_entity();
+				
+			if(!$luser->isAdmin()){
+				$options['owner_guid'] = $luser->guid;
+			}
+			$groups = elgg_get_entities_from_relationship($options);
+		if($luser->isAdmin()){
+			foreach($groups as $grp)
+			{
+				if(in_array($grp->guid,$sugested_groupids))
+				{
+					$greengroupids[]=$grp->guid;
+				}
+			}
+
+			$yellowgroupids = array_diff($sugested_groupids, $greengroupids);
+			foreach($yellowgroupids as $groupid){
+				$groups[] = get_entity($groupid);
+			}
+		}else{
+			$ioptions = array(
+					'type' => 'group',
+					'relationship' => 'invited',
+					'relationship_guid' => $user->guid,
+					'inverse_relationship' => true,
+					'owner_guid' =>$luser->guid,
+					);
+			$igroups = elgg_get_entities_from_relationship($ioptions);
+			foreach($igroups as $group){	
+				//echo $group->guid."olll";
+				$groups[] = $group;
+				
+			}
+			$roptions = array(
+					'type' => 'group',
+					'relationship' => 'membership_request',
+					'relationship_guid' => $user->guid,
+					'inverse_relationship' => false,
+					'owner_guid' => $luser->guid,
+					);
+			$rgroups = elgg_get_entities_from_relationship($roptions);
+			foreach($rgroups as $group){	
+				$groups[] = $group;
+				
+			}
+		}
+	}
+		/* if(!empty($_SESSION['member_extend_selected_groups'])){
+			foreach($groups as $key =>$group){
+				if(!in_array($group->guid,$_SESSION['member_extend_selected_groups'])){
+					unset($groups[$key]);
+				}
+			}//TBD : what is this ???
+		} */
     foreach($groups as $key=>$group)
-    {	
-		$status = member_extend_get_group_status($group,$user,$sugested_groupids);
+    {	$status = member_extend_get_group_status($group,$user,$sugested_groupids);
 		if($status == 'n/a')continue;
 		if ( end(array_keys($groups) ) == $key ) {
 			$border = 'border-bottom:0px solid;';
@@ -53,6 +100,7 @@ echo "<div class='me_div_as_td'>".$user->name;echo "</div><div class='me_div_as_
 				$icon_yellow = elgg_view_entity_icon($group, 'tiny', array(
 				'img_class' => 'elgg-index-photo',
 				));echo "</div>";
+				//echo $group->owner_guid;
 				echo $icon_yellow."</div>";
 	}
 	echo "</div>"; 
@@ -78,7 +126,7 @@ echo "<div class='me_div_as_td'>".$user->name;echo "</div><div class='me_div_as_
 											'class' => 'elgg-icon elgg-icon-delete-alt',
 									));					
 						echo elgg_echo('members:memberships:status:'.$status).$delete;
-					}elseif($status == 'pending'){
+					}elseif($status == 'w4_approval'){
 						$myurl_approve .="?user_guid=".$user->guid."&group_guid=".$group->guid;
 						$myurl_approve=elgg_add_action_tokens_to_url($myurl_approve);
 						$approve = elgg_view('output/url', array(
@@ -112,7 +160,7 @@ echo "<div class='me_div_as_td'>".$user->name;echo "</div><div class='me_div_as_
 				if ($status =='pending' ) echo "N/A";
 				elseif($group->group_paid_flag !='yes')echo "N/A";
                 else{
-				    if($last_date) echo date('m d Y', strtotime($last_date));
+				    if($last_date) echo date('m-d-Y', strtotime($last_date));
 				    else echo "Not Set";
 				}
 				echo "</div>";
@@ -135,13 +183,13 @@ echo "<div class='me_div_as_td'>".$user->name;echo "</div><div class='me_div_as_
 
 				$row = row_to_elggrelationship(get_data_row($query));			
 				echo "<div style='vertical-align: middle;height:40px;$border border-collapse: collapse;border-spacing:0px;width:100px;'>";
-				if($status != 'pending'){echo date('m d Y', $row->time_created);}else{echo "N/A";}
+				if($status != 'pending'){echo date('m-d-Y', $row->time_created);}else{echo "N/A";}
 				echo "</div>";	
 			}
 			echo "</div>";
 			
 	if($created_time == '1'){
-		echo"<div class='me_div_as_td' style='min-width:90px;'>".date('m d Y', $user->time_created)."</div>";
+		echo"<div class='me_div_as_td' style='min-width:90px;'>".date('m-d-Y', $user->time_created)."</div>";
 	}
     $event_calendar_extend_plugin = elgg_get_plugin_from_id('event_calendar_extend');
 	$event_calendar_plugin = elgg_get_plugin_from_id('event_calendar');

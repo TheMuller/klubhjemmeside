@@ -217,8 +217,8 @@ function paidgroup_manage_unpaid_members($hook, $type, $value, $params) {
     $user = elgg_get_logged_in_user_entity ();
     $group= elgg_get_page_owner_entity();//any entity, not just  group
  
-    if($user  instanceof  ElggUser and $user->isAdmin() )return;//
-
+    if($user  instanceof  ElggUser and ($user->isAdmin() OR $group->owner_guid == $user->guid))return;//
+	
     if($group instanceof ElggGroup and $group->group_paid_flag =='yes'){
         //ok so $group is really a group
         if($user  instanceof  ElggUser){
