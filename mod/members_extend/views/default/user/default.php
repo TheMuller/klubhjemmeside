@@ -160,7 +160,7 @@ echo "<div class='me_div_as_td'>".$user->name;echo "</div><div class='me_div_as_
 				if ($status =='pending' ) echo "N/A";
 				elseif($group->group_paid_flag !='yes')echo "N/A";
                 else{
-				    if($last_date) echo date('m-d-Y', strtotime($last_date));
+				    if($last_date) echo date('d-m-Y', strtotime($last_date));
 				    else echo "Not Set";
 				}
 				echo "</div>";
@@ -183,13 +183,13 @@ echo "<div class='me_div_as_td'>".$user->name;echo "</div><div class='me_div_as_
 
 				$row = row_to_elggrelationship(get_data_row($query));			
 				echo "<div style='vertical-align: middle;height:40px;$border border-collapse: collapse;border-spacing:0px;width:100px;'>";
-				if($status != 'pending'){echo date('m-d-Y', $row->time_created);}else{echo "N/A";}
+				if($status != 'pending'){echo date('d-m-Y', $row->time_created);}else{echo "N/A";}
 				echo "</div>";	
 			}
 			echo "</div>";
 			
 	if($created_time == '1'){
-		echo"<div class='me_div_as_td' style='min-width:90px;'>".date('m-d-Y', $user->time_created)."</div>";
+		echo"<div class='me_div_as_td' style='min-width:90px;'>".date('d-m-Y', $user->time_created)."</div>";
 	}
     $event_calendar_extend_plugin = elgg_get_plugin_from_id('event_calendar_extend');
 	$event_calendar_plugin = elgg_get_plugin_from_id('event_calendar');
