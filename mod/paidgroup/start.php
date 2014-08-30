@@ -436,7 +436,7 @@ function paidgroup_groups_handle_members_page($guid) {
 		$content .= elgg_view_entity_list(array_slice($entities,$options['offset'],$options['limit']),$options);
 	}else{
 		$options['limit'] =10;
-		$content .= elgg_list_entities($options);
+		$content .= elgg_list_entities_from_relationship($options);
 	}
 
 	$params = array(
@@ -645,13 +645,14 @@ function group_get_getActiveMembers($group){
                 $count++;
                 continue;
             }
-            
-            $last_dates = unserialize($user->last_dates);
-            
-            $last_date = $last_dates[$group->guid];
-            if(!$last_date or $last_date ==''){
-                continue;
-            }
+            if($group->group_paid_flag == 'yes'){
+				$last_dates = unserialize($user->last_dates);
+				
+				$last_date = $last_dates[$group->guid];
+				if(!$last_date or $last_date ==''){
+					continue;
+				}
+			}
             $count++;
             //echo "w".$count;
         }
