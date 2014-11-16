@@ -22,7 +22,7 @@
 
 <?php echo elgg_view('login/extend', $vars); ?>
 
-<div class="elgg-foot">
+<div class="elgg-foot" style="margin-bottom:0px;padding-bottom:0px">
 	<label class="mtm float-alt">
 		<input type="checkbox" name="persistent" value="true" />
 		<?php echo elgg_echo('user:persistent'); ?>
@@ -36,10 +36,13 @@
 	}
 	?>
 
-	<ul class="elgg-menu elgg-menu-general mtm">
+	<ul class="elgg-menu mtm">
+		<li><a class="forgot_link" href="<?php echo elgg_get_site_url(); ?>forgotpassword">
+			<?php echo elgg_echo('user:password:lost'); ?>
+		</a></li>
 	<?php
 		if (elgg_get_config('allow_registration')) {
-			echo '<li>';
+			echo '<li style="margin-top:15px;font-weight:bold;padding-left:5px;">';
 			echo elgg_view('output/url', array(
 				'href' => '/register',
 				'text' => elgg_echo('register'),
@@ -48,8 +51,6 @@
 			echo '</li>';
 		}
 	?>
-		<li><a class="forgot_link" href="<?php echo elgg_get_site_url(); ?>forgotpassword">
-			<?php echo elgg_echo('user:password:lost'); ?>
-		</a></li>
+
 	</ul>
 </div>

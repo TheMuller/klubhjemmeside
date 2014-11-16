@@ -5,7 +5,7 @@
  */
 
 if (elgg_is_logged_in()) {
-	forward('activity');
+	forward('dashboard');
 }
 
 elgg_push_context('main');

@@ -27,7 +27,7 @@
 }
 .gianna-index .elgg-inner .elgg-layout-one-sidebar > .elgg-body {
 	padding: 40px;
-	background: #FFFFFF;
+	background: #000000;
 	margin-bottom: 0;
 }
 .gianna-index > .elgg-inner {
@@ -127,7 +127,7 @@
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 	margin: 0;
 	
-	box-shadow: inset 0 0 1px #FFFFFF;	
+	box-shadow: inset 0 0 1px #FFFFFF;
 }
 .elgg-module-index .elgg-module-aside .elgg-head h3,
 .elgg-module-request .elgg-module-aside .elgg-head h3,

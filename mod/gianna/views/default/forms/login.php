@@ -37,14 +37,14 @@ $plugin = elgg_get_plugin_from_id('gianna');
 	}
 	?>
 	<ul class="elgg-menu elgg-menu-general mtm">
+		<li><span>&bull;</span><a class="forgot_link" href="<?php echo elgg_get_site_url(); ?>forgotpassword">
+			<?php echo elgg_echo('user:password:lost'); ?>
+		</a></li>
 		<?php
 			if (elgg_get_config('allow_registration') && $plugin->gianna_index != 'gianna') {
 				echo '<li><a class="registration_link" href="' . elgg_get_site_url() . 'register">' . elgg_echo('register') . '</a></li>';
 			}
 		?>
-		<li><span>&bull;</span><a class="forgot_link" href="<?php echo elgg_get_site_url(); ?>forgotpassword">
-			<?php echo elgg_echo('user:password:lost'); ?>
-		</a></li>
 	</ul>
 
 </div>

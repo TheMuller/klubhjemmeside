@@ -7,6 +7,9 @@ elgg_register_event_handler('init', 'system', 'registration_randomizer_init');
  * Init
  */
 function registration_randomizer_init() {
+
+	elgg_extend_view('css/elgg', 'gianna/css');
+
 	// Override registration page
 	elgg_unregister_page_handler('register');
 
@@ -36,7 +39,7 @@ function registration_randomizer_page_handler($page) {
 		registration_randomizer_tarpit();
 		forward('/', 404);
 	} else {
-		include elgg_get_config('path') . 'pages/account/register.php';
+		include elgg_get_config('path') . 'mod/gianna/pages/account/register.php';
 		return true;
 	}
 	registration_randomizer_log("No token for registration page");

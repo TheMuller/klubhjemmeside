@@ -144,7 +144,7 @@ echo "<div id=\"elggzone-tabs\">";
 		echo elgg_view('input/dropdown', array(
 			'name' => 'params[gianna_index]',
 			'options_values' => array(
-				'activity' => elgg_echo('gianna:option:activity'),
+				'dashboard' => elgg_echo('gianna:option:activity'),
 				'gianna' => elgg_echo('gianna:option:gianna')
 			),
 			'value' => $plugin->gianna_index,

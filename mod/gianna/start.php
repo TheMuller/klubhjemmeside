@@ -192,7 +192,7 @@ function gianna_pagesetup_handler() {
 
 	elgg_unregister_menu_item('topbar', 'dashboard');
 	elgg_unregister_menu_item('topbar', 'elgg_logo');
-	elgg_unregister_menu_item('topbar', 'messages');
+	//elgg_unregister_menu_item('topbar', 'messages');
 	elgg_unregister_menu_item('topbar', 'friends');
 
 	/*** elgg_unextend_view('page/elements/header', 'search/header');
